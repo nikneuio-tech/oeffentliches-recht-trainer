@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JUNIOR ASSOCIATE</title>
+    <title>JUNIOR ASSOCIATE | Public Law</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,7 +78,7 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v3.1</div>
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v4.0</div>
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
                     <span class="trust-label">PARTNER'S TRUST</span>
@@ -91,7 +91,7 @@
         <div id="menu-screen">
             <div class="menu-header">
                 <div class="menu-title">Aktenbestand</div>
-                <div class="menu-subtitle">Öffentliches Recht</div>
+                <div class="menu-subtitle">Öffentliches Recht (Alle 20 Aufgaben)</div>
             </div>
             <div id="case-list"></div>
         </div>
@@ -111,164 +111,275 @@
     </div>
 
     <script>
+        // --- COMPLETE DATABASE (All 20 Questions + Alternatives) ---
         const cases = [
             {
                 id: "AKTE_001",
                 title: "Grundlagen & Methoden",
-                subtitle: "Einführung in das System",
-                topics: ["Systematische Auslegung", "Historische Auslegung", "Verfassungskonforme Auslegung", "Staatszielbestimmungen"],
+                subtitle: "Aufgaben 1, 2, 3, 5",
+                topics: ["Systematische Auslegung", "Historische Auslegung", "Verfassungskonforme Auslegung", "Richtlinienkonforme Auslegung", "Staatsziele", "Verkündung Gesetze"],
                 questions: [
                     {
                         type: 'choice',
-                        intro: "Wortlaut unklar. Wir schauen auf die Stellung im Gesetz. Welche Auslegung?",
+                        intro: "Wir beginnen mit den Methoden. Ein Gesetz ist unklar. Wir ermitteln den Inhalt anhand der Stellung im Gesetz. Welche Auslegung?",
                         options: ["Historische Auslegung", "Systematische Auslegung", "Teleologische Auslegung"],
                         correctAnswer: 1,
-                        feedback: "Korrekt. Systematik = Kontext.",
+                        feedback: "Korrekt. Systematik = Kontext/Stellung.",
                         explanation: "Systematische Auslegung prüft die Stellung im Gesetz."
                     },
                     {
                         type: 'text',
-                        intro: "Und wenn wir Protokolle und Materialien prüfen? Wie heißt diese Methode?",
-                        keywords: ["historisch", "wille", "geschichte", "entstehung"],
-                        explanation: "Historische Auslegung (Wille des historischen Gesetzgebers).",
-                        feedback: "Richtig. Der historische Wille zählt."
+                        intro: "Alternativfrage: Was versteht man unter 'Historischer Auslegung'? Worauf stellen wir ab?",
+                        keywords: ["wille", "gesetzgeber", "geschichte", "materialien", "protokolle"],
+                        explanation: "Ermittlung des Willens des historischen Gesetzgebers anhand der Entstehungsgeschichte (Materialien/Protokolle).",
+                        feedback: "Richtig. Der historische Wille ist entscheidend."
                     },
                     {
                         type: 'choice',
-                        intro: "Eine Norm verstößt scheinbar gegen das GG. Was bedeutet 'verfassungskonforme Auslegung'?",
-                        options: ["Norm ist nichtig.", "Norm bleibt gültig, solange eine GG-konforme Deutung möglich ist.", "Norm wird ignoriert."],
+                        intro: "Ein Gesetz lässt mehrere Deutungen zu. Eine verstößt gegen das GG. Was besagt die 'verfassungskonforme Auslegung'?",
+                        options: ["Gesetz ist nichtig.", "Diejenige Deutung ist zu wählen, die mit dem GG vereinbar ist.", "Wir fragen das BVerfG."],
                         correctAnswer: 1,
-                        feedback: "Exakt. Die Norm wird erhalten.",
-                        explanation: "Vorrang des Gesetzeserhalts."
+                        feedback: "Exakt. Normerhalt geht vor.",
+                        explanation: "Die Norm bleibt gültig, solange eine GG-konforme Auslegung möglich ist."
                     },
                     {
                         type: 'text',
-                        intro: "Nennen Sie ein Beispiel für eine Staatszielbestimmung.",
-                        keywords: ["sozialstaat", "rechtsstaat", "umweltschutz", "tierschutz"],
-                        explanation: "Sozialstaat, Rechtsstaat, Umweltschutz.",
-                        feedback: "Akzeptiert."
+                        intro: "Und im Europarecht? Was ist 'richtlinienkonforme Auslegung'?",
+                        keywords: ["ziel", "richtlinie", "erreichen", "effet", "utile"],
+                        explanation: "Auslegung nationalen Rechts so, dass das Ziel der EU-Richtlinie bestmöglich erreicht wird (effet utile).",
+                        feedback: "Genau. Das Ziel der Richtlinie muss erreicht werden."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Kurze Definition: Was ist eine Staatszielbestimmung? (Mit Beispiel)",
+                        keywords: ["aufgabe", "staat", "subjektiv", "recht", "sozialstaat", "rechtsstaat", "umweltschutz"],
+                        explanation: "Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (z.B. Sozialstaat).",
+                        feedback: "Akzeptiert. Staatsaufgabe ohne subjektives Klagerecht."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Kleine Wissensfrage zwischendurch: Wo werden vom Bundespräsidenten ausgefertigte Gesetze veröffentlicht?",
+                        keywords: ["bundesgesetzblatt", "bgbl"],
+                        explanation: "Im Bundesgesetzblatt.",
+                        feedback: "Korrekt."
                     }
                 ]
             },
             {
                 id: "AKTE_002",
                 title: "Organisationsrecht",
-                subtitle: "Körperschaften & Anstalten",
-                topics: ["Definition Anstalt", "Abgrenzung zur Körperschaft", "Subordinationstheorie", "Interessentheorie"],
+                subtitle: "Aufgabe 4 & Zusatz",
+                topics: ["Definition Anstalt", "Abgrenzung zur Körperschaft", "Definition Stiftung"],
                 questions: [
                     {
                         type: 'text',
-                        intro: "Mandant will eine Anstalt gründen. Definieren Sie 'Anstalt'.",
+                        intro: "Organisationsformen. Definieren Sie 'Anstalt des öffentlichen Rechts'.",
                         keywords: ["personal", "sachmittel", "benutzer", "aufgabe"],
-                        explanation: "Zusammenfassung von Personal/Sachen zur Erfüllung öffentlicher Aufgaben für Benutzer.",
-                        feedback: "Gut. Wichtig: Benutzer, keine Mitglieder."
+                        explanation: "Zusammenfassung von Personal/Sachen zur Erfüllung öffentlicher Aufgaben, die Benutzern zur Verfügung steht.",
+                        feedback: "Gut. Wichtig: Benutzer."
                     },
                     {
                         type: 'choice',
-                        intro: "Was ist der Unterschied zur Körperschaft?",
-                        options: ["Körperschaft hat Mitglieder.", "Körperschaft ist privat.", "Körperschaft hat Kunden."],
-                        correctAnswer: 0,
-                        feedback: "Richtig. Mitgliedschaftliche Organisation ist das Merkmal.",
-                        explanation: "Körperschaften bestehen aus Mitgliedern."
-                    },
-                    {
-                        type: 'choice',
-                        intro: "Streit Nossen vs. Ketzerbachtal. Warum Verwaltungsrechtsweg? Welche Theorie nutzt das 'Über-/Unterordnungsverhältnis'?",
-                        options: ["Interessentheorie", "Subordinationstheorie", "Sonderrechtstheorie"],
+                        intro: "Wie grenzt sie sich zur Körperschaft ab?",
+                        options: ["Körperschaft ist privat.", "Körperschaft ist mitgliedschaftlich organisiert.", "Körperschaft hat keine Rechtsfähigkeit."],
                         correctAnswer: 1,
-                        feedback: "Korrekt.",
-                        explanation: "Subordinationstheorie fragt nach Hoheitsgewalt."
+                        feedback: "Richtig.",
+                        explanation: "Körperschaft = Mitglieder. Anstalt = Benutzer."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Und was ist eine Stiftung?",
+                        keywords: ["vermögen", "zweck", "stiftungszweck"],
+                        explanation: "Zusammenfassung von Vermögen, um einem Stiftungszweck zu dienen.",
+                        feedback: "Korrekt. Vermögensmasse mit Zweck."
                     }
                 ]
             },
             {
                 id: "AKTE_003",
-                title: "Fall: Windkraft",
-                subtitle: "Verwaltungsakt & Klage",
-                topics: ["Anfechtungsklage", "Widerspruch", "Klagebefugnis", "Möglichkeitstheorie", "Gemeinde-Klagerecht"],
+                title: "Fall: Nossen vs. Ketzerbachtal",
+                subtitle: "Aufgabe 6 (Großer Fall)",
+                topics: ["Rechtswegeröffnung", "Subordinationstheorie", "Interessentheorie", "Mod. Subjektstheorie"],
                 questions: [
                     {
                         type: 'choice',
-                        intro: "Hotelier Förster will die Genehmigung der Windkraftanlage 'weg' haben. Welche Klageart?",
-                        options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I Alt. 1 VwGO)", "Feststellungsklage"],
+                        intro: "Neuer Fall. Stadt Nossen und Gemeinde Ketzerbachtal streiten über ihre Verwaltungsgemeinschaft (SächsKomZG). Welcher Rechtsweg ist eröffnet?",
+                        options: ["Zivilrechtsweg (Schadensersatz)", "Verwaltungsrechtsweg (§ 40 VwGO)", "Verfassungsrechtsweg"],
                         correctAnswer: 1,
-                        feedback: "Richtig. Aufhebung eines VA.",
-                        explanation: "Anfechtungsklage richtet sich auf Aufhebung eines VA."
+                        feedback: "Richtig. Öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art.",
+                        explanation: "§ 40 VwGO ist einschlägig."
                     },
                     {
                         type: 'choice',
-                        intro: "Welches Verfahren ist nach § 68 VwGO vorgeschaltet?",
-                        options: ["Klageerzwingungsverfahren", "Widerspruch", "Mediation"],
+                        intro: "Wir müssen das begründen. Welche Theorie fragt nach dem 'Über-/Unterordnungsverhältnis'?",
+                        options: ["Interessentheorie", "Subordinationstheorie", "Sonderrechtstheorie"],
                         correctAnswer: 1,
-                        feedback: "Korrekt.",
-                        explanation: "Vor der Anfechtungsklage kommt der Widerspruch."
+                        feedback: "Korrekt. Das ist die Subordinationstheorie.",
+                        explanation: "Subordinationstheorie = Über-/Unterordnung."
                     },
                     {
                         type: 'text',
-                        intro: "Was muss Förster geltend machen, um klagebefugt zu sein? (§ 42 II VwGO)",
-                        keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv"],
-                        explanation: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten.",
-                        feedback: "Exakt. Bloße Behauptung reicht."
-                    },
-                    {
-                        type: 'text',
-                        intro: "Und worauf muss sich eine Gemeinde berufen, um zu klagen?",
-                        keywords: ["selbstverwaltung", "planungshoheit", "28"],
-                        explanation: "Kommunale Selbstverwaltungsgarantie / Planungshoheit (Art. 28 II GG).",
-                        feedback: "Ja. Art. 28 Abs. 2 GG ist der Schlüssel."
+                        intro: "Die Theorien sind oft ungenau. Warum ist es HIER definitiv öffentliches Recht? (Subsumtion)",
+                        keywords: ["interesse", "zusammenarbeit", "kommunal", "hoheitsträger", "berechtigt", "verpflichtet", "zuordnung"],
+                        explanation: "Es geht um kommunale Zusammenarbeit (originäre öff. Interessen) und das Gesetz berechtigt/verpflichtet Hoheitsträger (Zuordnungssubjekt).",
+                        feedback: "Sehr gut. Originäre öffentliche Interessen und Sonderrecht für Hoheitsträger."
                     }
                 ]
             },
             {
                 id: "AKTE_004",
-                title: "Normen & Grundrechte",
-                subtitle: "TKG & Rundfunk",
-                topics: ["Final/Konditional Normen", "Art. 13 GG Wohnung", "Grundrechtsfähigkeit Staat", "Rundfunkfreiheit"],
+                title: "Fall: Windkraft (Förster)",
+                subtitle: "Aufgabe 7 (Großer Fall)",
+                topics: ["VA-Qualifizierung", "Anfechtungsklage", "Widerspruch", "Klagebefugnis", "Gemeinde-Planungshoheit"],
                 questions: [
                     {
                         type: 'choice',
-                        intro: "§ 87 Abs. 1 TKG gibt ein Ziel vor. Welche Normart?",
-                        options: ["Konditional", "Final", "Deskriptiv"],
+                        intro: "Hotelier Förster will gegen die Genehmigung einer Windkraftanlage vorgehen. Um was für einen Rechtsakt handelt es sich bei der Genehmigung?",
+                        options: ["Realakt", "Verwaltungsakt (§ 35 VwVfG)", "Verordnung"],
                         correctAnswer: 1,
-                        feedback: "Gut. Zielorientiert = Final.",
-                        explanation: "Finalnormen geben Ziele vor."
-                    },
-                    {
-                        type: 'text',
-                        intro: "Kann sich der Staat (ZDF) auf Grundrechte berufen? Grundsatz?",
-                        keywords: ["nein", "grundsätzlich", "nicht"],
-                        explanation: "Grundsatz: Nein (Konfusionsargument).",
-                        feedback: "Grundsatz nein."
+                        feedback: "Korrekt. Regelung eines Einzelfalls.",
+                        explanation: "Genehmigung ist ein VA."
                     },
                     {
                         type: 'choice',
-                        intro: "Gebot der Staatsferne im Rundfunkrat. Maximale Quote staatlicher Mitglieder?",
-                        options: ["50%", "Ein Drittel (1/3)", "10%"],
+                        intro: "Er will, dass der VA aufgehoben wird. Welche Klageart?",
+                        options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I Alt. 1 VwGO)", "Feststellungsklage"],
                         correctAnswer: 1,
-                        feedback: "Korrekt.",
-                        explanation: "BVerfG sagt: Max 1/3 staatliche Vertreter."
+                        feedback: "Richtig.",
+                        explanation: "Anfechtungsklage richtet sich auf Aufhebung."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Welcher Rechtsbehelf ist nach § 68 VwGO vorgeschaltet?",
+                        keywords: ["widerspruch"],
+                        explanation: "Widerspruch (Anfechtungswiderspruch).",
+                        feedback: "Ja, der Widerspruch."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Klagebefugnis (§ 42 II VwGO): Was muss Förster geltend machen?",
+                        keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv", "eigene"],
+                        explanation: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten (Möglichkeitstheorie).",
+                        feedback: "Exakt. Möglichkeitstheorie."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Zusatzfrage: Wenn die STADT Löbau klagen würde – worauf müsste sie sich berufen?",
+                        keywords: ["selbstverwaltung", "planungshoheit", "28"],
+                        explanation: "Kommunale Selbstverwaltungsgarantie / Planungshoheit (Art. 28 Abs. 2 GG).",
+                        feedback: "Richtig. Art. 28 II GG."
                     }
                 ]
             },
             {
                 id: "AKTE_005",
+                title: "Normen & Verfassung",
+                subtitle: "Aufgaben 8, 9, 10, 11, 12",
+                topics: ["Normarten (TKG)", "Art. 13 GG", "Grundrechtsfähigkeit Staat", "Rundfunkfreiheit", "Demokratieprinzip", "Gesetzgebungskompetenz"],
+                questions: [
+                    {
+                        type: 'choice',
+                        intro: "Normenkunde. § 87 Abs. 1 TKG gibt ein Ziel vor. Welche Normart?",
+                        options: ["Konditional", "Final", "Deskriptiv"],
+                        correctAnswer: 1,
+                        feedback: "Final = Ziel.",
+                        explanation: "Finalnormen geben Ziele vor."
+                    },
+                    {
+                        type: 'choice',
+                        intro: "Und § 110 Abs. 1 TKG (Wenn-Dann-Schema)?",
+                        options: ["Konditional", "Final", "Deskriptiv"],
+                        correctAnswer: 0,
+                        feedback: "Korrekt. Wenn-Dann ist konditional.",
+                        explanation: "Konditionalnorm."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Art. 13 GG (Wohnung). Gelten Geschäftsräume als Wohnung? Und wann sind sie geschützt?",
+                        keywords: ["ja", "öffnungszeiten", "ladenschluss", "schutz"],
+                        explanation: "Ja. Aber während Öffnungszeiten geringerer Schutz, voller Schutz nach Ladenschluss.",
+                        feedback: "Richtig. Abstufung je nach Öffnungszeit."
+                    },
+                    {
+                        type: 'text',
+                        intro: "ZDF-Fall. Kann sich der Staat auf Grundrechte berufen? Grundsatz?",
+                        keywords: ["nein", "grundsätzlich", "nicht", "konfusion"],
+                        explanation: "Grundsatz nein (Konfusionsargument). Ausnahme: Rundfunkfreiheit.",
+                        feedback: "Grundsatz nein."
+                    },
+                    {
+                        type: 'choice',
+                        intro: "Rundfunkrat: Wie hoch darf der Anteil staatlicher Mitglieder maximal sein (Staatsferne)?",
+                        options: ["50%", "Ein Drittel (1/3)", "10%"],
+                        correctAnswer: 1,
+                        feedback: "Korrekt.",
+                        explanation: "Die Drittel-Quote (BVerfG)."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Nennen Sie ein Beispiel im GG, in dem das Demokratieprinzip zum Ausdruck kommt.",
+                        keywords: ["20", "wahlen", "abstimmung", "volkssouveränität"],
+                        explanation: "Art. 20 Abs. 1 und 2 GG (Wahlen / Volkssouveränität).",
+                        feedback: "Art. 20 GG ist der Kern."
+                    },
+                    {
+                        type: 'choice',
+                        intro: "Wer hat die Kompetenz für die 'Corona-Notbremse' (Infektionsschutz)?",
+                        options: ["Länder", "Bund (konkurrierende Gesetzgebung)", "EU"],
+                        correctAnswer: 1,
+                        feedback: "Richtig.",
+                        explanation: "Art. 74 GG: Maßnahmen gegen gemeingefährliche Krankheiten."
+                    }
+                ]
+            },
+            {
+                id: "AKTE_006",
+                title: "Verwaltungshandeln",
+                subtitle: "Aufgaben 15, 16, 17",
+                topics: ["Definition VA", "Ermessensfehler", "Widerruf § 49 VwVfG"],
+                questions: [
+                    {
+                        type: 'text',
+                        intro: "Definition Verwaltungsakt (§ 35 VwVfG). Nennen Sie die Elemente.",
+                        keywords: ["hoheitlich", "maßnahme", "behörde", "regelung", "einzelfall", "außenwirkung"],
+                        explanation: "Hoheitliche Maßnahme einer Behörde auf dem Gebiet des öff. Rechts zur Regelung eines Einzelfalls mit Außenwirkung.",
+                        feedback: "Das muss sitzen."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Nennen Sie einen typischen Ermessensfehler.",
+                        keywords: ["nichtgebrauch", "überschreitung", "fehlgebrauch"],
+                        explanation: "Ermessensnichtgebrauch, Ermessensüberschreitung, Ermessensfehlgebrauch.",
+                        feedback: "Richtig."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Wie nennt man die nachträgliche Aufhebung eines rechtmäßigen VA? Welche Norm?",
+                        keywords: ["widerruf", "49"],
+                        explanation: "Widerruf nach § 49 VwVfG.",
+                        feedback: "Korrekt."
+                    }
+                ]
+            },
+            {
+                id: "AKTE_007",
                 title: "Europa & Haftung",
-                subtitle: "EU-Recht & Amtshaftung",
-                topics: ["EU-Grundfreiheiten", "Amtshaftung § 839 BGB", "Richtlinien-Wirkung", "EU-Grundrechte"],
+                subtitle: "Aufgaben 13, 14, 18, 19",
+                topics: ["EU-Grundfreiheiten", "Amtshaftung", "Richtlinien-Wirkung", "EU-Grundrechte"],
                 questions: [
                     {
                         type: 'text',
                         intro: "Nennen Sie zwei EU-Grundfreiheiten.",
                         keywords: ["waren", "arbeitnehmer", "dienstleistung", "kapital", "niederlassung"],
-                        explanation: "Warenverkehr, Arbeitnehmer, Dienstleistung, Niederlassung.",
+                        explanation: "Warenverkehr, Arbeitnehmerfreizügigkeit, Dienstleistung, Niederlassung, Kapital.",
                         feedback: "Akzeptiert."
                     },
                     {
                         type: 'choice',
-                        intro: "Anspruchsgrundlage bei Amtspflichtverletzung (Schadensersatz)?",
+                        intro: "Behörde arbeitet zu langsam -> Schaden. Anspruchsgrundlage?",
                         options: ["§ 823 BGB", "§ 839 BGB i.V.m. Art. 34 GG", "VwGO"],
                         correctAnswer: 1,
-                        feedback: "Richtig.",
+                        feedback: "Richtig. Amtshaftung.",
                         explanation: "§ 839 BGB + Art. 34 GG."
                     },
                     {
@@ -277,38 +388,45 @@
                         options: ["Nie", "Wenn Frist abgelaufen & inhaltlich bestimmt", "Immer"],
                         correctAnswer: 1,
                         feedback: "Korrekt.",
-                        explanation: "Bei Umsetzungsfehlern/Fristablauf."
+                        explanation: "Vertikale Wirkung bei Fristablauf."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Woher kommen die EU-Grundrechte? (Rechtsquellen)",
+                        keywords: ["charta", "emrk", "verfassungsüberlieferung", "6"],
+                        explanation: "Art. 6 EUV: Grundrechtecharta, EMRK, gemeinsame Verfassungsüberlieferungen.",
+                        feedback: "Sehr gut."
                     }
                 ]
             },
             {
-                id: "AKTE_006",
+                id: "AKTE_008",
                 title: "Fall: Busunternehmer",
-                subtitle: "Gewerberecht & Widerruf",
+                subtitle: "Aufgabe 20 (Großer Fall)",
                 topics: ["Spezialgesetz PBefG", "Unzuverlässigkeit", "Widerruf Voraussetzungen"],
                 questions: [
                     {
                         type: 'choice',
-                        intro: "Busunternehmer zahlt Steuern nicht. Lizenzentzug. Welche Rechtsgrundlage?",
+                        intro: "Busunternehmer zahlt Steuern nicht. Wir wollen die Lizenz entziehen. Rechtsgrundlage?",
                         options: ["§ 35 GewO", "§ 25 PBefG", "§ 48 VwVfG"],
                         correctAnswer: 1,
-                        feedback: "Wichtig! Spezialgesetz vor GewO.",
-                        explanation: "Personenbeförderungsgesetz ist lex specialis."
+                        feedback: "Wichtig! PBefG ist Spezialgesetz.",
+                        explanation: "Personenbeförderungsgesetz geht vor GewO."
                     },
                     {
                         type: 'text',
-                        intro: "Definition 'Unzuverlässigkeit'?",
+                        intro: "Definieren Sie 'Unzuverlässigkeit' im Gewerberecht.",
                         keywords: ["gewähr", "künftig", "ordnungsgemäß", "betrieb", "prognose"],
-                        explanation: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb.",
+                        explanation: "Wer keine Gewähr für den künftigen ordnungsgemäßen Betrieb bietet (negative Zukunftsprognose).",
                         feedback: "Genau. Negative Zukunftsprognose."
                     },
                     {
                         type: 'choice',
-                        intro: "Was prüft man beim Widerruf nach § 25 PBefG?",
-                        options: ["Nur Schulden", "Wegfall Voraussetzungen + Tatsachen + Unzuverlässigkeit", "Belieben"],
+                        intro: "Was sind die Voraussetzungen für den Widerruf nach § 25 PBefG?",
+                        options: ["Nur Steuerschulden", "Wegfall Genehmigungsvoraussetzungen + Tatsachen + Unzuverlässigkeit", "Ermessen"],
                         correctAnswer: 1,
                         feedback: "Richtig.",
-                        explanation: "Voraussetzungen, Tatsachen und Unzuverlässigkeit."
+                        explanation: "Wegfall Voraussetzungen, Tatsachen, Unzuverlässigkeit."
                     }
                 ]
             }
@@ -319,11 +437,12 @@
         let trust = 50;
         let savedProgress = {};
 
+        // Auto-Fix Save File
         try {
             const data = localStorage.getItem('junior_lawyer_save_v1');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
-            console.log("Save error");
+            console.log("Save error, resetting.");
             savedProgress = {};
         }
 
@@ -356,7 +475,7 @@
                             <div class="case-subtitle">${c.subtitle}</div>
                         </div>
                         <div class="card-actions">
-                            <div class="info-icon" onclick="toggleT(this)">i</div>
+                            <div class="info-btn" onclick="toggleT(this)">i</div>
                             <button class="btn-start-case" onclick="start(${idx})">${highScore>0 ? 'Weiter' : 'Start'}</button>
                         </div>
                     </div>
