@@ -3,510 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jura Arcade</title>
+    <title>Jura Blitz</title>
     <style>
         :root {
-            --bg: #F2F2F7;
-            --card: #FFFFFF;
-            --text: #1C1C1E;
-            --sub: #8E8E93;
-            --blue: #007AFF;
-            --red: #FF3B30;
-            --green: #34C759;
-            --orange: #FF9500;
-            --radius: 24px;
-            --shadow: 0 12px 40px rgba(0,0,0,0.12);
+            --bg: #000000;
+            --card: #1C1C1E;
+            --text: #FFFFFF;
+            --green: #30D158;
+            --red: #FF453A;
+            --blue: #0A84FF;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
             height: 100vh;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            overflow: hidden;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- HUD --- */
-        .hud {
-            width: 90%;
-            max-width: 450px;
-            margin-top: 15px;
+        /* Top Bar: Time & Score */
+        .header {
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 20px;
             font-weight: 700;
             z-index: 10;
         }
 
-        .lives {
-            font-size: 20px;
-            letter-spacing: 2px;
-        }
-
-        .score-container {
-            text-align: center;
-        }
-
-        .score {
-            font-size: 24px;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .combo {
-            font-size: 12px;
-            color: var(--orange);
-            opacity: 0;
-            transition: opacity 0.2s, transform 0.2s;
-        }
-        .combo.active { opacity: 1; transform: scale(1.1); }
-
-        .progress-bar-bg {
-            width: 90%;
-            max-width: 450px;
+        .timer-bar {
+            position: absolute;
+            top: 0; left: 0;
             height: 6px;
-            background: #E5E5EA;
-            border-radius: 10px;
-            margin: 10px 0 20px 0;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
             background: var(--blue);
-            width: 0%;
-            transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        /* --- GAME SCENE --- */
-        .scene {
-            width: 90%;
-            max-width: 400px;
-            flex-grow: 1;
-            max-height: 60vh;
-            perspective: 1200px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .card {
             width: 100%;
-            height: 100%;
-            position: absolute;
-            transform-style: preserve-3d;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            transition: width 0.1s linear;
         }
 
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            border-radius: var(--radius);
-            background: var(--card);
+        /* Game Area */
+        .game-area {
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .card-stack {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+            height: 450px;
+        }
+
+        .card {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--card);
+            border-radius: 24px;
             padding: 30px;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
+            border: 1px solid #333;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
-        .face.back {
-            transform: rotateY(180deg);
-            background: #FDFDFF;
-            border: 2px solid var(--blue);
-        }
-
-        .tag {
-            position: absolute;
-            top: 25px;
-            background: #F2F2F7;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 700;
+        .term {
+            font-size: 14px;
             text-transform: uppercase;
-            color: var(--sub);
-            letter-spacing: 0.5px;
+            color: #888;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
 
-        h2 {
-            font-size: 22px;
-            line-height: 1.4;
-            margin: 0;
+        .question {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.3;
         }
 
-        p {
+        .divider {
+            width: 40px;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            margin-bottom: 30px;
+        }
+
+        .definition {
             font-size: 18px;
             line-height: 1.5;
-            color: #3A3A3C;
+            color: #DDD;
         }
 
-        .tap-hint {
+        /* Overlay Feedback */
+        .feedback-overlay {
             position: absolute;
-            bottom: 25px;
-            font-size: 13px;
-            color: var(--sub);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
-        }
-
-        /* --- CONTROLS --- */
-        .controls {
-            width: 100%;
-            max-width: 400px;
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            font-size: 100px;
             opacity: 0;
             pointer-events: none;
-            transform: translateY(20px);
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
         }
+        .feedback-overlay.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
-        .controls.active {
-            opacity: 1;
-            pointer-events: all;
-            transform: translateY(0);
+        /* Buttons */
+        .controls {
+            display: flex;
+            width: 100%;
+            max-width: 380px;
+            gap: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
         }
 
         .btn {
             flex: 1;
-            border: none;
-            padding: 18px;
+            height: 70px;
             border-radius: 20px;
-            font-size: 16px;
-            font-weight: 700;
+            border: none;
+            font-size: 20px;
+            font-weight: 800;
             cursor: pointer;
             transition: transform 0.1s;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 10px;
         }
-
-        .btn:active { transform: scale(0.96); }
-
-        .btn-wrong {
-            background: #FFF2F2;
-            color: var(--red);
-        }
+        .btn:active { transform: scale(0.95); }
         
-        .btn-right {
-            background: var(--blue);
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
-        }
+        .btn-false { background: #2C2C2E; color: var(--red); border: 2px solid var(--red); }
+        .btn-true { background: var(--green); color: black; }
 
-        /* --- SCREENS --- */
-        .overlay {
+        /* Screens */
+        .screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            z-index: 100;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
+            z-index: 200;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
-            display: none; /* hidden by default */
         }
 
-        .overlay h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
+        .hidden { display: none; }
 
-        .overlay p {
-            max-width: 300px;
-            margin-bottom: 30px;
-            color: var(--sub);
-        }
-
-        .big-btn {
-            background: var(--text);
-            color: white;
-            padding: 15px 40px;
+        h1 { font-size: 40px; margin-bottom: 10px; background: linear-gradient(to right, var(--blue), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .start-btn {
+            margin-top: 40px;
+            background: white;
+            color: black;
+            padding: 15px 50px;
             border-radius: 30px;
-            font-size: 18px;
+            font-size: 20px;
+            font-weight: 700;
             border: none;
-            cursor: pointer;
         }
 
-        /* --- FX --- */
-        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
-        @keyframes shake {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(2px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-            40%, 60% { transform: translate3d(4px, 0, 0); }
+        .stat-box {
+            background: #1C1C1E;
+            padding: 20px;
+            border-radius: 16px;
+            min-width: 200px;
+            margin: 10px;
         }
-
+        
     </style>
 </head>
 <body>
 
-    <div class="hud">
-        <div class="lives" id="livesDisplay">❤️❤️❤️❤️❤️</div>
-        <div class="score-container">
-            <div class="score" id="scoreDisplay">0</div>
-            <div class="combo" id="comboDisplay">COMBO x2</div>
-        </div>
-    </div>
-    
-    <div class="progress-bar-bg">
-        <div class="progress-fill" id="progressFill"></div>
+    <div class="timer-bar" id="timerBar"></div>
+    <div class="header">
+        <span id="scoreDisplay">Score: 0</span>
+        <span id="timeLeft">60s</span>
     </div>
 
-    <div class="scene" id="scene" onclick="flipCard()">
-        <div class="card" id="card">
-            <div class="face front">
-                <div class="tag" id="qTag">Kategorie</div>
-                <h2 id="qText">Frage laden...</h2>
-                <div class="tap-hint">Tippen zum Auflösen</div>
+    <div id="iconCheck" class="feedback-overlay">✅</div>
+    <div id="iconX" class="feedback-overlay">❌</div>
+
+    <div class="game-area">
+        <div class="card-stack" id="cardContainer">
             </div>
-            <div class="face back">
-                <div class="tag">Lösung</div>
-                <p id="aText">Antwort...</p>
-            </div>
-        </div>
     </div>
 
-    <div class="controls" id="controls">
-        <button class="btn btn-wrong" onclick="processAnswer(false)">
-            <span>Falsch</span>
-            <span style="font-size: 10px; opacity: 0.6; margin-top: 4px;">Leben verlieren</span>
+    <div class="controls">
+        <button class="btn btn-false" onclick="handleInput(false)">
+            <span>TRASH</span> (Falsch)
         </button>
-        <button class="btn btn-right" onclick="processAnswer(true)">
-            <span>Richtig</span>
-            <span style="font-size: 10px; opacity: 0.8; margin-top: 4px;">Punkte + Combo</span>
+        <button class="btn btn-true" onclick="handleInput(true)">
+            (Richtig) <span>MATCH</span>
         </button>
     </div>
 
-    <div class="overlay" id="startScreen" style="display: flex;">
-        <h1>Jura Arcade</h1>
-        <p>Montag ist Klausur. <br>Der Survival-Modus für Öffentliches Recht.</p>
-        <p style="font-size: 14px;">5 Leben. Highscore-Jagd. <br>Falsche Antworten kommen sofort zurück.</p>
-        <button class="big-btn" onclick="startGame()">Starten</button>
+    <div id="startScreen" class="screen">
+        <h1>Jura Blitz</h1>
+        <p style="font-size: 18px; color: #888;">60 Sekunden.</p>
+        <p style="font-size: 18px; color: #888;">Ist die Aussage Richtig oder Falsch?</p>
+        <button class="start-btn" onclick="startGame()">Starten</button>
     </div>
 
-    <div class="overlay" id="gameOverScreen">
-        <h1 style="color: var(--red);">Game Over</h1>
-        <p>Du hast alle Leben verloren.</p>
-        <h2 id="finalScoreLose">0 Punkte</h2>
-        <button class="big-btn" onclick="startGame()">Neu versuchen</button>
-    </div>
-
-    <div class="overlay" id="winScreen">
-        <h1 style="color: var(--green);">Bestanden!</h1>
-        <p>Du hast den Stoff für Montag drauf.</p>
-        <h2 id="finalScoreWin">0 Punkte</h2>
-        <button class="big-btn" onclick="startGame()">Nochmal zur Sicherheit</button>
+    <div id="endScreen" class="screen hidden">
+        <h1>Zeit abgelaufen!</h1>
+        <div class="stat-box">
+            <div style="color: #888; font-size: 14px;">Dein Score</div>
+            <div style="font-size: 40px; font-weight: 800;" id="finalScore">0</div>
+        </div>
+        <p id="highScoreText" style="color: var(--green); font-weight: bold; margin-top: 10px;"></p>
+        <button class="start-btn" onclick="startGame()">Nochmal</button>
     </div>
 
     <script>
-        // --- DATA ---
-        const questions = [
-            { cat: "Aufgabe 1", q: "Was ist Systematische Auslegung?", a: "Feststellen des Aussagegehaltes einer Norm anhand ihrer Stellung im Gesetz oder im Gesamtzusammenhang." },
-            { cat: "Aufgabe 1 (Alt)", q: "Was ist Historische Auslegung?", a: "Ermittlung des Willens des historischen Gesetzgebers anhand der Entstehungsgeschichte (Gesetzesmaterialien, Protokolle)." },
-            { cat: "Aufgabe 2", q: "Was ist verfassungskonforme Auslegung?", a: "Wenn mehrere Deutungen möglich sind: Die wählen, die mit dem GG vereinbar ist. Norm bleibt gültig." },
-            { cat: "Aufgabe 2 (Alt)", q: "Was ist richtlinienkonforme Auslegung?", a: "Auslegung nationalen Rechts so, dass das Ziel einer EU-Richtlinie bestmöglich erreicht wird." },
-            { cat: "Aufgabe 3", q: "Was ist eine Staatszielbestimmung? (+Beispiel)", a: "Verfassungsnorm, die dem Staat Aufgaben vorgibt ohne subjektive Rechte für Einzelne (z.B. Sozialstaat, Umweltschutz)." },
-            { cat: "Aufgabe 4", q: "Definition: Anstalt (Öff. Recht)", a: "Zusammenfassung von Personal/Sachen zur Erfüllung öffentlicher Aufgaben, die BENUTZERN zur Verfügung steht." },
-            { cat: "Aufgabe 4 (Alt)", q: "Unterschied Körperschaft vs. Anstalt", a: "Körperschaft hat MITGLIEDER. Anstalt hat BENUTZER." },
-            { cat: "Aufgabe 5", q: "Wo werden Bundesgesetze veröffentlicht?", a: "Im Bundesgesetzblatt." },
-            { cat: "Aufgabe 6", q: "Warum ist bei komm. Zusammenarbeit der Verwaltungsrechtsweg (§ 40 VwGO) eröffnet?", a: "Weil es um originäre öffentliche Interessen geht und Gemeinden als Hoheitsträger berechtigt sind (Modifizierte Subjektstheorie)." },
-            { cat: "Aufgabe 7a", q: "Windkraft: Welcher Rechtsakt ist die Genehmigung?", a: "Ein Verwaltungsakt i.S.v. § 35 VwVfG." },
-            { cat: "Aufgabe 7a", q: "Windkraft: Statthafte Klageart & Rechtsbehelf?", a: "Anfechtungsklage (§ 42 VwGO). Vorgeschaltet: Widerspruch (§ 68 VwGO)." },
-            { cat: "Aufgabe 7a", q: "Windkraft: Wann ist der Nachbar klagebefugt?", a: "Wenn die MÖGLICHKEIT einer Rechtsverletzung besteht (z.B. Art. 14 GG Eigentum oder Art. 12 GG)." },
-            { cat: "Aufgabe 7b", q: "Windkraft: Worauf beruft sich eine Gemeinde bei Klage?", a: "Auf die kommunale Selbstverwaltungsgarantie / Planungshoheit (Art. 28 Abs. 2 GG)." },
-            { cat: "Aufgabe 8", q: "Welche Normart ist § 87 I TKG (Ziele)?", a: "Final gefasste Norm (Gibt Ziel/Rechtsfolge vor)." },
-            { cat: "Aufgabe 8", q: "Welche Normart ist § 110 I TKG (Wenn-Dann)?", a: "Konditional gefasste Norm." },
-            { cat: "Aufgabe 8", q: "Welche Normart ist § 3 Nr. 20 TKG (Begriff)?", a: "Deskriptiv gefasste Norm (Definition)." },
-            { cat: "Aufgabe 9", q: "Sind Geschäftsräume als 'Wohnung' (Art. 13 GG) geschützt?", a: "Ja. Aber während Öffnungszeiten geringerer Schutz, erst nach Ladenschluss voller Schutz." },
-            { cat: "Aufgabe 10", q: "Kann sich der Staat (ZDF) auf Grundrechte berufen?", a: "Grundsatz: Nein (Konfusionsargument). Ausnahme: Wenn grundrechtlich geschützter Lebensbereich (Rundfunkfreiheit)." },
-            { cat: "Aufgabe 10", q: "Gebote für Rundfunk-Aufsichtsgremien?", a: "1. Vielfaltsicherung (Spiegelbild der Gesellschaft). 2. Staatsferne (max 1/3 Staat)." },
-            { cat: "Aufgabe 11", q: "Beispiel für Demokratieprinzip im GG", a: "Art. 20 Abs. 1 und 2 GG (Wahlen / Volkssouveränität)." },
-            { cat: "Aufgabe 12", q: "Wer hat Kompetenz für 'Corona-Notbremse'?", a: "Der Bund (Art. 74 GG, Maßnahmen gegen gemeingefährliche Krankheiten)." },
-            { cat: "Aufgabe 13", q: "Nenne 2 EU-Grundfreiheiten (+Artikel)", a: "Warenverkehr (Art. 28 AEUV), Arbeitnehmerfreizügigkeit (Art. 45), Dienstleistung (Art. 56)." },
-            { cat: "Aufgabe 14", q: "Anspruchsgrundlage Amtshaftung (Schadenersatz)", a: "§ 839 BGB i.V.m. Art. 34 GG (Verletzung drittgerichteter Amtspflicht)." },
-            { cat: "Aufgabe 15", q: "Definition Verwaltungsakt (§ 35 VwVfG)", a: "Hoheitliche Maßnahme einer Behörde auf Gebiet des öff. Rechts zur Regelung eines Einzelfalls mit Außenwirkung." },
-            { cat: "Aufgabe 16", q: "Nenne einen Ermessensfehler", a: "Ermessensnichtgebrauch, Ermessensüberschreitung oder Ermessensfehlgebrauch (sachfremde Erwägungen)." },
-            { cat: "Aufgabe 17", q: "Aufhebung eines rechtmäßigen VA (Fachbegriff + Norm)", a: "Widerruf nach § 49 VwVfG." },
-            { cat: "Aufgabe 18", q: "Wann gelten EU-Richtlinien unmittelbar?", a: "Wenn Frist abgelaufen, inhaltlich unbedingt, hinreichend bestimmt und Begünstigung des Bürgers." },
-            { cat: "Aufgabe 19", q: "Woher kommen EU-Grundrechte?", a: "Art. 6 EUV referenziert auf: EU-Grundrechtecharta, EMRK und gemeinsame Verfassungsüberlieferungen." },
-            { cat: "Aufgabe 20", q: "Rechtsgrundlage gegen Busunternehmer (Unzuverlässig)", a: "Widerruf der Genehmigung nach § 25 PBefG (Personenbeförderungsgesetz). NICHT GewO!" },
-            { cat: "Aufgabe 20", q: "Voraussetzungen Widerruf § 25 PBefG", a: "1. Wegfall Genehmigungsvoraussetzungen, 2. Konkrete Tatsachen, 3. Unzuverlässigkeit (negative Prognose)." }
+        // DATEN (Kategorisiert für intelligenten Tausch)
+        // Gruppe 1: Definitionen
+        const poolDefinitions = [
+            { q: "Systematische Auslegung", a: "Feststellen des Aussagegehaltes anhand der Stellung im Gesetz." },
+            { q: "Historische Auslegung", a: "Ermittlung des Willens des historischen Gesetzgebers (Materialien)." },
+            { q: "Verfassungskonforme Auslegung", a: "Wahl der Deutung, die mit dem GG vereinbar ist." },
+            { q: "Richtlinienkonforme Auslegung", a: "Auslegung für bestmögliches Erreichen des Richtlinienziels." },
+            { q: "Anstalt (Öff. Recht)", a: "Zusammenfassung von Mitteln, die Benutzern zur Verfügung steht." },
+            { q: "Körperschaft", a: "Mitgliedschaftlich organisierter Hoheitsträger." },
+            { q: "Stiftung", a: "Zusammenfassung von Vermögen für einen Stiftungszweck." },
+            { q: "Final gefasste Norm", a: "Gibt ein Ziel oder eine Rechtsfolge vor (z.B. § 87 TKG)." },
+            { q: "Konditional gefasste Norm", a: "Wenn-Dann-Schema (z.B. § 110 TKG)." },
+            { q: "Deskriptive Norm", a: "Beschreibung eines Begriffs (Definition)." },
+            { q: "Verwaltungsakt", a: "Maßnahme einer Behörde zur Regelung eines Einzelfalls mit Außenwirkung." }
         ];
 
-        // --- GAME STATE ---
-        let deck = [];
-        let lives = 5;
+        // Gruppe 2: Fakten & Regeln
+        const poolFacts = [
+            { q: "Veröffentlichung Gesetze", a: "Im Bundesgesetzblatt." },
+            { q: "Rechtsweg § 40 VwGO", a: "Öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art." },
+            { q: "Klagebefugnis § 42 II VwGO", a: "Möglichkeit der Verletzung in subjektiven Rechten." },
+            { q: "Widerspruch", a: "Vorgeschalteter Rechtsbehelf nach § 68 VwGO." },
+            { q: "Wohnungsschutz (Geschäft)", a: "Voller Schutz nur nach Ladenschluss." },
+            { q: "Grundrechte für Staat?", a: "Nein (Konfusionsargument), außer Rundfunkfreiheit." },
+            { q: "Rundfunkrat: Staatsferne", a: "Maximal 1/3 staatliche Mitglieder." },
+            { q: "Kompetenz Corona-Notbremse", a: "Bund (Art. 74 GG, gemeingefährliche Krankheiten)." },
+            { q: "EU-Richtlinien Wirkung", a: "Unmittelbar nur wenn Frist abgelaufen & begünstigend." },
+            { q: "Widerruf § 25 PBefG", a: "Erfordert Unzuverlässigkeit (negative Zukunftsprognose)." },
+            { q: "Amtshaftung § 839 BGB", a: "Setzt Verletzung einer drittgerichteten Amtspflicht voraus." }
+        ];
+
+        let currentRound = null; // { q, a, isCorrect }
         let score = 0;
-        let combo = 0;
-        let isFlipped = false;
-        let currentCard = null;
-        let maxCards = 0;
-
-        // --- DOM ---
-        const cardEl = document.getElementById('card');
-        const controls = document.getElementById('controls');
-        const qText = document.getElementById('qText');
-        const aText = document.getElementById('aText');
-        const qTag = document.getElementById('qTag');
-        const livesDisplay = document.getElementById('livesDisplay');
-        const scoreDisplay = document.getElementById('scoreDisplay');
-        const comboDisplay = document.getElementById('comboDisplay');
-        const progressFill = document.getElementById('progressFill');
-
-        function shuffle(array) {
-            return array.sort(() => Math.random() - 0.5);
-        }
-
-        function updateHUD() {
-            // Lives
-            let heartString = "";
-            for(let i=0; i<lives; i++) heartString += "❤️";
-            livesDisplay.innerText = heartString || "💀";
-
-            // Score
-            scoreDisplay.innerText = score;
-
-            // Combo
-            if (combo > 1) {
-                comboDisplay.innerText = "COMBO x" + combo;
-                comboDisplay.classList.add('active');
-            } else {
-                comboDisplay.classList.remove('active');
-            }
-
-            // Progress
-            let progress = ((maxCards - deck.length) / maxCards) * 100;
-            if(deck.length === 0 && currentCard === null) progress = 100;
-            progressFill.style.width = progress + "%";
-        }
+        let timeLeft = 60;
+        let gameInterval;
+        let isPlaying = false;
+        let highScore = localStorage.getItem('juraHighScore') || 0;
 
         function startGame() {
-            document.querySelectorAll('.overlay').forEach(el => el.style.display = 'none');
-            
-            // Reset State
-            deck = shuffle([...questions]);
-            maxCards = questions.length;
-            lives = 5;
             score = 0;
-            combo = 0;
+            timeLeft = 60;
+            isPlaying = true;
+            document.getElementById('scoreDisplay').innerText = "Score: 0";
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('endScreen').classList.add('hidden');
             
-            updateHUD();
-            drawCard();
-        }
-
-        function drawCard() {
-            if (deck.length === 0) {
-                endGame(true);
-                return;
-            }
-
-            currentCard = deck.shift();
-            isFlipped = false;
-
-            // Reset CSS
-            cardEl.classList.remove('flipped');
-            controls.classList.remove('active');
+            // Timer starten
+            clearInterval(gameInterval);
+            gameInterval = setInterval(tick, 100);
             
-            // Fill Content with slight delay for transition
-            setTimeout(() => {
-                qTag.innerText = currentCard.cat;
-                qText.innerText = currentCard.q;
-                aText.innerText = currentCard.a;
-            }, 200);
-
-            updateHUD();
+            nextCard();
         }
 
-        function flipCard() {
-            if (isFlipped) return;
-            cardEl.classList.add('flipped');
-            controls.classList.add('active');
-            isFlipped = true;
-        }
+        function tick() {
+            if (!isPlaying) return;
+            timeLeft -= 0.1;
+            document.getElementById('timeLeft').innerText = Math.ceil(timeLeft) + "s";
+            document.getElementById('timerBar').style.width = (timeLeft / 60 * 100) + "%";
 
-        function processAnswer(correct) {
-            if (!isFlipped) return;
-
-            if (correct) {
-                // Logic
-                combo++;
-                let points = 10 * (combo > 1 ? combo : 1);
-                score += points;
-                
-                // Visuals
-                document.body.style.backgroundColor = "#E8F5E9"; // Green tint
-                setTimeout(() => document.body.style.backgroundColor = "#F2F2F7", 300);
-                
-                nextTurn();
-
-            } else {
-                // Logic
-                lives--;
-                combo = 0;
-                
-                // Punishment: Card goes back into deck (at index 2 or end)
-                let reinsertIndex = Math.min(deck.length, 2);
-                deck.splice(reinsertIndex, 0, currentCard);
-                maxCards++; // Increase max to reflect added work
-                
-                // Visuals
-                document.body.style.backgroundColor = "#FFEBEE"; // Red tint
-                document.getElementById('scene').classList.add('shake');
-                setTimeout(() => {
-                    document.body.style.backgroundColor = "#F2F2F7";
-                    document.getElementById('scene').classList.remove('shake');
-                }, 400);
-
-                if (lives <= 0) {
-                    endGame(false);
-                } else {
-                    nextTurn();
-                }
+            if (timeLeft <= 0) {
+                endGame();
             }
         }
 
-        function nextTurn() {
-            setTimeout(() => {
-                drawCard();
-            }, 400);
+        function endGame() {
+            isPlaying = false;
+            clearInterval(gameInterval);
+            
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('juraHighScore', highScore);
+                document.getElementById('highScoreText').innerText = "Neuer Highscore!";
+            } else {
+                document.getElementById('highScoreText').innerText = "Highscore: " + highScore;
+            }
+
+            document.getElementById('finalScore').innerText = score;
+            document.getElementById('endScreen').classList.remove('hidden');
         }
 
-        function endGame(won) {
-            if (won) {
-                document.getElementById('finalScoreWin').innerText = score + " Punkte";
-                document.getElementById('winScreen').style.display = 'flex';
-                // Simple Confetti Effect via JS could go here
-            } else {
-                document.getElementById('finalScoreLose').innerText = score + " Punkte";
-                document.getElementById('gameOverScreen').style.display = 'flex';
+        function nextCard() {
+            const container = document.getElementById('cardContainer');
+            container.innerHTML = ""; // Clear old card
+
+            // Zufallsauswahl des Pools (damit sich ähnliche Fragen mischen)
+            const pool = Math.random() > 0.5 ? poolDefinitions : poolFacts;
+            
+            // Zufälliges Frage-Paar wählen
+            const correctIndex = Math.floor(Math.random() * pool.length);
+            const correctPair = pool[correctIndex];
+
+            // Entscheiden: Richtig oder Falsch anzeigen?
+            const showCorrect = Math.random() > 0.5;
+            let displayedAnswer = correctPair.a;
+
+            if (!showCorrect) {
+                // Falsche Antwort generieren
+                let wrongIndex;
+                do {
+                    wrongIndex = Math.floor(Math.random() * pool.length);
+                } while (wrongIndex === correctIndex); // Sicherstellen, dass es nicht zufällig doch die richtige ist
+                
+                displayedAnswer = pool[wrongIndex].a;
             }
+
+            currentRound = {
+                correct: showCorrect
+            };
+
+            // Karte rendern
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="term">Begriff / Frage</div>
+                <div class="question">${correctPair.q}</div>
+                <div class="divider"></div>
+                <div class="term">Definition / Antwort</div>
+                <div class="definition">${displayedAnswer}</div>
+            `;
+            
+            // Animation In
+            card.style.transform = "scale(0.8) translateY(50px)";
+            card.style.opacity = "0";
+            container.appendChild(card);
+            
+            requestAnimationFrame(() => {
+                card.style.transform = "scale(1) translateY(0)";
+                card.style.opacity = "1";
+            });
+        }
+
+        function handleInput(userSaidTrue) {
+            if (!isPlaying) return;
+
+            const isActuallyCorrect = currentRound.correct;
+            const userIsRight = (userSaidTrue === isActuallyCorrect);
+
+            // Feedback Visuals
+            const feedbackEl = userIsRight ? document.getElementById('iconCheck') : document.getElementById('iconX');
+            feedbackEl.classList.add('show');
+            setTimeout(() => feedbackEl.classList.remove('show'), 400);
+
+            const card = document.querySelector('.card');
+
+            if (userIsRight) {
+                score += 10; // Punkte
+                // Swipe Animation Right/Left based on button
+                card.style.transform = `translateX(${userSaidTrue ? 100 : -100}%) rotate(${userSaidTrue ? 10 : -10}deg)`;
+            } else {
+                score -= 5; // Strafe
+                timeLeft -= 2; // Zeitstrafe!
+                card.style.border = "2px solid red";
+                // Shake Animation
+                card.style.transform = "translateX(10px)";
+                setTimeout(() => card.style.transform = "translateX(-10px)", 50);
+                setTimeout(() => card.style.transform = "translateX(0)", 100);
+            }
+            
+            card.style.opacity = "0";
+            document.getElementById('scoreDisplay').innerText = "Score: " + score;
+
+            // Nächste Karte kurz verzögert
+            setTimeout(() => {
+                nextCard();
+            }, 150);
         }
 
     </script>
