@@ -14,7 +14,6 @@
             --danger: #FF453A;
             --text: #FFFFFF;
             --subtext: #86868B;
-            --glow: 0 0 20px rgba(10, 132, 255, 0.3);
         }
 
         @font-face {
@@ -35,7 +34,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- BACKGROUND FX --- */
+        /* --- BACKGROUND --- */
         .grid-bg {
             position: absolute;
             width: 200%;
@@ -61,13 +60,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 25px;
-            padding-top: 50px; /* Safe Area */
+            padding-top: 50px;
             z-index: 10;
         }
 
         .level-badge {
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 12px;
@@ -93,7 +93,7 @@
             transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        /* --- CORE AREA --- */
+        /* --- GAME AREA --- */
         .core-container {
             flex: 1;
             display: flex;
@@ -116,7 +116,7 @@
             text-align: center;
             margin-bottom: 20px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            transition: transform 0.3s;
+            transition: border-color 0.3s;
         }
 
         .q-label {
@@ -135,7 +135,7 @@
             line-height: 1.4;
         }
 
-        /* --- ANSWER SLOT --- */
+        /* --- SLOTS & FRAGMENTS --- */
         .answer-slot {
             min-height: 60px;
             display: flex;
@@ -153,6 +153,9 @@
             font-size: 16px;
             font-weight: 600;
             animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 8px;
         }
 
         @keyframes slideUp {
@@ -160,7 +163,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- FRAGMENT FIELD --- */
         .fragment-field {
             display: flex;
             flex-wrap: wrap;
@@ -168,7 +170,7 @@
             gap: 12px;
             width: 100%;
             max-width: 400px;
-            perspective: 1000px;
+            padding-bottom: 50px;
         }
 
         .fragment {
@@ -179,23 +181,14 @@
             font-size: 15px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: transform 0.1s, background 0.2s;
             position: relative;
             overflow: hidden;
         }
-
-        .fragment::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: translateX(-100%);
-            transition: 0.5s;
-        }
-
+        
         .fragment:active {
             transform: scale(0.92);
-            background: rgba(60,60,60, 0.9);
+            background: rgba(80,80,80, 1);
         }
 
         /* --- FX --- */
@@ -209,6 +202,7 @@
         .glitch-anim {
             animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both;
             color: var(--danger);
+            border-color: var(--danger);
         }
 
         @keyframes glitch {
@@ -224,14 +218,16 @@
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
+            background: rgba(5,5,5,0.9);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 100;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
+            padding: 20px;
         }
         
         .overlay h1 {
@@ -239,7 +235,7 @@
             background: linear-gradient(to right, var(--primary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 0;
+            margin: 0 0 20px 0;
             letter-spacing: -2px;
         }
 
@@ -247,11 +243,10 @@
             color: var(--subtext);
             max-width: 300px;
             line-height: 1.6;
-            margin-top: 10px;
+            margin: 0 0 30px 0;
         }
 
         .btn-start {
-            margin-top: 40px;
             background: white;
             color: black;
             border: none;
@@ -260,7 +255,7 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+            box-shadow: 0 0 30px rgba(255,255,255,0.2);
             transition: transform 0.2s;
         }
         .btn-start:active { transform: scale(0.95); }
@@ -273,7 +268,7 @@
     <canvas id="fxCanvas"></canvas>
 
     <div class="hud">
-        <div class="level-badge" id="levelDisplay">SEQUENCE 01</div>
+        <div class="level-badge" id="levelDisplay">READY</div>
         <div class="hp-bar-container">
             <div class="hp-bar" id="hpBar"></div>
         </div>
@@ -281,34 +276,29 @@
 
     <div class="core-container" id="gameArea">
         <div class="question-card" id="qCard">
-            <span class="q-label" id="catDisplay">Datenbank</span>
-            <div class="q-text" id="qText">Initialisiere...</div>
+            <span class="q-label" id="catDisplay">System</span>
+            <div class="q-text" id="qText">Warte auf Start...</div>
         </div>
 
-        <div class="answer-slot" id="answerSlot">
-            </div>
-
-        <div class="fragment-field" id="fragmentField">
-            </div>
+        <div class="answer-slot" id="answerSlot"></div>
+        <div class="fragment-field" id="fragmentField"></div>
     </div>
 
     <div class="overlay" id="startScreen">
-        <div style="font-size: 60px; margin-bottom: 20px;">💠</div>
+        <div style="font-size: 50px; margin-bottom: 20px;">💠</div>
         <h1>NEXUS</h1>
-        <p>Baue die juristischen Definitionen zusammen.</p>
-        <p style="font-size: 13px; opacity: 0.7;">WARNUNG: "Viren" (falsche Wörter) führen zu Systemschaden.</p>
-        <button class="btn-start" onclick="initGame()">Verbindung herstellen</button>
+        <p>Tippe die Definitionen in der richtigen Reihenfolge an.<br>Vermeide die "Viren" (falsche Wörter).</p>
+        <button class="btn-start" onclick="startGame()">System Starten</button>
     </div>
 
     <div class="overlay" id="endScreen" style="display: none;">
         <h1 id="endTitle">SYSTEM FAILURE</h1>
-        <p id="endSub">Kritischer Fehler im öffentlichen Recht.</p>
-        <button class="btn-start" onclick="initGame()">Neustart</button>
+        <p id="endSub">Verbindung unterbrochen.</p>
+        <button class="btn-start" onclick="location.reload()">Neustart</button>
     </div>
 
     <script>
-        [cite_start]// --- DATA [cite: 1-271] ---
-        // Format: q: Frage, a: Richtige Antwort, dist: Falsche Wörter (Viren)
+        [cite_start]// DATENBANK [cite: 1-271]
         const db = [
             { cat: "Aufgabe 1", q: "Systematische Auslegung", a: "Feststellen des Aussagegehaltes anhand der Stellung im Gesetz", dist: ["Willen", "Historie", "Zweck", "Entstehung"] },
             { cat: "Aufgabe 1", q: "Historische Auslegung", a: "Ermittlung des Willens des historischen Gesetzgebers durch Materialien", dist: ["Stellung", "System", "Wortlaut", "Ziel"] },
@@ -328,56 +318,75 @@
             { cat: "Aufgabe 20", q: "Rechtsgrundlage Busunternehmer", a: "Widerruf der Genehmigung nach Personenbeförderungsgesetz", dist: ["Gewerbeordnung", "Untersagung", "Rücknahme", "Polizei"] }
         ];
 
-        // --- GAME ENGINE ---
+        // VARIABLEN
         let currentIdx = 0;
         let hp = 100;
         let targetWords = [];
         let completedWords = [];
         let gameActive = false;
+        let audioCtx = null;
 
-        // Sound Synth
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSound(type) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            if (type === 'tap') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.1);
-            } else if (type === 'error') {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(100, audioCtx.currentTime);
-                osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.2);
-                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.2);
-            } else if (type === 'win') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-                osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.3);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.3);
+        // SOUND SYSTEM (Safe Init)
+        function initAudio() {
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch(e) { console.log("Audio not supported"); }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
             }
         }
 
-        function initGame() {
+        function playSound(type) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+                if (type === 'tap') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+                    gainNode.gain.setValueAtTime(0.1, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                } else if (type === 'error') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(100, now);
+                    osc.frequency.linearRampToValueAtTime(50, now + 0.2);
+                    gainNode.gain.setValueAtTime(0.2, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                } else if (type === 'win') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.linearRampToValueAtTime(800, now + 0.3);
+                    gainNode.gain.setValueAtTime(0.1, now);
+                    gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                }
+            } catch(e) { /* ignore sound errors */ }
+        }
+
+        // SPIEL STARTEN
+        function startGame() {
+            initAudio(); // Wichtig: Audio erst hier starten
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('endScreen').style.display = 'none';
+            
+            // Datenbank mischen
+            db.sort(() => Math.random() - 0.5);
+            
             currentIdx = 0;
             hp = 100;
             updateHP();
-            db.sort(() => Math.random() - 0.5); // Shuffle Levels
             gameActive = true;
             loadLevel();
         }
@@ -389,37 +398,38 @@
             }
 
             const data = db[currentIdx];
-            document.getElementById('catDisplay').innerText = data.cat + " // TERMINAL " + (currentIdx + 1);
+            document.getElementById('catDisplay').innerText = data.cat;
+            document.getElementById('levelDisplay').innerText = (currentIdx + 1) + " / " + db.length;
             document.getElementById('qText').innerText = data.q;
             
-            // Reset Areas
+            // Reset
             document.getElementById('answerSlot').innerHTML = '';
             document.getElementById('fragmentField').innerHTML = '';
             
-            // Logic Setup
             targetWords = data.a.split(' ');
             completedWords = [];
             
-            // Generate Fragments (Correct + Distractors)
+            // Fragmente erstellen (Richtige + Falsche)
             let allFragments = targetWords.map(w => ({ word: w, type: 'valid' }));
             
-            // Add 3-4 Distractors
-            let distractors = data.dist || ["Fehler", "Falsch", "Nicht", "Privat"];
+            let distractors = data.dist || ["Fehler", "Falsch"];
             distractors.forEach(d => {
                 allFragments.push({ word: d, type: 'invalid' });
             });
 
-            // Shuffle Fragments
+            // Mischen
             allFragments.sort(() => Math.random() - 0.5);
 
-            // Render
+            // Anzeigen
             const field = document.getElementById('fragmentField');
             allFragments.forEach((frag, i) => {
                 const btn = document.createElement('div');
                 btn.className = 'fragment';
                 btn.innerText = frag.word;
+                // Animation Delay
                 btn.style.animation = `slideUp 0.4s ease ${i * 0.05}s backwards`;
                 
+                // Click Event
                 btn.onclick = (e) => handleTap(btn, frag, e);
                 field.appendChild(btn);
             });
@@ -428,7 +438,6 @@
         function handleTap(el, frag, e) {
             if (!gameActive) return;
 
-            // Logik Check
             const expectedWord = targetWords[completedWords.length];
 
             if (frag.type === 'valid' && frag.word === expectedWord) {
@@ -436,35 +445,34 @@
                 playSound('tap');
                 spawnParticles(e.clientX, e.clientY, '#30D158');
                 
-                // Move to Slot
+                // Wort in Slot schieben
                 const slotWord = document.createElement('span');
                 slotWord.className = 'slot-word';
                 slotWord.innerText = frag.word;
                 document.getElementById('answerSlot').appendChild(slotWord);
                 
-                // Remove from Field
+                // Button entfernen
                 el.style.transform = "scale(0)";
-                setTimeout(() => el.remove(), 200);
+                setTimeout(() => { if(el.parentNode) el.remove(); }, 200);
 
                 completedWords.push(frag.word);
 
-                // Level Complete?
+                // Level geschafft?
                 if (completedWords.length === targetWords.length) {
                     playSound('win');
                     setTimeout(() => {
                         currentIdx++;
                         loadLevel();
-                    }, 600);
+                    }, 500);
                 }
 
             } else {
                 // FALSCH
                 playSound('error');
+                spawnParticles(e.clientX, e.clientY, '#FF453A');
                 hp -= 15;
                 updateHP();
-                spawnParticles(e.clientX, e.clientY, '#FF453A');
                 
-                // Visual Glitch
                 el.classList.add('glitch-anim');
                 document.getElementById('qCard').style.borderColor = "var(--danger)";
                 setTimeout(() => {
@@ -479,8 +487,7 @@
         function updateHP() {
             const bar = document.getElementById('hpBar');
             bar.style.width = hp + "%";
-            if (hp < 30) bar.style.background = "var(--danger)";
-            else bar.style.background = "var(--success)";
+            bar.style.background = hp < 30 ? "var(--danger)" : "var(--success)";
         }
 
         function gameOver(win) {
@@ -493,15 +500,15 @@
             if (win) {
                 title.innerText = "SYSTEM SYNCHRONIZED";
                 title.style.color = "var(--success)";
-                sub.innerText = "Alle Definitionen erfolgreich geladen. Bereit für Klausur.";
+                sub.innerText = "Alle Definitionen erfolgreich geladen.";
             } else {
                 title.innerText = "CRITICAL ERROR";
                 title.style.color = "var(--danger)";
-                sub.innerText = "Verbindung unterbrochen. Systemintegrität zu gering.";
+                sub.innerText = "Verbindung unterbrochen.";
             }
         }
 
-        // --- PARTICLE SYSTEM ---
+        // --- PARTIKEL SYSTEM ---
         const canvas = document.getElementById('fxCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -514,11 +521,11 @@
         resizeCanvas();
 
         function spawnParticles(x, y, color) {
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < 10; i++) {
                 particles.push({
                     x: x, y: y,
-                    vx: (Math.random() - 0.5) * 10,
-                    vy: (Math.random() - 0.5) * 10,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
                     life: 1,
                     color: color
                 });
@@ -527,24 +534,24 @@
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, i) => {
+            // Rückwärts iterieren für sicheres Löschen
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
                 p.x += p.vx;
                 p.y += p.vy;
                 p.life -= 0.05;
-                p.vx *= 0.9;
-                p.vy *= 0.9;
                 
-                ctx.globalAlpha = p.life;
+                ctx.globalAlpha = Math.max(0, p.life);
                 ctx.fillStyle = p.color;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
                 ctx.fill();
 
                 if (p.life <= 0) particles.splice(i, 1);
-            });
+            }
             requestAnimationFrame(animate);
         }
-        animate();
+        animate(); // Loop starten
 
     </script>
 </body>
