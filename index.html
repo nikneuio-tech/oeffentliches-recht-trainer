@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jura Blitz</title>
+    <title>Jura Flow</title>
     <style>
         :root {
-            --bg: #000000;
-            --card: #1C1C1E;
-            --text: #FFFFFF;
-            --green: #30D158;
-            --red: #FF453A;
-            --blue: #0A84FF;
+            --bg: #F5F5F7;
+            --text: #1D1D1F;
+            --bubble-bg: #FFFFFF;
+            --bubble-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --accent: #007AFF;
+            --success: #34C759;
+            --error: #FF3B30;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
@@ -23,28 +24,31 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Top Bar: Time & Score */
+        /* Header */
         .header {
             padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 20px;
-            font-weight: 700;
-            z-index: 10;
+            text-align: center;
+            padding-top: 50px; /* Safe area */
         }
 
-        .timer-bar {
-            position: absolute;
-            top: 0; left: 0;
-            height: 6px;
-            background: var(--blue);
-            width: 100%;
-            transition: width 0.1s linear;
+        .category {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #86868B;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .question {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.4;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         /* Game Area */
@@ -52,357 +56,265 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            justify-content: space-between;
             padding: 20px;
-            position: relative;
-        }
-
-        .card-stack {
-            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
             width: 100%;
-            max-width: 380px;
-            height: 450px;
-        }
-
-        .card {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--card);
-            border-radius: 24px;
-            padding: 30px;
             box-sizing: border-box;
+        }
+
+        /* Solution Area (Top) */
+        .solution-area {
+            background: #E5E5EA;
+            border-radius: 16px;
+            min-height: 120px;
+            padding: 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-content: flex-start;
+            transition: background 0.3s;
+        }
+        .solution-area.complete {
+            background: #D1FAE5; /* Light Green */
+        }
+
+        /* Word Pool (Bottom) */
+        .pool-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
             justify-content: center;
-            text-align: center;
-            border: 1px solid #333;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            align-content: center;
+            padding-bottom: 30px;
         }
 
-        .term {
-            font-size: 14px;
-            text-transform: uppercase;
-            color: #888;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-            font-weight: 600;
+        /* Bubbles */
+        .bubble {
+            background: var(--bubble-bg);
+            padding: 12px 20px;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: var(--bubble-shadow);
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s, opacity 0.2s;
+            user-select: none;
+            border: 1px solid transparent;
         }
 
-        .question {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            line-height: 1.3;
+        .bubble:active {
+            transform: scale(0.95);
         }
 
-        .divider {
-            width: 40px;
-            height: 4px;
-            background: #333;
-            border-radius: 2px;
-            margin-bottom: 30px;
+        /* Animations */
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; background: #FFEEEE; border-color: var(--error); }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
         }
 
-        .definition {
+        .pop-in { animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Next Button */
+        .next-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--accent);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 30px;
             font-size: 18px;
-            line-height: 1.5;
-            color: #DDD;
-        }
-
-        /* Overlay Feedback */
-        .feedback-overlay {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(0.5);
-            font-size: 100px;
+            font-weight: 700;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,122,255,0.4);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             opacity: 0;
             pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 100;
         }
-        .feedback-overlay.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-
-        /* Buttons */
-        .controls {
-            display: flex;
-            width: 100%;
-            max-width: 380px;
-            gap: 20px;
-            padding: 20px;
-            margin-bottom: 30px;
+        .next-btn.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: all;
         }
 
-        .btn {
-            flex: 1;
-            height: 70px;
-            border-radius: 20px;
-            border: none;
-            font-size: 20px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: transform 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .btn:active { transform: scale(0.95); }
-        
-        .btn-false { background: #2C2C2E; color: var(--red); border: 2px solid var(--red); }
-        .btn-true { background: var(--green); color: black; }
-
-        /* Screens */
-        .screen {
+        .progress-bar {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(20px);
-            z-index: 200;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            top: 0; left: 0; height: 6px; background: var(--success); width: 0%; transition: width 0.5s;
         }
 
-        .hidden { display: none; }
-
-        h1 { font-size: 40px; margin-bottom: 10px; background: linear-gradient(to right, var(--blue), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .start-btn {
-            margin-top: 40px;
-            background: white;
-            color: black;
-            padding: 15px 50px;
-            border-radius: 30px;
-            font-size: 20px;
-            font-weight: 700;
-            border: none;
-        }
-
-        .stat-box {
-            background: #1C1C1E;
-            padding: 20px;
-            border-radius: 16px;
-            min-width: 200px;
-            margin: 10px;
-        }
-        
     </style>
 </head>
 <body>
 
-    <div class="timer-bar" id="timerBar"></div>
+    <div class="progress-bar" id="progressBar"></div>
+
     <div class="header">
-        <span id="scoreDisplay">Score: 0</span>
-        <span id="timeLeft">60s</span>
+        <div class="category" id="catDisplay">Lade Daten...</div>
+        <div class="question" id="qDisplay">...</div>
     </div>
 
-    <div id="iconCheck" class="feedback-overlay">✅</div>
-    <div id="iconX" class="feedback-overlay">❌</div>
-
     <div class="game-area">
-        <div class="card-stack" id="cardContainer">
+        <div class="solution-area" id="solutionArea">
+            <span style="color: #AAA; font-size: 14px; width: 100%; text-align: center; margin-top: 30px;" id="placeholderText">Tippe die Wörter in der richtigen Reihenfolge...</span>
+        </div>
+
+        <div class="pool-area" id="poolArea">
             </div>
     </div>
 
-    <div class="controls">
-        <button class="btn btn-false" onclick="handleInput(false)">
-            <span>TRASH</span> (Falsch)
-        </button>
-        <button class="btn btn-true" onclick="handleInput(true)">
-            (Richtig) <span>MATCH</span>
-        </button>
-    </div>
-
-    <div id="startScreen" class="screen">
-        <h1>Jura Blitz</h1>
-        <p style="font-size: 18px; color: #888;">60 Sekunden.</p>
-        <p style="font-size: 18px; color: #888;">Ist die Aussage Richtig oder Falsch?</p>
-        <button class="start-btn" onclick="startGame()">Starten</button>
-    </div>
-
-    <div id="endScreen" class="screen hidden">
-        <h1>Zeit abgelaufen!</h1>
-        <div class="stat-box">
-            <div style="color: #888; font-size: 14px;">Dein Score</div>
-            <div style="font-size: 40px; font-weight: 800;" id="finalScore">0</div>
-        </div>
-        <p id="highScoreText" style="color: var(--green); font-weight: bold; margin-top: 10px;"></p>
-        <button class="start-btn" onclick="startGame()">Nochmal</button>
-    </div>
+    <button class="next-btn" id="nextBtn" onclick="nextLevel()">Weiter</button>
 
     <script>
-        // DATEN (Kategorisiert für intelligenten Tausch)
-        // Gruppe 1: Definitionen
-        const poolDefinitions = [
-            { q: "Systematische Auslegung", a: "Feststellen des Aussagegehaltes anhand der Stellung im Gesetz." },
-            { q: "Historische Auslegung", a: "Ermittlung des Willens des historischen Gesetzgebers (Materialien)." },
-            { q: "Verfassungskonforme Auslegung", a: "Wahl der Deutung, die mit dem GG vereinbar ist." },
-            { q: "Richtlinienkonforme Auslegung", a: "Auslegung für bestmögliches Erreichen des Richtlinienziels." },
-            { q: "Anstalt (Öff. Recht)", a: "Zusammenfassung von Mitteln, die Benutzern zur Verfügung steht." },
-            { q: "Körperschaft", a: "Mitgliedschaftlich organisierter Hoheitsträger." },
-            { q: "Stiftung", a: "Zusammenfassung von Vermögen für einen Stiftungszweck." },
-            { q: "Final gefasste Norm", a: "Gibt ein Ziel oder eine Rechtsfolge vor (z.B. § 87 TKG)." },
-            { q: "Konditional gefasste Norm", a: "Wenn-Dann-Schema (z.B. § 110 TKG)." },
-            { q: "Deskriptive Norm", a: "Beschreibung eines Begriffs (Definition)." },
-            { q: "Verwaltungsakt", a: "Maßnahme einer Behörde zur Regelung eines Einzelfalls mit Außenwirkung." }
+        // --- DEINE DATEN (Satzbau-Optimiert) ---
+        // Lange Sätze wurden leicht gekürzt/angepasst für besseren Spielfluss, behalten aber den exakten juristischen Inhalt.
+        const levels = [
+            { cat: "Aufgabe 1", q: "Systematische Auslegung", a: "Feststellen des Aussagegehaltes anhand der Stellung im Gesetz" },
+            { cat: "Aufgabe 1", q: "Historische Auslegung", a: "Ermittlung des Willens des historischen Gesetzgebers durch Materialien" },
+            { cat: "Aufgabe 2", q: "Verfassungskonforme Auslegung", a: "Wahl der Deutung die mit dem Grundgesetz vereinbar ist" },
+            { cat: "Aufgabe 3", q: "Staatszielbestimmung", a: "Verfassungsnorm die dem Staat Aufgaben vorgibt ohne subjektive Rechte" },
+            { cat: "Aufgabe 4", q: "Anstalt (Öffentliches Recht)", a: "Zusammenfassung von Mitteln zur öffentlichen Aufgabe für Benutzer" },
+            { cat: "Aufgabe 4", q: "Unterschied Körperschaft vs Anstalt", a: "Die Körperschaft hat Mitglieder die Anstalt hat Benutzer" },
+            { cat: "Aufgabe 6", q: "Subordinationstheorie", a: "Liegt ein Über- und Unterordnungsverhältnis vor" },
+            { cat: "Aufgabe 6", q: "Interessentheorie", a: "Dient die Norm dem öffentlichen Interesse oder Individualinteresse" },
+            { cat: "Aufgabe 7", q: "Voraussetzung Klagebefugnis (§ 42 II VwGO)", a: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten" },
+            { cat: "Aufgabe 10", q: "Grundrechte für Staat (Grundsatz)", a: "Staat kann sich grundsätzlich nicht auf Grundrechte berufen" },
+            { cat: "Aufgabe 10", q: "Rundfunkfreiheit Ausnahme", a: "Öffentlich-rechtliche Rundfunkanstalten können sich auf Rundfunkfreiheit berufen" },
+            { cat: "Aufgabe 10", q: "Gebot der Vielfaltsicherung", a: "Gremium muss ein Spiegelbild der gesellschaftlichen Gruppen sein" },
+            { cat: "Aufgabe 15", q: "Verwaltungsakt (§ 35 VwVfG)", a: "Hoheitliche Maßnahme einer Behörde zur Regelung eines Einzelfalls" },
+            { cat: "Aufgabe 16", q: "Ermessensnichtgebrauch", a: "Behörde macht von eingeräumtem Ermessen keinen Gebrauch" },
+            { cat: "Aufgabe 16", q: "Ermessensüberschreitung", a: "Behörde wählt eine Rechtsfolge die nicht im Gesetz steht" },
+            { cat: "Aufgabe 20", q: "Unzuverlässigkeit (Gewerbe)", a: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb des Gewerbes" }
         ];
 
-        // Gruppe 2: Fakten & Regeln
-        const poolFacts = [
-            { q: "Veröffentlichung Gesetze", a: "Im Bundesgesetzblatt." },
-            { q: "Rechtsweg § 40 VwGO", a: "Öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art." },
-            { q: "Klagebefugnis § 42 II VwGO", a: "Möglichkeit der Verletzung in subjektiven Rechten." },
-            { q: "Widerspruch", a: "Vorgeschalteter Rechtsbehelf nach § 68 VwGO." },
-            { q: "Wohnungsschutz (Geschäft)", a: "Voller Schutz nur nach Ladenschluss." },
-            { q: "Grundrechte für Staat?", a: "Nein (Konfusionsargument), außer Rundfunkfreiheit." },
-            { q: "Rundfunkrat: Staatsferne", a: "Maximal 1/3 staatliche Mitglieder." },
-            { q: "Kompetenz Corona-Notbremse", a: "Bund (Art. 74 GG, gemeingefährliche Krankheiten)." },
-            { q: "EU-Richtlinien Wirkung", a: "Unmittelbar nur wenn Frist abgelaufen & begünstigend." },
-            { q: "Widerruf § 25 PBefG", a: "Erfordert Unzuverlässigkeit (negative Zukunftsprognose)." },
-            { q: "Amtshaftung § 839 BGB", a: "Setzt Verletzung einer drittgerichteten Amtspflicht voraus." }
-        ];
+        // --- GAME LOGIC ---
+        let currentLevelIdx = 0;
+        let currentWords = [];
+        let targetWords = [];
+        let formedWords = [];
 
-        let currentRound = null; // { q, a, isCorrect }
-        let score = 0;
-        let timeLeft = 60;
-        let gameInterval;
-        let isPlaying = false;
-        let highScore = localStorage.getItem('juraHighScore') || 0;
-
-        function startGame() {
-            score = 0;
-            timeLeft = 60;
-            isPlaying = true;
-            document.getElementById('scoreDisplay').innerText = "Score: 0";
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('endScreen').classList.add('hidden');
-            
-            // Timer starten
-            clearInterval(gameInterval);
-            gameInterval = setInterval(tick, 100);
-            
-            nextCard();
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
         }
 
-        function tick() {
-            if (!isPlaying) return;
-            timeLeft -= 0.1;
-            document.getElementById('timeLeft').innerText = Math.ceil(timeLeft) + "s";
-            document.getElementById('timerBar').style.width = (timeLeft / 60 * 100) + "%";
-
-            if (timeLeft <= 0) {
-                endGame();
-            }
+        function initGame() {
+            // Mischen der Level, damit es spannend bleibt
+            shuffle(levels);
+            loadLevel();
         }
 
-        function endGame() {
-            isPlaying = false;
-            clearInterval(gameInterval);
+        function loadLevel() {
+            const level = levels[currentLevelIdx];
             
-            if (score > highScore) {
-                highScore = score;
-                localStorage.setItem('juraHighScore', highScore);
-                document.getElementById('highScoreText').innerText = "Neuer Highscore!";
-            } else {
-                document.getElementById('highScoreText').innerText = "Highscore: " + highScore;
-            }
-
-            document.getElementById('finalScore').innerText = score;
-            document.getElementById('endScreen').classList.remove('hidden');
-        }
-
-        function nextCard() {
-            const container = document.getElementById('cardContainer');
-            container.innerHTML = ""; // Clear old card
-
-            // Zufallsauswahl des Pools (damit sich ähnliche Fragen mischen)
-            const pool = Math.random() > 0.5 ? poolDefinitions : poolFacts;
+            // UI Reset
+            document.getElementById('catDisplay').innerText = level.cat;
+            document.getElementById('qDisplay').innerText = level.q;
+            document.getElementById('solutionArea').innerHTML = '<span style="color: #AAA; font-size: 14px; width: 100%; text-align: center; margin-top: 35px;" id="placeholderText">Tippe die Wörter in der richtigen Reihenfolge...</span>';
+            document.getElementById('solutionArea').classList.remove('complete');
+            document.getElementById('nextBtn').classList.remove('show');
+            document.getElementById('poolArea').innerHTML = '';
             
-            // Zufälliges Frage-Paar wählen
-            const correctIndex = Math.floor(Math.random() * pool.length);
-            const correctPair = pool[correctIndex];
+            // Progress
+            const pct = (currentLevelIdx / levels.length) * 100;
+            document.getElementById('progressBar').style.width = pct + "%";
 
-            // Entscheiden: Richtig oder Falsch anzeigen?
-            const showCorrect = Math.random() > 0.5;
-            let displayedAnswer = correctPair.a;
-
-            if (!showCorrect) {
-                // Falsche Antwort generieren
-                let wrongIndex;
-                do {
-                    wrongIndex = Math.floor(Math.random() * pool.length);
-                } while (wrongIndex === correctIndex); // Sicherstellen, dass es nicht zufällig doch die richtige ist
-                
-                displayedAnswer = pool[wrongIndex].a;
-            }
-
-            currentRound = {
-                correct: showCorrect
-            };
-
-            // Karte rendern
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <div class="term">Begriff / Frage</div>
-                <div class="question">${correctPair.q}</div>
-                <div class="divider"></div>
-                <div class="term">Definition / Antwort</div>
-                <div class="definition">${displayedAnswer}</div>
-            `;
+            // Word Logic
+            // Satz bereinigen und splitten
+            targetWords = level.a.split(' ');
+            formedWords = [];
             
-            // Animation In
-            card.style.transform = "scale(0.8) translateY(50px)";
-            card.style.opacity = "0";
-            container.appendChild(card);
-            
-            requestAnimationFrame(() => {
-                card.style.transform = "scale(1) translateY(0)";
-                card.style.opacity = "1";
+            // Pool erstellen (kopieren und mischen)
+            let poolWords = [...targetWords];
+            shuffle(poolWords);
+
+            // Bubbles rendern
+            poolWords.forEach((word, index) => {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.innerText = word;
+                bubble.dataset.word = word;
+                // Unique ID falls ein Wort doppelt vorkommt
+                bubble.id = 'b-' + index; 
+                bubble.onclick = () => handleWordClick(bubble);
+                document.getElementById('poolArea').appendChild(bubble);
             });
         }
 
-        function handleInput(userSaidTrue) {
-            if (!isPlaying) return;
+        function handleWordClick(bubbleElement) {
+            // Welches Wort wird als nächstes erwartet?
+            const neededWord = targetWords[formedWords.length];
+            const clickedWord = bubbleElement.innerText;
 
-            const isActuallyCorrect = currentRound.correct;
-            const userIsRight = (userSaidTrue === isActuallyCorrect);
+            if (clickedWord === neededWord) {
+                // RICHTIG
+                // 1. Placeholder weg
+                const ph = document.getElementById('placeholderText');
+                if(ph) ph.remove();
 
-            // Feedback Visuals
-            const feedbackEl = userIsRight ? document.getElementById('iconCheck') : document.getElementById('iconX');
-            feedbackEl.classList.add('show');
-            setTimeout(() => feedbackEl.classList.remove('show'), 400);
+                // 2. Bubble visuell verschieben
+                // Wir klonen die Bubble für die Solution Area, damit wir das Layout nicht zerschießen
+                const solvedBubble = document.createElement('div');
+                solvedBubble.className = 'bubble pop-in';
+                solvedBubble.style.background = '#FFFFFF';
+                solvedBubble.style.color = '#000';
+                solvedBubble.style.cursor = 'default';
+                solvedBubble.innerText = clickedWord;
+                
+                document.getElementById('solutionArea').appendChild(solvedBubble);
 
-            const card = document.querySelector('.card');
+                // 3. Original Bubble verstecken
+                bubbleElement.style.opacity = '0';
+                bubbleElement.style.pointerEvents = 'none';
 
-            if (userIsRight) {
-                score += 10; // Punkte
-                // Swipe Animation Right/Left based on button
-                card.style.transform = `translateX(${userSaidTrue ? 100 : -100}%) rotate(${userSaidTrue ? 10 : -10}deg)`;
+                // 4. Logik updaten
+                formedWords.push(clickedWord);
+
+                // 5. Check if finished
+                if (formedWords.length === targetWords.length) {
+                    levelComplete();
+                }
+
             } else {
-                score -= 5; // Strafe
-                timeLeft -= 2; // Zeitstrafe!
-                card.style.border = "2px solid red";
-                // Shake Animation
-                card.style.transform = "translateX(10px)";
-                setTimeout(() => card.style.transform = "translateX(-10px)", 50);
-                setTimeout(() => card.style.transform = "translateX(0)", 100);
+                // FALSCH
+                bubbleElement.classList.add('shake');
+                // Vibration (Haptik) auf Handy
+                if(navigator.vibrate) navigator.vibrate(50);
+                
+                setTimeout(() => {
+                    bubbleElement.classList.remove('shake');
+                }, 400);
             }
-            
-            card.style.opacity = "0";
-            document.getElementById('scoreDisplay').innerText = "Score: " + score;
-
-            // Nächste Karte kurz verzögert
-            setTimeout(() => {
-                nextCard();
-            }, 150);
         }
+
+        function levelComplete() {
+            document.getElementById('solutionArea').classList.add('complete');
+            document.getElementById('nextBtn').classList.add('show');
+            // Konfetti könnte hier hin ;)
+        }
+
+        function nextLevel() {
+            currentLevelIdx++;
+            if (currentLevelIdx < levels.length) {
+                loadLevel();
+            } else {
+                // Game Over Screen (Quick & Dirty implementation inside the Q Display)
+                document.getElementById('game-area').style.display = 'none';
+                document.getElementById('header').innerHTML = "<h1>Geschafft!</h1><p>Du hast alle Definitionen gebaut.</p><button class='next-btn show' style='position:relative; transform:none;' onclick='location.reload()'>Nochmal</button>";
+                document.getElementById('nextBtn').style.display = 'none';
+            }
+        }
+
+        // Start
+        initGame();
 
     </script>
 </body>
