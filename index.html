@@ -7,7 +7,6 @@
     <style>
         :root {
             --bg: #050505;
-            --surface: rgba(30, 30, 30, 0.6);
             --primary: #0A84FF;
             --accent: #BF5AF2;
             --success: #30D158;
@@ -16,15 +15,10 @@
             --subtext: #86868B;
         }
 
-        @font-face {
-            font-family: 'SF Pro Display';
-            src: local('SF Pro Display'), local('Helvetica Neue'), sans-serif;
-        }
-
         body {
             background-color: var(--bg);
             color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
             height: 100vh;
             overflow: hidden;
@@ -34,11 +28,9 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- BACKGROUND --- */
         .grid-bg {
             position: absolute;
-            width: 200%;
-            height: 200%;
+            width: 200%; height: 200%;
             background-image: 
                 linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
@@ -46,7 +38,6 @@
             transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
             animation: gridMove 20s linear infinite;
             z-index: -1;
-            pointer-events: none;
         }
 
         @keyframes gridMove {
@@ -54,26 +45,21 @@
             100% { transform: perspective(500px) rotateX(60deg) translateY(40px) translateZ(-200px); }
         }
 
-        /* --- HUD --- */
         .hud {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 25px;
-            padding-top: 50px; /* Safe Area */
+            padding: 50px 25px 20px;
             z-index: 10;
         }
 
         .level-badge {
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 700;
-            letter-spacing: 1px;
-            border: 1px solid rgba(255,255,255,0.1);
             text-transform: uppercase;
         }
 
@@ -82,32 +68,26 @@
             height: 6px;
             background: rgba(255,255,255,0.1);
             border-radius: 3px;
-            overflow: hidden;
         }
 
         .hp-bar {
             height: 100%;
             width: 100%;
             background: var(--success);
-            box-shadow: 0 0 10px var(--success);
-            transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: width 0.3s ease;
         }
 
-        /* --- GAME AREA --- */
         .core-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
             align-items: center;
             padding: 20px;
-            position: relative;
         }
 
         .question-card {
             background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 30px;
             padding: 30px;
@@ -115,27 +95,10 @@
             max-width: 400px;
             text-align: center;
             margin-bottom: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            transition: border-color 0.3s;
         }
 
-        .q-label {
-            color: var(--primary);
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            display: block;
-        }
+        .q-text { font-size: 22px; font-weight: 700; }
 
-        .q-text {
-            font-size: 22px;
-            font-weight: 700;
-            line-height: 1.4;
-        }
-
-        /* --- SLOTS & FRAGMENTS --- */
         .answer-slot {
             min-height: 60px;
             display: flex;
@@ -143,25 +106,16 @@
             justify-content: center;
             gap: 8px;
             margin-bottom: 30px;
-            width: 100%;
-            max-width: 400px;
-            padding: 10px;
         }
 
         .slot-word {
-            color: var(--text);
-            font-size: 16px;
-            font-weight: 600;
-            animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background: rgba(255,255,255,0.1);
             padding: 6px 12px;
             border-radius: 10px;
+            animation: popIn 0.3s ease;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
 
         .fragment-field {
             display: flex;
@@ -170,81 +124,27 @@
             gap: 12px;
             width: 100%;
             max-width: 400px;
-            padding-bottom: 80px; /* Space for scrolling */
         }
 
         .fragment {
             background: rgba(40, 40, 40, 0.8);
             border: 1px solid rgba(255,255,255,0.1);
-            padding: 14px 24px;
+            padding: 14px 20px;
             border-radius: 16px;
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 15px;
             cursor: pointer;
-            transition: transform 0.1s, background 0.2s;
-            position: relative;
-            overflow: hidden;
-            touch-action: manipulation; /* Improves touch response */
-        }
-        
-        .fragment:active {
-            transform: scale(0.92);
-            background: rgba(80,80,80, 1);
         }
 
-        /* --- FX --- */
-        canvas {
-            position: absolute;
-            top: 0; left: 0;
-            pointer-events: none;
-            z-index: 99;
-        }
-
-        .glitch-anim {
-            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both;
-            color: var(--danger);
-            border-color: var(--danger);
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-5px, 5px); }
-            40% { transform: translate(-5px, -5px); }
-            60% { transform: translate(5px, 5px); }
-            80% { transform: translate(5px, -5px); }
-            100% { transform: translate(0); }
-        }
-
-        /* --- SCREENS --- */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(5,5,5,0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             z-index: 100;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
-        }
-        
-        .overlay h1 {
-            font-size: 48px;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0 0 20px 0;
-            letter-spacing: -2px;
-        }
-
-        .overlay p {
-            color: var(--subtext);
-            max-width: 300px;
-            line-height: 1.6;
-            margin: 0 0 30px 0;
         }
 
         .btn-start {
@@ -255,320 +155,106 @@
             border-radius: 40px;
             font-size: 18px;
             font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 0 30px rgba(255,255,255,0.2);
-            transition: transform 0.2s;
-            -webkit-appearance: none; /* iOS Button Fix */
+            margin-top: 20px;
         }
-        .btn-start:active { transform: scale(0.95); }
-
     </style>
 </head>
 <body>
 
     <div class="grid-bg"></div>
-    <canvas id="fxCanvas"></canvas>
 
     <div class="hud">
-        <div class="level-badge" id="levelDisplay">READY</div>
-        <div class="hp-bar-container">
-            <div class="hp-bar" id="hpBar"></div>
-        </div>
+        <div class="level-badge" id="levelDisplay">Ready</div>
+        <div class="hp-bar-container"><div class="hp-bar" id="hpBar"></div></div>
     </div>
 
-    <div class="core-container" id="gameArea">
-        <div class="question-card" id="qCard">
-            <span class="q-label" id="catDisplay">System</span>
-            <div class="q-text" id="qText">Warte auf Start...</div>
+    <div class="core-container">
+        <div class="question-card">
+            <div style="color:var(--primary); font-size:11px; font-weight:800; margin-bottom:10px;">SYSTEM CORE</div>
+            <div class="q-text" id="qText">Initialisiere...</div>
         </div>
-
         <div class="answer-slot" id="answerSlot"></div>
         <div class="fragment-field" id="fragmentField"></div>
     </div>
 
     <div class="overlay" id="startScreen">
-        <div style="font-size: 50px; margin-bottom: 20px;">💠</div>
         <h1>NEXUS</h1>
-        <p>Tippe die Definitionen in der richtigen Reihenfolge an.<br>Vermeide die "Viren" (falsche Wörter).</p>
-        <button class="btn-start" onclick="startGameSafely()">System Starten</button>
+        <p>Baue die Definitionen korrekt zusammen.</p>
+        <button class="btn-start" onclick="startGame()">Starten</button>
     </div>
 
-    <div class="overlay" id="endScreen" style="display: none;">
-        <h1 id="endTitle">SYSTEM FAILURE</h1>
-        <p id="endSub">Verbindung unterbrochen.</p>
-        <button class="btn-start" onclick="location.reload()">Neustart</button>
+    <div class="overlay" id="endScreen" style="display:none">
+        <h1 id="endTitle">FAIL</h1>
+        <button class="btn-start" onclick="location.reload()">Reset</button>
     </div>
 
     <script>
-        // ERROR HANDLER (Zeigt Fehler an, falls etwas kaputt geht)
-        window.onerror = function(msg, url, line) {
-            alert("Fehler: " + msg + "\nZeile: " + line);
-        };
-
-        [cite_start]// DATENBANK [cite: 1-271]
         const db = [
-            { cat: "Aufgabe 1", q: "Systematische Auslegung", a: "Feststellen des Aussagegehaltes anhand der Stellung im Gesetz", dist: ["Willen", "Historie", "Zweck", "Entstehung"] },
-            { cat: "Aufgabe 1", q: "Historische Auslegung", a: "Ermittlung des Willens des historischen Gesetzgebers durch Materialien", dist: ["Stellung", "System", "Wortlaut", "Ziel"] },
-            { cat: "Aufgabe 2", q: "Verfassungskonforme Auslegung", a: "Wahl der Deutung die mit dem Grundgesetz vereinbar ist", dist: ["Richtlinie", "EU", "Ungültig", "Nichtig"] },
-            { cat: "Aufgabe 3", q: "Staatszielbestimmung", a: "Verfassungsnorm die dem Staat Aufgaben vorgibt ohne subjektive Rechte", dist: ["Bürger", "Anspruch", "Klage", "Verpflichtung"] },
-            { cat: "Aufgabe 4", q: "Anstalt (Öff. Recht)", a: "Zusammenfassung von Mitteln zur öffentlichen Aufgabe für Benutzer", dist: ["Mitglieder", "Personen", "Verein", "Gesellschafter"] },
-            { cat: "Aufgabe 4", q: "Körperschaft", a: "Mitgliedschaftlich organisierter Hoheitsträger", dist: ["Benutzer", "Kunden", "Sachen", "Dienst"] },
-            { cat: "Aufgabe 6", q: "Subordinationstheorie", a: "Liegt ein Über- und Unterordnungsverhältnis vor", dist: ["Gleichordnung", "Interesse", "Sonderrecht", "Privat"] },
-            { cat: "Aufgabe 6", q: "Interessentheorie", a: "Dient die Norm dem öffentlichen Interesse", dist: ["Staat", "Hoheit", "Unterordnung", "Bürger"] },
-            { cat: "Aufgabe 6", q: "Modifizierte Subjektstheorie", a: "Berechtigt die Norm einen Hoheitsträger als solchen", dist: ["Jedermann", "Interesse", "Allgemein", "Ziel"] },
-            { cat: "Aufgabe 7", q: "Klagebefugnis (§ 42 II VwGO)", a: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten", dist: ["Tatsache", "Sicherheit", "Objektiv", "Interesse"] },
-            { cat: "Aufgabe 10", q: "Grundrechte für Staat?", a: "Staat kann sich grundsätzlich nicht auf Grundrechte berufen", dist: ["Immer", "Ja", "Ausnahme", "Bürger"] },
-            { cat: "Aufgabe 10", q: "Rundfunkfreiheit (Ausnahme)", a: "Öffentlich-rechtliche Anstalten können sich auf Grundrechte berufen", dist: ["Behörden", "Städte", "Verboten", "Niemals"] },
-            { cat: "Aufgabe 15", q: "Verwaltungsakt (§ 35 VwVfG)", a: "Hoheitliche Maßnahme einer Behörde zur Regelung eines Einzelfalls", dist: ["Gesetz", "Allgemein", "Verordnung", "Vertrag"] },
-            { cat: "Aufgabe 16", q: "Ermessensnichtgebrauch", a: "Behörde macht von Ermessen keinen Gebrauch", dist: ["Falsch", "Zuviel", "Sachfremd", "Willkür"] },
-            { cat: "Aufgabe 20", q: "Unzuverlässigkeit (Gewerbe)", a: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb", dist: ["Vergangenheit", "Schulden", "Straftat", "Absicht"] },
-            { cat: "Aufgabe 20", q: "Rechtsgrundlage Busunternehmer", a: "Widerruf der Genehmigung nach Personenbeförderungsgesetz", dist: ["Gewerbeordnung", "Untersagung", "Rücknahme", "Polizei"] }
+            [cite_start]{ q: "Systematische Auslegung [cite: 1, 11][cite_start]", a: "Feststellen des Aussagegehaltes anhand der Stellung im Gesetz [cite: 11, 232]" },
+            [cite_start]{ q: "Historische Auslegung [cite: 13, 233][cite_start]", a: "Ermittlung des Willens des historischen Gesetzgebers durch Materialien [cite: 13, 233]" },
+            [cite_start]{ q: "Verfassungskonforme Auslegung [cite: 14, 235][cite_start]", a: "Wahl der Deutung die mit dem Grundgesetz vereinbar ist [cite: 15, 17]" },
+            [cite_start]{ q: "Staatszielbestimmung [cite: 19, 237][cite_start]", a: "Verfassungsnorm die dem Staat Aufgaben vorgibt ohne subjektive Rechte [cite: 19, 237]" },
+            [cite_start]{ q: "Anstalt [cite: 20, 21][cite_start]", a: "Zusammenfassung von Mitteln zur öffentlichen Aufgabe für Benutzer [cite: 20, 21]" },
+            [cite_start]{ q: "Körperschaft [cite: 239, 240][cite_start]", a: "Mitgliedschaftlich organisierter Hoheitsträger aus Mitgliedern [cite: 239, 240]" },
+            [cite_start]{ q: "Subordinationstheorie [cite: 34, 47][cite_start]", a: "Unterscheidung durch das Bestehen eines Über- und Unterordnungsverhältnisses [cite: 34, 47]" },
+            [cite_start]{ q: "Verwaltungsakt [cite: 57, 258][cite_start]", a: "Hoheitliche Maßnahme einer Behörde zur Regelung eines Einzelfalls [cite: 57, 155]" }
         ];
 
-        // VARIABLEN
         let currentIdx = 0;
         let hp = 100;
         let targetWords = [];
         let completedWords = [];
-        let gameActive = false;
-        let audioCtx = null;
 
-        // SOUND SYSTEM (Safe Init)
-        function initAudio() {
-            try {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (audioCtx && audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-            } catch(e) { 
-                console.log("Audio Error (Ignored):", e); 
-            }
-        }
-
-        function playSound(type) {
-            if (!audioCtx) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-
-                const now = audioCtx.currentTime;
-                if (type === 'tap') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(600, now);
-                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
-                    gainNode.gain.setValueAtTime(0.1, now);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                    osc.start(now);
-                    osc.stop(now + 0.1);
-                } else if (type === 'error') {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(100, now);
-                    osc.frequency.linearRampToValueAtTime(50, now + 0.2);
-                    gainNode.gain.setValueAtTime(0.2, now);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-                    osc.start(now);
-                    osc.stop(now + 0.2);
-                } else if (type === 'win') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(400, now);
-                    osc.frequency.linearRampToValueAtTime(800, now + 0.3);
-                    gainNode.gain.setValueAtTime(0.1, now);
-                    gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
-                    osc.start(now);
-                    osc.stop(now + 0.3);
-                }
-            } catch(e) { /* ignore sound errors */ }
-        }
-
-        // SPIEL STARTEN (SAFE WRAPPER)
-        function startGameSafely() {
-            try {
-                initAudio(); // Versuch Audio zu starten
-            } catch(e) { console.log("Audio failed to init"); }
-
-            // UI Wechseln
-            const startScreen = document.getElementById('startScreen');
-            if (startScreen) startScreen.style.display = 'none';
-            document.getElementById('endScreen').style.display = 'none';
-            
-            // Logic Start
-            currentIdx = 0;
-            hp = 100;
-            updateHP();
-            db.sort(() => Math.random() - 0.5); // Mischen
-            gameActive = true;
+        function startGame() {
+            document.getElementById('startScreen').style.display = 'none';
+            db.sort(() => Math.random() - 0.5);
             loadLevel();
         }
 
         function loadLevel() {
-            if (currentIdx >= db.length) {
-                gameOver(true);
-                return;
-            }
-
+            if (currentIdx >= db.length) return alert("Klausurreif!");
             const data = db[currentIdx];
-            document.getElementById('catDisplay').innerText = data.cat;
-            document.getElementById('levelDisplay').innerText = "SEQUENCE " + (currentIdx + 1) + " / " + db.length;
             document.getElementById('qText').innerText = data.q;
-            
-            // Reset
+            document.getElementById('levelDisplay').innerText = (currentIdx + 1) + " / " + db.length;
             document.getElementById('answerSlot').innerHTML = '';
-            document.getElementById('fragmentField').innerHTML = '';
             
             targetWords = data.a.split(' ');
             completedWords = [];
             
-            // Fragmente erstellen (Richtige + Falsche)
-            let allFragments = targetWords.map(w => ({ word: w, type: 'valid' }));
-            
-            let distractors = data.dist || ["Fehler", "Falsch"];
-            distractors.forEach(d => {
-                allFragments.push({ word: d, type: 'invalid' });
-            });
+            let pool = [...targetWords, "Falsch", "Privat", "Gesetz", "Norm"];
+            pool.sort(() => Math.random() - 0.5);
 
-            // Mischen
-            allFragments.sort(() => Math.random() - 0.5);
-
-            // Anzeigen
             const field = document.getElementById('fragmentField');
-            allFragments.forEach((frag, i) => {
-                const btn = document.createElement('div');
-                btn.className = 'fragment';
-                btn.innerText = frag.word;
-                // Animation Delay
-                btn.style.animation = `slideUp 0.4s ease ${i * 0.05}s backwards`;
-                
-                // Click Event
-                btn.onclick = (e) => handleTap(btn, frag, e);
-                field.appendChild(btn);
+            field.innerHTML = '';
+            pool.forEach(word => {
+                const div = document.createElement('div');
+                div.className = 'fragment';
+                div.innerText = word;
+                div.onclick = () => handleTap(word, div);
+                field.appendChild(div);
             });
         }
 
-        function handleTap(el, frag, e) {
-            if (!gameActive) return;
-
-            const expectedWord = targetWords[completedWords.length];
-
-            if (frag.type === 'valid' && frag.word === expectedWord) {
-                // RICHTIG
-                playSound('tap');
-                try { spawnParticles(e.clientX, e.clientY, '#30D158'); } catch(err){}
-                
-                // Wort in Slot schieben
-                const slotWord = document.createElement('span');
-                slotWord.className = 'slot-word';
-                slotWord.innerText = frag.word;
-                document.getElementById('answerSlot').appendChild(slotWord);
-                
-                // Button entfernen
-                el.style.transform = "scale(0)";
-                setTimeout(() => { if(el.parentNode) el.remove(); }, 200);
-
-                completedWords.push(frag.word);
-
-                // Level geschafft?
+        function handleTap(word, el) {
+            if (word === targetWords[completedWords.length]) {
+                completedWords.push(word);
+                const span = document.createElement('span');
+                span.className = 'slot-word';
+                span.innerText = word;
+                document.getElementById('answerSlot').appendChild(span);
+                el.style.visibility = 'hidden';
                 if (completedWords.length === targetWords.length) {
-                    playSound('win');
-                    setTimeout(() => {
-                        currentIdx++;
-                        loadLevel();
-                    }, 500);
+                    currentIdx++;
+                    setTimeout(loadLevel, 500);
                 }
-
             } else {
-                // FALSCH
-                playSound('error');
-                try { spawnParticles(e.clientX, e.clientY, '#FF453A'); } catch(err){}
-                hp -= 15;
-                updateHP();
-                
-                el.classList.add('glitch-anim');
-                document.getElementById('qCard').style.borderColor = "var(--danger)";
-                setTimeout(() => {
-                    el.classList.remove('glitch-anim');
-                    document.getElementById('qCard').style.borderColor = "rgba(255,255,255,0.08)";
-                }, 300);
-
-                if (hp <= 0) gameOver(false);
+                hp -= 20;
+                document.getElementById('hpBar').style.width = hp + "%";
+                if (hp <= 0) {
+                    document.getElementById('endScreen').style.display = 'flex';
+                }
             }
         }
-
-        function updateHP() {
-            const bar = document.getElementById('hpBar');
-            bar.style.width = hp + "%";
-            bar.style.background = hp < 30 ? "var(--danger)" : "var(--success)";
-        }
-
-        function gameOver(win) {
-            gameActive = false;
-            const screen = document.getElementById('endScreen');
-            const title = document.getElementById('endTitle');
-            const sub = document.getElementById('endSub');
-
-            screen.style.display = 'flex';
-            if (win) {
-                title.innerText = "SYSTEM SYNCHRONIZED";
-                title.style.color = "var(--success)";
-                sub.innerText = "Alle Definitionen erfolgreich geladen.";
-            } else {
-                title.innerText = "CRITICAL ERROR";
-                title.style.color = "var(--danger)";
-                sub.innerText = "Verbindung unterbrochen.";
-            }
-        }
-
-        // --- PARTIKEL SYSTEM ---
-        const canvas = document.getElementById('fxCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            if(canvas) {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function spawnParticles(x, y, color) {
-            for (let i = 0; i < 10; i++) {
-                particles.push({
-                    x: x, y: y,
-                    vx: (Math.random() - 0.5) * 8,
-                    vy: (Math.random() - 0.5) * 8,
-                    life: 1,
-                    color: color
-                });
-            }
-        }
-
-        function animate() {
-            if(!ctx) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Rückwärts iterieren für sicheres Löschen
-            for (let i = particles.length - 1; i >= 0; i--) {
-                let p = particles[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                p.life -= 0.05;
-                
-                ctx.globalAlpha = Math.max(0, p.life);
-                ctx.fillStyle = p.color;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-                ctx.fill();
-
-                if (p.life <= 0) particles.splice(i, 1);
-            }
-            requestAnimationFrame(animate);
-        }
-        animate(); // Loop starten
-
     </script>
 </body>
 </html>
