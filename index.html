@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JUNIOR ASSOCIATE | Public Law</title>
+    <title>JUNIOR ASSOCIATE</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,185 +22,67 @@
             --font-serif: 'Playfair Display', serif;
             --font-mono: 'Fira Code', monospace;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: var(--font-mono);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        #app-container {
-            width: 100%;
-            max-width: 800px;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            border-left: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
-            background-color: var(--panel-bg);
-            position: relative;
-        }
-
-        /* --- HEADER --- */
-        header {
-            padding: 0 20px;
-            border-bottom: 1px solid var(--border-color);
-            background: #181818;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-            flex-shrink: 0;
-            z-index: 10;
-        }
-
-        .case-id { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+        body { background-color: var(--bg-color); color: var(--text-primary); font-family: var(--font-mono); height: 100vh; display: flex; justify-content: center; overflow: hidden; }
+        #app-container { width: 100%; max-width: 800px; height: 100vh; display: flex; flex-direction: column; border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); background-color: var(--panel-bg); position: relative; }
         
+        header { padding: 0 20px; border-bottom: 1px solid var(--border-color); background: #181818; display: flex; justify-content: space-between; align-items: center; height: 60px; flex-shrink: 0; z-index: 10; }
+        .case-id { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
         .game-header-elements { display: none; align-items: center; gap: 15px; width: 100%; justify-content: space-between; }
         .trust-container { width: 150px; text-align: right; }
         .trust-label { font-size: 0.6rem; display: block; margin-bottom: 3px; color: var(--text-secondary); }
         .progress-bg { width: 100%; height: 6px; background: #333; border-radius: 3px; overflow: hidden; }
         .progress-fill { height: 100%; width: 50%; background: var(--accent-blue); transition: width 0.5s ease, background 0.5s ease; }
+        .btn-exit { background: transparent; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 5px; }
         
-        .btn-exit {
-            background: transparent; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 5px;
-        }
-        .btn-exit:hover { color: var(--accent-red); }
-
-        /* --- MENU SCREEN --- */
-        #menu-screen {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .menu-header {
-            text-align: center;
-            margin-bottom: 10px;
-            padding-top: 10px;
-        }
+        #menu-screen { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .menu-header { text-align: center; margin-bottom: 10px; padding-top: 10px; }
         .menu-title { font-family: var(--font-serif); font-size: 1.8rem; color: #fff; margin-bottom: 5px; }
         .menu-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
-
-        .case-card {
-            background: #252525;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            transition: transform 0.2s, border-color 0.2s;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .case-card:hover { border-color: var(--text-secondary); }
-        .case-card.completed { border-color: var(--accent-green); }
-
-        .card-top { display: flex; justify-content: space-between; align-items: center; }
-        .case-info { flex: 1; }
-        .case-title { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 2px; }
-        .case-subtitle { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; }
-
-        .case-mastery { margin-top: 5px; }
-        .mastery-label { font-size: 0.7rem; color: var(--text-secondary); display: flex; justify-content: space-between; margin-bottom: 3px; }
-        .mastery-bg { width: 100%; height: 4px; background: #111; border-radius: 2px; overflow: hidden; }
-        .mastery-fill { height: 100%; width: 0%; background: var(--accent-blue); }
         
+        .case-card { background: #252525; border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .card-top { display: flex; justify-content: space-between; align-items: center; }
+        .case-title { font-size: 1.1rem; font-weight: 600; color: #fff; }
+        .case-subtitle { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; }
         .card-actions { display: flex; gap: 10px; align-items: center; }
+        .info-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--text-secondary); color: var(--text-secondary); display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-style: italic; cursor: pointer; }
+        .btn-start-case { background: transparent; border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 8px 16px; font-family: var(--font-mono); cursor: pointer; font-size: 0.8rem; text-transform: uppercase; border-radius: 4px; }
+        
+        .topics-container { background: #1a1a1a; padding: 10px; border-radius: 4px; display: none; margin-top: 5px; border-left: 2px solid var(--accent-blue); }
+        .topic-tag { font-size: 0.7rem; color: var(--text-secondary); background: #333; padding: 2px 6px; border-radius: 3px; display: inline-block; margin: 2px; }
 
-        .info-btn {
-            width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--text-secondary); color: var(--text-secondary);
-            display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-style: italic; cursor: pointer;
-        }
-        .info-btn:hover { border-color: #fff; color: #fff; }
-        .info-btn.active { background: var(--text-secondary); color: #000; }
-
-        .btn-start-case {
-            background: transparent; border: 1px solid var(--accent-blue); color: var(--accent-blue);
-            padding: 8px 16px; font-family: var(--font-mono); cursor: pointer; font-size: 0.8rem; text-transform: uppercase; border-radius: 4px;
-        }
-        .btn-start-case:hover { background: var(--accent-blue); color: #fff; }
-
-        .topics-container {
-            background: #1a1a1a; padding: 10px; border-radius: 4px; display: none; margin-top: 5px; border-left: 2px solid var(--accent-blue);
-        }
-        .topics-title { font-size: 0.7rem; color: #fff; margin-bottom: 5px; text-transform: uppercase; }
-        .topics-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 5px; }
-        .topic-tag { font-size: 0.7rem; color: var(--text-secondary); background: #333; padding: 2px 6px; border-radius: 3px; }
-
-        /* --- GAME SCREEN --- */
-        #game-screen {
-            display: none; flex: 1; flex-direction: column; overflow: hidden;
-        }
-
-        #chat-window {
-            flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth;
-        }
-
-        .message {
-            max-width: 85%; padding: 15px 20px; border-radius: 4px; animation: fadeIn 0.3s ease-up; line-height: 1.5; position: relative;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .message.partner {
-            align-self: flex-start; background-color: #252525; border-left: 3px solid var(--text-secondary);
-            font-family: var(--font-serif); font-size: 1.1rem; color: #fff;
-        }
+        #game-screen { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+        #chat-window { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
+        .message { max-width: 85%; padding: 15px 20px; border-radius: 4px; line-height: 1.5; position: relative; margin-bottom: 10px; }
+        .message.partner { align-self: flex-start; background-color: #252525; border-left: 3px solid var(--text-secondary); font-family: var(--font-serif); font-size: 1.1rem; color: #fff; margin-top: 15px; }
         .message.partner::before { content: "SENIOR PARTNER"; position: absolute; top: -18px; left: 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-secondary); }
-
         .message.user { align-self: flex-end; background-color: #2a3b4d; border-right: 3px solid var(--accent-blue); text-align: right; font-size: 0.95rem; }
-
-        .message.system { align-self: center; font-size: 0.8rem; padding: 8px 15px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .message.system { align-self: center; font-size: 0.8rem; padding: 8px 15px; border-radius: 20px; }
         .message.system.success { color: var(--accent-green); border: 1px solid var(--accent-green); background: rgba(0, 230, 118, 0.05); }
         .message.system.fail { color: var(--accent-red); border: 1px solid var(--accent-red); background: rgba(255, 82, 82, 0.05); }
 
-        /* --- INPUT AREA --- */
-        #input-area {
-            padding: 20px; border-top: 1px solid var(--border-color); background: #181818; min-height: 100px; display: flex; flex-direction: column; justify-content: center;
-        }
+        #input-area { padding: 20px; border-top: 1px solid var(--border-color); background: #181818; min-height: 100px; display: flex; flex-direction: column; justify-content: center; }
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn-option { background: transparent; border: 1px solid var(--text-secondary); color: var(--text-primary); padding: 12px; font-family: var(--font-mono); cursor: pointer; transition: all 0.2s; text-align: left; }
-        .btn-option:hover { border-color: var(--accent-blue); background: rgba(41, 121, 255, 0.1); }
+        .btn-option { background: transparent; border: 1px solid var(--text-secondary); color: var(--text-primary); padding: 12px; font-family: var(--font-mono); cursor: pointer; text-align: left; }
         .text-input-wrapper { display: flex; gap: 10px; }
         input[type="text"] { flex: 1; background: transparent; border: 1px solid var(--text-secondary); color: #fff; padding: 12px; font-family: var(--font-mono); outline: none; }
-        input[type="text"]:focus { border-color: var(--accent-blue); }
         .btn-submit { background: var(--accent-blue); color: #fff; border: none; padding: 0 20px; cursor: pointer; font-family: var(--font-mono); font-weight: 600; }
-        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
 
-        /* --- OVERLAYS --- */
-        #game-over-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(18, 18, 18, 0.98);
-            display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100;
-        }
-        .status-text { font-family: var(--font-serif); font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
-        .status-sub { font-size: 1rem; color: #888; margin-bottom: 30px; text-align: center; padding: 0 20px;}
+        #game-over-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 18, 18, 0.98); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
         .btn-back { background: transparent; border: 1px solid #fff; color: #fff; padding: 12px 30px; cursor: pointer; font-family: var(--font-mono); margin-top: 10px; text-transform: uppercase; }
-        .btn-back:hover { background: #fff; color: #000; }
 
+        .reset-btn { position: absolute; bottom: 10px; left: 10px; opacity: 0.3; cursor: pointer; font-size: 20px; z-index: 200; }
     </style>
 </head>
 <body>
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v3.0</div>
-            
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v3.1</div>
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
                     <span class="trust-label">PARTNER'S TRUST</span>
-                    <div class="progress-bg">
-                        <div class="progress-fill" id="trust-bar"></div>
-                    </div>
+                    <div class="progress-bg"><div class="progress-fill" id="trust-bar"></div></div>
                 </div>
                 <button class="btn-exit" onclick="exitToMenu()">✕</button>
             </div>
@@ -209,7 +91,7 @@
         <div id="menu-screen">
             <div class="menu-header">
                 <div class="menu-title">Aktenbestand</div>
-                <div class="menu-subtitle">Öffentliches Recht - Prüfungsrelevante Fälle</div>
+                <div class="menu-subtitle">Öffentliches Recht</div>
             </div>
             <div id="case-list"></div>
         </div>
@@ -220,15 +102,15 @@
         </div>
 
         <div id="game-over-screen">
-            <div class="status-text" id="overlay-title">STATUS</div>
-            <div class="status-sub" id="overlay-msg"></div>
-            <div style="font-size: 0.8rem; color: #555; margin-bottom: 20px;">Fortschritt gespeichert.</div>
-            <button class="btn-back" onclick="exitToMenu()">Zurück zur Übersicht</button>
+            <div style="font-family:serif; font-size:2.5rem; margin-bottom:10px;" id="overlay-title">STATUS</div>
+            <div style="color:#888; margin-bottom:30px;" id="overlay-msg"></div>
+            <button class="btn-back" onclick="exitToMenu()">Zurück</button>
         </div>
+        
+        <div class="reset-btn" onclick="hardReset()">🗑️</div>
     </div>
 
     <script>
-        // DATENBANK DER FÄLLE
         const cases = [
             {
                 id: "AKTE_001",
@@ -238,32 +120,32 @@
                 questions: [
                     {
                         type: 'choice',
-                        intro: "Wir beginnen mit den Basics. Wortlaut unklar. Wir schauen auf die Stellung im Gesetz. Welche Auslegung?",
+                        intro: "Wortlaut unklar. Wir schauen auf die Stellung im Gesetz. Welche Auslegung?",
                         options: ["Historische Auslegung", "Systematische Auslegung", "Teleologische Auslegung"],
                         correctAnswer: 1,
                         feedback: "Korrekt. Systematik = Kontext.",
-                        [cite_start]explanation: "Systematische Auslegung prüft die Stellung im Gesetz[cite: 11]."
+                        explanation: "Systematische Auslegung prüft die Stellung im Gesetz."
                     },
                     {
                         type: 'text',
                         intro: "Und wenn wir Protokolle und Materialien prüfen? Wie heißt diese Methode?",
                         keywords: ["historisch", "wille", "geschichte", "entstehung"],
-                        [cite_start]explanation: "Historische Auslegung (Wille des historischen Gesetzgebers)[cite: 13].",
+                        explanation: "Historische Auslegung (Wille des historischen Gesetzgebers).",
                         feedback: "Richtig. Der historische Wille zählt."
                     },
                     {
                         type: 'choice',
-                        intro: "Eine Norm verstößt gegen das GG. Was bedeutet 'verfassungskonforme Auslegung'?",
+                        intro: "Eine Norm verstößt scheinbar gegen das GG. Was bedeutet 'verfassungskonforme Auslegung'?",
                         options: ["Norm ist nichtig.", "Norm bleibt gültig, solange eine GG-konforme Deutung möglich ist.", "Norm wird ignoriert."],
                         correctAnswer: 1,
                         feedback: "Exakt. Die Norm wird erhalten.",
-                        [cite_start]explanation: "Vorrang des Gesetzeserhalts, solange Auslegung möglich[cite: 15]."
+                        explanation: "Vorrang des Gesetzeserhalts."
                     },
                     {
                         type: 'text',
                         intro: "Nennen Sie ein Beispiel für eine Staatszielbestimmung.",
                         keywords: ["sozialstaat", "rechtsstaat", "umweltschutz", "tierschutz"],
-                        [cite_start]explanation: "Sozialstaat, Rechtsstaat, Umweltschutz[cite: 19].",
+                        explanation: "Sozialstaat, Rechtsstaat, Umweltschutz.",
                         feedback: "Akzeptiert."
                     }
                 ]
@@ -278,7 +160,7 @@
                         type: 'text',
                         intro: "Mandant will eine Anstalt gründen. Definieren Sie 'Anstalt'.",
                         keywords: ["personal", "sachmittel", "benutzer", "aufgabe"],
-                        [cite_start]explanation: "Zusammenfassung von Personal/Sachen zur Erfüllung öffentlicher Aufgaben für Benutzer[cite: 20, 21].",
+                        explanation: "Zusammenfassung von Personal/Sachen zur Erfüllung öffentlicher Aufgaben für Benutzer.",
                         feedback: "Gut. Wichtig: Benutzer, keine Mitglieder."
                     },
                     {
@@ -287,7 +169,7 @@
                         options: ["Körperschaft hat Mitglieder.", "Körperschaft ist privat.", "Körperschaft hat Kunden."],
                         correctAnswer: 0,
                         feedback: "Richtig. Mitgliedschaftliche Organisation ist das Merkmal.",
-                        [cite_start]explanation: "Körperschaften bestehen aus Mitgliedern[cite: 21]."
+                        explanation: "Körperschaften bestehen aus Mitgliedern."
                     },
                     {
                         type: 'choice',
@@ -295,7 +177,7 @@
                         options: ["Interessentheorie", "Subordinationstheorie", "Sonderrechtstheorie"],
                         correctAnswer: 1,
                         feedback: "Korrekt.",
-                        [cite_start]explanation: "Subordinationstheorie fragt nach Hoheitsgewalt[cite: 34, 50]."
+                        explanation: "Subordinationstheorie fragt nach Hoheitsgewalt."
                     }
                 ]
             },
@@ -311,7 +193,7 @@
                         options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I Alt. 1 VwGO)", "Feststellungsklage"],
                         correctAnswer: 1,
                         feedback: "Richtig. Aufhebung eines VA.",
-                        [cite_start]explanation: "Anfechtungsklage richtet sich auf Aufhebung eines VA[cite: 59]."
+                        explanation: "Anfechtungsklage richtet sich auf Aufhebung eines VA."
                     },
                     {
                         type: 'choice',
@@ -319,20 +201,20 @@
                         options: ["Klageerzwingungsverfahren", "Widerspruch", "Mediation"],
                         correctAnswer: 1,
                         feedback: "Korrekt.",
-                        [cite_start]explanation: "Vor der Anfechtungsklage kommt der Widerspruch[cite: 60]."
+                        explanation: "Vor der Anfechtungsklage kommt der Widerspruch."
                     },
                     {
                         type: 'text',
                         intro: "Was muss Förster geltend machen, um klagebefugt zu sein? (§ 42 II VwGO)",
                         keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv"],
-                        [cite_start]explanation: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten[cite: 63].",
+                        explanation: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten.",
                         feedback: "Exakt. Bloße Behauptung reicht."
                     },
                     {
                         type: 'text',
                         intro: "Und worauf muss sich eine Gemeinde berufen, um zu klagen?",
                         keywords: ["selbstverwaltung", "planungshoheit", "28"],
-                        [cite_start]explanation: "Kommunale Selbstverwaltungsgarantie / Planungshoheit (Art. 28 II GG)[cite: 78].",
+                        explanation: "Kommunale Selbstverwaltungsgarantie / Planungshoheit (Art. 28 II GG).",
                         feedback: "Ja. Art. 28 Abs. 2 GG ist der Schlüssel."
                     }
                 ]
@@ -349,13 +231,13 @@
                         options: ["Konditional", "Final", "Deskriptiv"],
                         correctAnswer: 1,
                         feedback: "Gut. Zielorientiert = Final.",
-                        [cite_start]explanation: "Finalnormen geben Ziele vor[cite: 88]."
+                        explanation: "Finalnormen geben Ziele vor."
                     },
                     {
                         type: 'text',
                         intro: "Kann sich der Staat (ZDF) auf Grundrechte berufen? Grundsatz?",
                         keywords: ["nein", "grundsätzlich", "nicht"],
-                        [cite_start]explanation: "Grundsatz: Nein (Konfusionsargument)[cite: 109].",
+                        explanation: "Grundsatz: Nein (Konfusionsargument).",
                         feedback: "Grundsatz nein."
                     },
                     {
@@ -364,7 +246,7 @@
                         options: ["50%", "Ein Drittel (1/3)", "10%"],
                         correctAnswer: 1,
                         feedback: "Korrekt.",
-                        [cite_start]explanation: "BVerfG sagt: Max 1/3 staatliche Vertreter[cite: 121]."
+                        explanation: "BVerfG sagt: Max 1/3 staatliche Vertreter."
                     }
                 ]
             },
@@ -378,7 +260,7 @@
                         type: 'text',
                         intro: "Nennen Sie zwei EU-Grundfreiheiten.",
                         keywords: ["waren", "arbeitnehmer", "dienstleistung", "kapital", "niederlassung"],
-                        [cite_start]explanation: "Warenverkehr, Arbeitnehmer, Dienstleistung, Niederlassung[cite: 140, 141, 142].",
+                        explanation: "Warenverkehr, Arbeitnehmer, Dienstleistung, Niederlassung.",
                         feedback: "Akzeptiert."
                     },
                     {
@@ -387,7 +269,7 @@
                         options: ["§ 823 BGB", "§ 839 BGB i.V.m. Art. 34 GG", "VwGO"],
                         correctAnswer: 1,
                         feedback: "Richtig.",
-                        explanation: "§ 839 BGB + Art. [cite_start]34 GG[cite: 154]."
+                        explanation: "§ 839 BGB + Art. 34 GG."
                     },
                     {
                         type: 'choice',
@@ -395,7 +277,7 @@
                         options: ["Nie", "Wenn Frist abgelaufen & inhaltlich bestimmt", "Immer"],
                         correctAnswer: 1,
                         feedback: "Korrekt.",
-                        [cite_start]explanation: "Bei Umsetzungsfehlern/Fristablauf[cite: 184]."
+                        explanation: "Bei Umsetzungsfehlern/Fristablauf."
                     }
                 ]
             },
@@ -411,13 +293,13 @@
                         options: ["§ 35 GewO", "§ 25 PBefG", "§ 48 VwVfG"],
                         correctAnswer: 1,
                         feedback: "Wichtig! Spezialgesetz vor GewO.",
-                        [cite_start]explanation: "Personenbeförderungsgesetz ist lex specialis[cite: 205]."
+                        explanation: "Personenbeförderungsgesetz ist lex specialis."
                     },
                     {
                         type: 'text',
                         intro: "Definition 'Unzuverlässigkeit'?",
                         keywords: ["gewähr", "künftig", "ordnungsgemäß", "betrieb", "prognose"],
-                        [cite_start]explanation: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb[cite: 215].",
+                        explanation: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb.",
                         feedback: "Genau. Negative Zukunftsprognose."
                     },
                     {
@@ -426,34 +308,29 @@
                         options: ["Nur Schulden", "Wegfall Voraussetzungen + Tatsachen + Unzuverlässigkeit", "Belieben"],
                         correctAnswer: 1,
                         feedback: "Richtig.",
-                        [cite_start]explanation: "Voraussetzungen, Tatsachen und Unzuverlässigkeit[cite: 210, 211, 215]."
+                        explanation: "Voraussetzungen, Tatsachen und Unzuverlässigkeit."
                     }
                 ]
             }
         ];
 
-        // --- GAME LOGIC ---
         let activeCase = null;
         let qIndex = 0;
         let trust = 50;
-        
-        // Save System: Try to load or init empty
         let savedProgress = {};
+
         try {
-            const data = localStorage.getItem('junior_associate_progress');
+            const data = localStorage.getItem('junior_lawyer_save_v1');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
-            console.log("Save file corrupt, resetting.");
+            console.log("Save error");
             savedProgress = {};
         }
 
-        // DOM ELEMENTS
         const menuScreen = document.getElementById('menu-screen');
         const gameScreen = document.getElementById('game-screen');
         const caseList = document.getElementById('case-list');
-        const gameHeaderElements = document.getElementById('game-header-elements');
-        const headerTitle = document.getElementById('header-title');
-        
+        const gameHeader = document.getElementById('game-header-elements');
         const chatWindow = document.getElementById('chat-window');
         const inputArea = document.getElementById('input-area');
         const overlay = document.getElementById('game-over-screen');
@@ -466,98 +343,56 @@
             caseList.innerHTML = '';
             cases.forEach((c, idx) => {
                 let highScore = savedProgress[c.id] || 0;
-                let masteryWidth = highScore + "%";
-                let masteryColor = highScore >= 70 ? 'var(--accent-green)' : (highScore > 0 ? 'var(--accent-blue)' : '#333');
-
-                let topicTags = c.topics.map(t => `<li class="topic-tag">${t}</li>`).join('');
+                let barW = highScore + "%";
+                let barC = highScore > 70 ? 'var(--accent-green)' : (highScore > 0 ? 'var(--accent-blue)' : '#333');
+                let topics = c.topics.map(t => `<span class="topic-tag">${t}</span>`).join('');
 
                 const card = document.createElement('div');
                 card.className = 'case-card';
-                if(highScore >= 100) card.classList.add('completed');
-                
                 card.innerHTML = `
                     <div class="card-top">
-                        <div class="case-info">
+                        <div>
                             <div class="case-title">${c.title}</div>
                             <div class="case-subtitle">${c.subtitle}</div>
                         </div>
                         <div class="card-actions">
-                            <div class="info-icon" onclick="toggleTopics(this)">i</div>
-                            <button class="btn-start-case" onclick="startCase(${idx})">${highScore > 0 ? 'Weiter' : 'Öffnen'}</button>
+                            <div class="info-icon" onclick="toggleT(this)">i</div>
+                            <button class="btn-start-case" onclick="start(${idx})">${highScore>0 ? 'Weiter' : 'Start'}</button>
                         </div>
                     </div>
-                    <div class="case-mastery">
-                        <div class="mastery-label">
-                            <span>MASTER:</span><span>${highScore}%</span>
-                        </div>
-                        <div class="mastery-bg">
-                            <div class="mastery-fill" style="width: ${masteryWidth}; background: ${masteryColor}"></div>
-                        </div>
-                    </div>
-                    <div class="topics-container">
-                        <div class="topics-title">Relevante Themen:</div>
-                        <ul class="topics-list">${topicTags}</ul>
-                    </div>
+                    <div style="margin-top:5px; height:4px; background:#111; width:100%;"><div style="width:${barW}; background:${barC}; height:100%;"></div></div>
+                    <div class="topics-container">${topics}</div>
                 `;
                 caseList.appendChild(card);
             });
         }
 
-        function toggleTopics(btn) {
-            const card = btn.closest('.case-card');
-            const container = card.querySelector('.topics-container');
-            if (container.style.display === 'block') {
-                container.style.display = 'none';
-                btn.classList.remove('active');
-            } else {
-                container.style.display = 'block';
-                btn.classList.add('active');
-            }
+        function toggleT(btn) {
+            const el = btn.closest('.case-card').querySelector('.topics-container');
+            el.style.display = el.style.display === 'block' ? 'none' : 'block';
         }
 
-        function showMenu() {
-            menuScreen.style.display = 'flex';
-            gameScreen.style.display = 'none';
-            gameHeaderElements.style.display = 'none';
-            overlay.style.display = 'none';
-            headerTitle.innerText = "KANZLEI-SYSTEM v3.0";
-            activeCase = null;
-            renderMenu();
-        }
-
-        function exitToMenu() {
-            showMenu();
-        }
-
-        function startCase(idx) {
+        function start(idx) {
             activeCase = cases[idx];
             qIndex = 0;
             trust = 50;
-            
             menuScreen.style.display = 'none';
             gameScreen.style.display = 'flex';
-            gameHeaderElements.style.display = 'flex';
-            updateTrustUI();
-            
-            headerTitle.innerText = `AKTE: ${activeCase.id}`;
+            gameHeader.style.display = 'flex';
+            updateTrust();
             chatWindow.innerHTML = '';
-            inputArea.innerHTML = '';
-
-            addMessage('system', `LADE AKTE: ${activeCase.title}...`);
-            setTimeout(nextQuestion, 1000);
+            addMsg('system', 'LADE AKTE...');
+            setTimeout(nextQ, 800);
         }
 
-        function nextQuestion() {
-            if (qIndex >= activeCase.questions.length) {
-                endCase(true);
-                return;
-            }
+        function nextQ() {
+            if (qIndex >= activeCase.questions.length) return endCase(true);
             const q = activeCase.questions[qIndex];
-            addMessage('partner', q.intro);
-            renderInputs(q);
+            addMsg('partner', q.intro);
+            renderInp(q);
         }
 
-        function renderInputs(q) {
+        function renderInp(q) {
             inputArea.innerHTML = '';
             if (q.type === 'choice') {
                 const grid = document.createElement('div');
@@ -565,98 +400,100 @@
                 q.options.forEach((opt, i) => {
                     const btn = document.createElement('button');
                     btn.className = 'btn-option';
-                    btn.innerText = `> ${opt}`;
-                    btn.onclick = () => handleAnswer(i, q);
+                    btn.innerText = "> " + opt;
+                    btn.onclick = () => ans(i, q);
                     grid.appendChild(btn);
                 });
                 inputArea.appendChild(grid);
             } else {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'text-input-wrapper';
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.placeholder = 'Antwort eingeben...';
-                input.addEventListener("keypress", (e) => { if(e.key==="Enter") handleAnswer(input.value, q); });
+                const wrp = document.createElement('div');
+                wrp.className = 'text-input-wrapper';
+                const inp = document.createElement('input');
+                inp.type = 'text';
                 const btn = document.createElement('button');
                 btn.className = 'btn-submit';
                 btn.innerText = 'SENDEN';
-                btn.onclick = () => handleAnswer(input.value, q);
-                wrapper.appendChild(input);
-                wrapper.appendChild(btn);
-                inputArea.appendChild(wrapper);
-                setTimeout(() => input.focus(), 100);
+                btn.onclick = () => ans(inp.value, q);
+                inp.onkeypress = (e) => { if(e.key==='Enter') ans(inp.value, q); };
+                wrp.append(inp, btn);
+                inputArea.appendChild(wrp);
+                setTimeout(() => inp.focus(), 100);
             }
         }
 
-        function handleAnswer(ans, q) {
+        function ans(val, q) {
             inputArea.innerHTML = '';
-            let display = (q.type === 'choice') ? q.options[ans] : ans;
-            addMessage('user', display);
-
-            let correct = false;
-            if (q.type === 'choice') correct = (ans === q.correctAnswer);
-            else {
-                let lower = ans.toLowerCase();
-                correct = q.keywords.some(k => lower.includes(k));
-            }
+            let disp = q.type === 'choice' ? q.options[val] : val;
+            addMsg('user', disp);
+            
+            let ok = false;
+            if (q.type === 'choice') ok = (val === q.correctAnswer);
+            else ok = q.keywords.some(k => val.toLowerCase().includes(k));
 
             setTimeout(() => {
-                if (correct) {
+                if (ok) {
                     trust = Math.min(100, trust + 15);
-                    addMessage('system', 'TRUST INCREASED', 'success');
-                    addMessage('partner', q.feedback);
+                    addMsg('system', 'TRUST +', 'success');
+                    addMsg('partner', q.feedback);
                 } else {
                     trust -= 20;
-                    addMessage('system', 'TRUST DECREASED', 'fail');
-                    let expl = (q.type === 'choice') ? `Richtig wäre: ${q.options[q.correctAnswer]}` : q.explanation;
-                    addMessage('partner', `Das war falsch. ${expl}`);
+                    addMsg('system', 'TRUST -', 'fail');
+                    addMsg('partner', "Falsch. " + q.explanation);
                 }
-                updateTrustUI();
-
+                updateTrust();
                 if (trust <= 0) endCase(false);
                 else {
                     qIndex++;
-                    setTimeout(nextQuestion, 1500);
+                    setTimeout(nextQ, 1500);
                 }
-            }, 600);
+            }, 500);
         }
 
-        function endCase(success) {
+        function endCase(win) {
             overlay.style.display = 'flex';
-            const title = document.getElementById('overlay-title');
-            const msg = document.getElementById('overlay-msg');
-            
-            if (success) {
-                title.innerText = "AKTE GESCHLOSSEN";
-                title.style.color = "var(--accent-green)";
-                msg.innerText = `Endstand Vertrauen: ${trust}%`;
-                
-                let oldScore = savedProgress[activeCase.id] || 0;
-                if (trust > oldScore) {
+            const t = document.getElementById('overlay-title');
+            const m = document.getElementById('overlay-msg');
+            if (win) {
+                t.innerText = "AKTE GESCHLOSSEN";
+                t.style.color = "var(--accent-green)";
+                m.innerText = "Vertrauen: " + trust + "%";
+                let old = savedProgress[activeCase.id] || 0;
+                if (trust > old) {
                     savedProgress[activeCase.id] = trust;
-                    localStorage.setItem('junior_associate_progress', JSON.stringify(savedProgress));
+                    localStorage.setItem('junior_lawyer_save_v1', JSON.stringify(savedProgress));
                 }
             } else {
-                title.innerText = "GEFEUERT";
-                title.style.color = "var(--accent-red)";
-                msg.innerText = "Das Vertrauen ist aufgebraucht. Akte fehlgeschlagen.";
+                t.innerText = "GEFEUERT";
+                t.style.color = "var(--accent-red)";
+                m.innerText = "Nicht bestanden.";
             }
         }
 
-        function addMessage(sender, text, type) {
-            const div = document.createElement('div');
-            div.className = `message ${sender} ${type || ''}`;
-            div.innerText = text;
-            chatWindow.appendChild(div);
+        function addMsg(cls, txt, type) {
+            const d = document.createElement('div');
+            d.className = `message ${cls} ${type||''}`;
+            d.innerText = txt;
+            chatWindow.appendChild(d);
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }
 
-        function updateTrustUI() {
-            const bar = document.getElementById('trust-bar');
-            bar.style.width = trust + '%';
-            if (trust > 70) bar.style.background = 'var(--accent-green)';
-            else if (trust < 30) bar.style.background = 'var(--accent-red)';
-            else bar.style.background = 'var(--accent-blue)';
+        function updateTrust() {
+            const b = document.getElementById('trust-bar');
+            b.style.width = trust + "%";
+            b.style.background = trust > 70 ? 'var(--accent-green)' : (trust < 30 ? 'var(--accent-red)' : 'var(--accent-blue)');
+        }
+
+        function exitToMenu() {
+            menuScreen.style.display = 'flex';
+            gameScreen.style.display = 'none';
+            gameHeader.style.display = 'none';
+            overlay.style.display = 'none';
+            renderMenu();
+        }
+
+        function hardReset() {
+            localStorage.clear();
+            location.reload();
         }
 
         window.onload = init;
