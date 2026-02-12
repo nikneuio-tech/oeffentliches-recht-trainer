@@ -59,6 +59,7 @@
             height: 60px;
             flex-shrink: 0;
             z-index: 10;
+            position: relative;
         }
 
         .case-id { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
@@ -74,6 +75,13 @@
         }
         .btn-exit:hover { color: var(--accent-red); }
 
+        /* TIMER BAR (NEW) */
+        #timer-container {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: transparent; z-index: 15;
+            display: none; /* Only show in game */
+        }
+        #timer-bar { height: 100%; background: var(--accent-green); width: 100%; transition: width 1s linear, background-color 0.5s; }
+
         /* --- MENU SCREEN --- */
         #menu-screen {
             flex: 1;
@@ -87,6 +95,16 @@
         .menu-header { text-align: center; margin-bottom: 10px; padding-top: 10px; }
         .menu-title { font-family: var(--font-serif); font-size: 1.8rem; color: #fff; margin-bottom: 5px; }
         .menu-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
+
+        .archive-link {
+            text-align: center; margin-bottom: 10px;
+        }
+        .btn-archive {
+            background: transparent; border: 1px solid var(--text-secondary); color: var(--text-secondary);
+            padding: 8px 20px; font-family: var(--font-mono); font-size: 0.8rem; cursor: pointer; text-transform: uppercase;
+            border-radius: 4px; transition: all 0.2s;
+        }
+        .btn-archive:hover { border-color: var(--accent-blue); color: #fff; }
 
         .case-card {
             background: #252525;
@@ -106,21 +124,8 @@
         .case-title { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
         .case-subtitle { font-size: 0.75rem; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 
-        /* Visible Topics List */
-        .topics-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 5px;
-        }
-        .topic-pill {
-            font-size: 0.7rem;
-            background: #333;
-            color: #ccc;
-            padding: 3px 8px;
-            border-radius: 4px;
-            border: 1px solid #444;
-        }
+        .topics-preview { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+        .topic-pill { font-size: 0.7rem; background: #333; color: #ccc; padding: 3px 8px; border-radius: 4px; border: 1px solid #444; }
 
         .case-mastery { margin-top: 10px; }
         .mastery-label { font-size: 0.7rem; color: var(--text-secondary); display: flex; justify-content: space-between; margin-bottom: 3px; }
@@ -134,6 +139,16 @@
         }
         .btn-start-case:hover { background: var(--accent-blue); color: #fff; }
 
+        /* --- ARCHIVE SCREEN (NEW) --- */
+        #archive-screen {
+            display: none; flex: 1; padding: 20px; overflow-y: auto; flex-direction: column; background: var(--bg-color);
+        }
+        .archive-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
+        .archive-list { display: flex; flex-direction: column; gap: 20px; }
+        .archive-item { background: #1a1a1a; padding: 15px; border-radius: 6px; border-left: 3px solid var(--text-secondary); }
+        .archive-q { font-weight: bold; margin-bottom: 8px; color: #fff; font-family: var(--font-serif); }
+        .archive-a { font-size: 0.9rem; color: var(--accent-green); margin-bottom: 5px; }
+        .archive-exp { font-size: 0.8rem; color: var(--text-secondary); font-style: italic; }
 
         /* --- GAME SCREEN --- */
         #game-screen { display: none; flex: 1; flex-direction: column; overflow: hidden; }
@@ -202,7 +217,7 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v7.0</div>
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v8.0</div>
             
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
@@ -213,6 +228,8 @@
                 </div>
                 <button class="btn-exit" onclick="exitToMenu()">✕</button>
             </div>
+            
+            <div id="timer-container"><div id="timer-bar"></div></div>
         </header>
 
         <div id="menu-screen">
@@ -220,7 +237,20 @@
                 <div class="menu-title">Aktenbestand</div>
                 <div class="menu-subtitle">Öffentliches Recht - Training Mode</div>
             </div>
+            
+            <div class="archive-link">
+                <button class="btn-archive" onclick="showArchive()">📂 Aktenarchiv (Read-Only)</button>
+            </div>
+
             <div id="case-list"></div>
+        </div>
+
+        <div id="archive-screen">
+            <div class="archive-header">
+                <div class="menu-title" style="font-size: 1.2rem;">Aktenarchiv</div>
+                <button class="btn-back" style="margin:0; padding: 5px 15px; font-size: 0.8rem;" onclick="exitToMenu()">Zurück</button>
+            </div>
+            <div id="archive-content" class="archive-list"></div>
         </div>
 
         <div id="game-screen">
@@ -238,7 +268,7 @@
     </div>
 
     <script>
-        // --- DATA ---
+        // --- COMPLETE DATABASE ---
         const cases = [
             {
                 id: "AKTE_001",
@@ -247,7 +277,7 @@
                 topics: ["Systematische Auslegung", "Historische Auslegung", "Verfassungskonforme Auslegung", "Richtlinienkonforme Auslegung", "Gesetzesverkündung"],
                 questions: [
                     { type: 'choice', intro: "Ein Gesetz ist unklar. Wir ermitteln den Inhalt anhand der Stellung im Gesetz. Welche Auslegung?", options: ["Historische Auslegung", "Systematische Auslegung", "Teleologische Auslegung"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Systematische Auslegung prüft die Stellung im Gesetz." },
-                    { type: 'text', intro: "Was versteht man unter 'Historischer Auslegung'?", keywords: ["wille", "gesetzgeber", "geschichte"], explanation: "Ermittlung des Willens des historischen Gesetzgebers (Materialien/Protokolle).", feedback: "Richtig." },
+                    { type: 'text', intro: "Was versteht man unter 'Historischer Auslegung'?", keywords: ["wille", "gesetzgeber", "geschichte", "materialien", "protokolle"], explanation: "Ermittlung des Willens des historischen Gesetzgebers (Materialien/Protokolle).", feedback: "Richtig." },
                     { type: 'choice', intro: "Ein Gesetz verstößt scheinbar gegen das GG. Was besagt die 'verfassungskonforme Auslegung'?", options: ["Gesetz ist nichtig.", "Diejenige Deutung wählen, die mit dem GG vereinbar ist.", "BVerfG fragen."], correctAnswer: 1, feedback: "Exakt.", explanation: "Normerhalt geht vor." },
                     { type: 'text', intro: "Was ist 'richtlinienkonforme Auslegung'?", keywords: ["ziel", "richtlinie", "effet", "utile"], explanation: "Auslegung so, dass das Ziel der EU-Richtlinie bestmöglich erreicht wird.", feedback: "Genau." },
                     { type: 'text', intro: "Wo werden Bundesgesetze veröffentlicht?", keywords: ["bundesgesetzblatt", "bgbl"], explanation: "Im Bundesgesetzblatt.", feedback: "Korrekt." }
@@ -345,29 +375,39 @@
         let qIndex = 0;
         let trust = 50;
         let savedProgress = {};
+        
+        // Timer Logic
+        let timerInterval = null;
+        const TIME_LIMIT = 60; // Seconds
+        let timeLeft = TIME_LIMIT;
 
         // AUTO-REPAIR STARTUP
         try {
-            const data = localStorage.getItem('junior_lawyer_save_v7');
+            const data = localStorage.getItem('junior_lawyer_save_v8');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
             console.log("Resetting save.");
-            localStorage.removeItem('junior_lawyer_save_v7');
+            localStorage.removeItem('junior_lawyer_save_v8');
             savedProgress = {};
         }
 
         const menuScreen = document.getElementById('menu-screen');
         const gameScreen = document.getElementById('game-screen');
+        const archiveScreen = document.getElementById('archive-screen');
         const caseList = document.getElementById('case-list');
+        const archiveContent = document.getElementById('archive-content');
         const gameHeader = document.getElementById('game-header-elements');
         const chatWindow = document.getElementById('chat-window');
         const inputArea = document.getElementById('input-area');
         const overlay = document.getElementById('game-over-screen');
+        const timerContainer = document.getElementById('timer-container');
+        const timerBar = document.getElementById('timer-bar');
 
         function init() {
             renderMenu();
         }
 
+        // --- RENDER MENU ---
         function renderMenu() {
             caseList.innerHTML = '';
             cases.forEach((c, idx) => {
@@ -401,17 +441,86 @@
             });
         }
 
+        // --- ARCHIVE ---
+        function showArchive() {
+            menuScreen.style.display = 'none';
+            archiveScreen.style.display = 'flex';
+            archiveContent.innerHTML = '';
+            
+            cases.forEach(c => {
+                const grp = document.createElement('div');
+                grp.innerHTML = `<h3 style="color:var(--accent-blue); border-bottom:1px solid #333; margin-top:20px;">${c.title}</h3>`;
+                archiveContent.appendChild(grp);
+                c.questions.forEach(q => {
+                    const item = document.createElement('div');
+                    item.className = 'archive-item';
+                    let ansTxt = q.type === 'choice' ? q.options[q.correctAnswer] : (q.explanation);
+                    item.innerHTML = `
+                        <div class="archive-q">${q.intro}</div>
+                        <div class="archive-a">Lösung: ${ansTxt}</div>
+                        <div class="archive-exp">${q.explanation}</div>
+                    `;
+                    archiveContent.appendChild(item);
+                });
+            });
+        }
+
+        // --- GAMEPLAY ---
         function start(idx) {
             activeCase = cases[idx];
             qIndex = 0;
             trust = 50;
+            
             menuScreen.style.display = 'none';
             gameScreen.style.display = 'flex';
             gameHeader.style.display = 'flex';
+            timerContainer.style.display = 'block';
             updateTrust();
             chatWindow.innerHTML = '';
             addMsg('system', 'AKTE GELADEN: ' + activeCase.title, 'info');
             setTimeout(nextQ, 800);
+        }
+
+        function startTimer() {
+            timeLeft = TIME_LIMIT;
+            timerBar.style.width = '100%';
+            timerBar.style.backgroundColor = 'var(--accent-green)';
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                let pct = (timeLeft / TIME_LIMIT) * 100;
+                timerBar.style.width = pct + '%';
+                
+                if (timeLeft < 10) timerBar.style.backgroundColor = 'var(--accent-red)';
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function handleTimeout() {
+            inputArea.innerHTML = '';
+            trust = Math.max(0, trust - 10);
+            addMsg('system', 'ZEIT ABGELAUFEN', 'fail');
+            addMsg('partner', "Sie brauchen zu lange! Mandant wird ungeduldig. Antwort falsch.");
+            updateTrust();
+            
+            if(trust === 0) endCase(false);
+            else {
+                // Generate a "Give Up" button to proceed since they timed out
+                const btn = document.createElement('button');
+                btn.className = 'btn-giveup';
+                btn.innerText = 'Lösung anzeigen & Weiter';
+                btn.onclick = () => revealSolution(activeCase.questions[qIndex]);
+                inputArea.appendChild(btn);
+            }
         }
 
         function nextQ() {
@@ -419,6 +528,7 @@
             const q = activeCase.questions[qIndex];
             addMsg('partner', q.intro);
             renderInp(q);
+            startTimer();
         }
 
         function renderInp(q) {
@@ -459,33 +569,47 @@
 
         function checkChoice(val, q, btn) {
             if (val === q.correctAnswer) {
+                stopTimer();
                 inputArea.innerHTML = '';
                 addMsg('user', q.options[val]);
                 processSuccess(q);
             } else {
+                // Wrong - Retry mode
+                // Don't stop timer yet unless we penalize heavily. 
+                // Let's keep timer running for pressure, but penalize trust.
                 btn.classList.add('wrong');
                 trust = Math.max(0, trust - 5);
                 addMsg('system', 'Falsch. Versuch es erneut.', 'fail');
                 updateTrust();
-                if(trust === 0) endCase(false);
+                if(trust === 0) { stopTimer(); endCase(false); }
             }
         }
 
         function checkText(val, q) {
-            const ok = q.keywords.some(k => val.toLowerCase().includes(k));
-            if (ok) {
+            // Smart Keyword Check
+            const lowerVal = val.toLowerCase();
+            const hits = q.keywords.filter(k => lowerVal.includes(k));
+            
+            if (hits.length > 0) {
+                stopTimer();
                 inputArea.innerHTML = '';
                 addMsg('user', val);
                 processSuccess(q);
             } else {
+                // Smart Feedback: Hint at what's missing (if input is not empty)
                 trust = Math.max(0, trust - 5);
-                addMsg('system', 'Zu ungenau. Prüfen Sie die Definition.', 'fail');
+                if(val.length > 2) {
+                    addMsg('system', `Richtig gedacht, aber das Schlagwort '${q.keywords[0]}' fehlte!`, 'info');
+                } else {
+                    addMsg('system', 'Zu ungenau.', 'fail');
+                }
                 updateTrust();
-                if(trust === 0) endCase(false);
+                if(trust === 0) { stopTimer(); endCase(false); }
             }
         }
 
         function revealSolution(q) {
+            stopTimer();
             inputArea.innerHTML = '';
             addMsg('user', '(Hilfe angefordert)');
             trust = Math.max(0, trust - 15);
@@ -509,6 +633,7 @@
         }
 
         function endCase(win) {
+            stopTimer();
             overlay.style.display = 'flex';
             const t = document.getElementById('overlay-title');
             const m = document.getElementById('overlay-msg');
@@ -519,7 +644,7 @@
                 let old = savedProgress[activeCase.id] || 0;
                 if (trust > old) {
                     savedProgress[activeCase.id] = trust;
-                    localStorage.setItem('junior_lawyer_save_v7', JSON.stringify(savedProgress));
+                    localStorage.setItem('junior_lawyer_save_v8', JSON.stringify(savedProgress));
                 }
             } else {
                 t.innerText = "GESCHEITERT";
@@ -543,16 +668,19 @@
         }
 
         function exitToMenu() {
+            stopTimer();
             menuScreen.style.display = 'flex';
             gameScreen.style.display = 'none';
+            archiveScreen.style.display = 'none';
             gameHeader.style.display = 'none';
+            timerContainer.style.display = 'none';
             overlay.style.display = 'none';
             renderMenu();
         }
 
         function hardReset() {
             if(confirm("Spielstand löschen?")) {
-                localStorage.removeItem('junior_lawyer_save_v7');
+                localStorage.removeItem('junior_lawyer_save_v8');
                 location.reload();
             }
         }
