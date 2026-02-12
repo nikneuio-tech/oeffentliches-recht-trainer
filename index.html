@@ -2,8 +2,8 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JUNIOR ASSOCIATE | Case Files</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JUNIOR ASSOCIATE | Public Law</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,23 +49,32 @@
 
         /* --- HEADER --- */
         header {
-            padding: 15px 20px;
+            padding: 0 20px;
             border-bottom: 1px solid var(--border-color);
             background: #181818;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px;
+            height: 60px;
             flex-shrink: 0;
+            z-index: 10;
         }
 
         .case-id { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
-        .trust-container { width: 200px; text-align: right; display: none; } /* Hidden in Menu */
-        .trust-label { font-size: 0.7rem; display: block; margin-bottom: 5px; color: var(--text-secondary); }
+        
+        /* Game Header Elements */
+        .game-header-elements { display: none; align-items: center; gap: 15px; width: 100%; justify-content: space-between; }
+        .trust-container { width: 150px; text-align: right; }
+        .trust-label { font-size: 0.6rem; display: block; margin-bottom: 3px; color: var(--text-secondary); }
         .progress-bg { width: 100%; height: 6px; background: #333; border-radius: 3px; overflow: hidden; }
         .progress-fill { height: 100%; width: 50%; background: var(--accent-blue); transition: width 0.5s ease, background 0.5s ease; }
+        
+        .btn-exit {
+            background: transparent; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 5px;
+        }
+        .btn-exit:hover { color: var(--accent-red); }
 
-        /* --- MENU SCREEN (Aktenregal) --- */
+        /* --- MENU SCREEN --- */
         #menu-screen {
             flex: 1;
             padding: 20px;
@@ -77,125 +86,79 @@
 
         .menu-header {
             text-align: center;
-            margin-bottom: 20px;
-            font-family: var(--font-serif);
-            font-size: 1.5rem;
-            color: #fff;
-            padding-top: 20px;
+            margin-bottom: 10px;
+            padding-top: 10px;
         }
+        .menu-title { font-family: var(--font-serif); font-size: 1.8rem; color: #fff; margin-bottom: 5px; }
+        .menu-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
 
         .case-card {
             background: #252525;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 20px;
-            position: relative;
+            padding: 15px;
             transition: transform 0.2s, border-color 0.2s;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .case-card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
+        .case-card:hover { border-color: var(--text-secondary); }
+        .case-card.completed { border-color: var(--accent-green); }
 
+        .card-top { display: flex; justify-content: space-between; align-items: center; }
         .case-info { flex: 1; }
-        .case-title { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 5px; }
-        .case-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
+        .case-title { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 2px; }
+        .case-subtitle { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; }
 
-        /* INFO ICON & TOOLTIP */
-        .info-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 1px solid var(--text-secondary);
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            margin-right: 15px;
-            cursor: help;
-            position: relative;
-        }
-
-        .info-icon:hover { color: var(--accent-blue); border-color: var(--accent-blue); background: rgba(41, 121, 255, 0.1); }
-
-        .tooltip {
-            visibility: hidden;
-            width: 250px;
-            background-color: #111;
-            color: #ccc;
-            text-align: left;
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            border-radius: 6px;
-            position: absolute;
-            z-index: 10;
-            top: 130%;
-            right: 0; /* Align right to icon */
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.8rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            pointer-events: none;
-        }
+        /* Progress Bar in Menu */
+        .case-mastery { margin-top: 5px; }
+        .mastery-label { font-size: 0.7rem; color: var(--text-secondary); display: flex; justify-content: space-between; margin-bottom: 3px; }
+        .mastery-bg { width: 100%; height: 4px; background: #111; border-radius: 2px; overflow: hidden; }
+        .mastery-fill { height: 100%; width: 0%; background: var(--accent-blue); }
         
-        .tooltip ul { list-style-type: none; padding: 0; }
-        .tooltip li { margin-bottom: 4px; padding-left: 10px; border-left: 2px solid var(--accent-blue); }
+        /* Actions */
+        .card-actions { display: flex; gap: 10px; align-items: center; }
 
-        .info-icon:hover .tooltip { visibility: visible; opacity: 1; }
+        .info-btn {
+            width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--text-secondary); color: var(--text-secondary);
+            display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-style: italic; cursor: pointer;
+        }
+        .info-btn:hover { border-color: #fff; color: #fff; }
+        .info-btn.active { background: var(--text-secondary); color: #000; }
 
         .btn-start-case {
-            background: transparent;
-            border: 1px solid var(--accent-blue);
-            color: var(--accent-blue);
-            padding: 8px 16px;
-            font-family: var(--font-mono);
-            cursor: pointer;
-            font-size: 0.8rem;
-            text-transform: uppercase;
+            background: transparent; border: 1px solid var(--accent-blue); color: var(--accent-blue);
+            padding: 8px 16px; font-family: var(--font-mono); cursor: pointer; font-size: 0.8rem; text-transform: uppercase; border-radius: 4px;
         }
         .btn-start-case:hover { background: var(--accent-blue); color: #fff; }
 
+        /* Topics Dropdown */
+        .topics-container {
+            background: #1a1a1a; padding: 10px; border-radius: 4px; display: none; margin-top: 5px; border-left: 2px solid var(--accent-blue);
+        }
+        .topics-title { font-size: 0.7rem; color: #fff; margin-bottom: 5px; text-transform: uppercase; }
+        .topics-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 5px; }
+        .topic-tag { font-size: 0.7rem; color: var(--text-secondary); background: #333; padding: 2px 6px; border-radius: 3px; }
 
-        /* --- GAME SCREEN (Chat) --- */
+        /* --- GAME SCREEN --- */
         #game-screen {
-            display: none; /* Hidden by default */
-            flex: 1;
-            flex-direction: column;
-            overflow: hidden;
+            display: none; flex: 1; flex-direction: column; overflow: hidden;
         }
 
         #chat-window {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            scroll-behavior: smooth;
+            flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth;
         }
 
         .message {
-            max-width: 85%;
-            padding: 15px 20px;
-            border-radius: 4px;
-            animation: fadeIn 0.3s ease-up;
-            line-height: 1.5;
-            position: relative;
+            max-width: 85%; padding: 15px 20px; border-radius: 4px; animation: fadeIn 0.3s ease-up; line-height: 1.5; position: relative;
         }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .message.partner {
-            align-self: flex-start;
-            background-color: #252525;
-            border-left: 3px solid var(--text-secondary);
-            font-family: var(--font-serif);
-            font-size: 1.1rem;
-            color: #fff;
+            align-self: flex-start; background-color: #252525; border-left: 3px solid var(--text-secondary);
+            font-family: var(--font-serif); font-size: 1.1rem; color: #fff;
         }
-
         .message.partner::before { content: "SENIOR PARTNER"; position: absolute; top: -18px; left: 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-secondary); }
 
         .message.user { align-self: flex-end; background-color: #2a3b4d; border-right: 3px solid var(--accent-blue); text-align: right; font-size: 0.95rem; }
@@ -206,25 +169,15 @@
 
         /* --- INPUT AREA --- */
         #input-area {
-            padding: 20px;
-            border-top: 1px solid var(--border-color);
-            background: #181818;
-            min-height: 100px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            padding: 20px; border-top: 1px solid var(--border-color); background: #181818; min-height: 100px; display: flex; flex-direction: column; justify-content: center;
         }
-
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn-option { background: transparent; border: 1px solid var(--text-secondary); color: var(--text-primary); padding: 12px; font-family: var(--font-mono); cursor: pointer; transition: all 0.2s; text-align: left; }
         .btn-option:hover { border-color: var(--accent-blue); background: rgba(41, 121, 255, 0.1); }
-        
         .text-input-wrapper { display: flex; gap: 10px; }
         input[type="text"] { flex: 1; background: transparent; border: 1px solid var(--text-secondary); color: #fff; padding: 12px; font-family: var(--font-mono); outline: none; }
         input[type="text"]:focus { border-color: var(--accent-blue); }
         .btn-submit { background: var(--accent-blue); color: #fff; border: none; padding: 0 20px; cursor: pointer; font-family: var(--font-mono); font-weight: 600; }
-        
-        /* Mobile Input fix */
         @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
 
         /* --- OVERLAYS --- */
@@ -233,8 +186,9 @@
             background: rgba(18, 18, 18, 0.98);
             display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100;
         }
-        .status-text { font-family: var(--font-serif); font-size: 3rem; margin-bottom: 20px; text-transform: uppercase; }
-        .btn-back { background: transparent; border: 1px solid #fff; color: #fff; padding: 10px 30px; cursor: pointer; font-family: var(--font-mono); margin-top: 20px; }
+        .status-text { font-family: var(--font-serif); font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
+        .status-sub { font-size: 1rem; color: #888; margin-bottom: 30px; text-align: center; padding: 0 20px;}
+        .btn-back { background: transparent; border: 1px solid #fff; color: #fff; padding: 12px 30px; cursor: pointer; font-family: var(--font-mono); margin-top: 10px; text-transform: uppercase; }
         .btn-back:hover { background: #fff; color: #000; }
 
     </style>
@@ -243,17 +197,24 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v2.4</div>
-            <div class="trust-container" id="trust-container">
-                <span class="trust-label">PARTNER'S TRUST</span>
-                <div class="progress-bg">
-                    <div class="progress-fill" id="trust-bar"></div>
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v3.0</div>
+            
+            <div class="game-header-elements" id="game-header-elements">
+                <div class="trust-container">
+                    <span class="trust-label">PARTNER'S TRUST</span>
+                    <div class="progress-bg">
+                        <div class="progress-fill" id="trust-bar"></div>
+                    </div>
                 </div>
+                <button class="btn-exit" onclick="exitToMenu()">✕</button>
             </div>
         </header>
 
         <div id="menu-screen">
-            <div class="menu-header">Aktenbestand</div>
+            <div class="menu-header">
+                <div class="menu-title">Aktenbestand</div>
+                <div class="menu-subtitle">Öffentliches Recht - Prüfungsrelevante Fälle</div>
+            </div>
             <div id="case-list">
                 </div>
         </div>
@@ -264,15 +225,15 @@
         </div>
 
         <div id="game-over-screen">
-            <div class="status-text" id="overlay-title">FIRED</div>
-            <div id="overlay-msg" style="color: #888;"></div>
-            <button class="btn-back" onclick="showMenu()">Zurück zur Übersicht</button>
+            <div class="status-text" id="overlay-title">STATUS</div>
+            <div class="status-sub" id="overlay-msg"></div>
+            <div style="font-size: 0.8rem; color: #555; margin-bottom: 20px;">Fortschritt gespeichert.</div>
+            <button class="btn-back" onclick="exitToMenu()">Zurück zur Übersicht</button>
         </div>
     </div>
 
     <script>
-        // --- DATA ---
-        // Hier sind die Themen jetzt im Feld 'topics' für das Info-Symbol hinterlegt.
+        [cite_start]// --- DATA [cite: 1-271] ---
         const cases = [
             {
                 id: "AKTE_001",
@@ -291,7 +252,7 @@
                     {
                         type: 'text',
                         intro: "Und wenn wir Protokolle und Materialien prüfen? Wie heißt diese Methode?",
-                        keywords: ["historisch", "wille", "geschichte"],
+                        keywords: ["historisch", "wille", "geschichte", "entstehung"],
                         explanation: "Historische Auslegung (Wille des historischen Gesetzgebers).",
                         feedback: "Richtig. Der historische Wille zählt."
                     },
@@ -480,15 +441,19 @@
         let activeCase = null;
         let qIndex = 0;
         let trust = 50;
+        
+        // Speicherstand laden
+        let savedProgress = JSON.parse(localStorage.getItem('junior_associate_progress')) || {};
 
-        // --- DOM ---
+        // --- DOM ELEMENTS ---
         const menuScreen = document.getElementById('menu-screen');
         const gameScreen = document.getElementById('game-screen');
         const caseList = document.getElementById('case-list');
-        const trustContainer = document.getElementById('trust-container');
+        const gameHeaderElements = document.getElementById('game-header-elements');
+        const headerTitle = document.getElementById('header-title');
+        
         const chatWindow = document.getElementById('chat-window');
         const inputArea = document.getElementById('input-area');
-        const headerTitle = document.getElementById('header-title');
         const overlay = document.getElementById('game-over-screen');
 
         // --- INIT ---
@@ -499,36 +464,81 @@
         // --- MENU LOGIC ---
         function renderMenu() {
             caseList.innerHTML = '';
+            
             cases.forEach((c, idx) => {
-                // Build Tooltip List
-                let topicList = c.topics.map(t => `<li>${t}</li>`).join('');
+                // Berechne Fortschritt
+                let highScore = savedProgress[c.id] || 0;
+                let colorClass = highScore > 0 ? (highScore >= 80 ? 'green' : 'blue') : 'grey';
+                let masteryWidth = highScore + "%";
+                let masteryColor = highScore >= 70 ? 'var(--accent-green)' : (highScore > 0 ? 'var(--accent-blue)' : '#333');
+
+                // Topics List
+                let topicTags = c.topics.map(t => `<li class="topic-tag">${t}</li>`).join('');
 
                 const card = document.createElement('div');
                 card.className = 'case-card';
+                if(highScore >= 100) card.classList.add('completed');
+                
                 card.innerHTML = `
-                    <div class="case-info">
-                        <div class="case-title">${c.title}</div>
-                        <div class="case-subtitle">${c.subtitle}</div>
-                    </div>
-                    <div class="info-icon">i
-                        <div class="tooltip">
-                            <strong>Abgedeckte Themen:</strong>
-                            <ul>${topicList}</ul>
+                    <div class="card-top">
+                        <div class="case-info">
+                            <div class="case-title">${c.title}</div>
+                            <div class="case-subtitle">${c.subtitle}</div>
+                        </div>
+                        <div class="card-actions">
+                            <div class="info-icon" onclick="toggleTopics(this)">i</div>
+                            <button class="btn-start-case" onclick="startCase(${idx})">${highScore > 0 ? 'Weiter' : 'Öffnen'}</button>
                         </div>
                     </div>
-                    <button class="btn-start-case" onclick="startCase(${idx})">Öffnen</button>
+                    
+                    <div class="case-mastery">
+                        <div class="mastery-label">
+                            <span>MASTER:</span>
+                            <span>${highScore}%</span>
+                        </div>
+                        <div class="mastery-bg">
+                            <div class="mastery-fill" style="width: ${masteryWidth}; background: ${masteryColor}"></div>
+                        </div>
+                    </div>
+
+                    <div class="topics-container">
+                        <div class="topics-title">Relevante Themen:</div>
+                        <ul class="topics-list">${topicTags}</ul>
+                    </div>
                 `;
                 caseList.appendChild(card);
             });
         }
 
+        function toggleTopics(btn) {
+            const card = btn.closest('.case-card');
+            const container = card.querySelector('.topics-container');
+            
+            if (container.style.display === 'block') {
+                container.style.display = 'none';
+                btn.classList.remove('active');
+            } else {
+                // Close others first? Optional.
+                container.style.display = 'block';
+                btn.classList.add('active');
+            }
+        }
+
         function showMenu() {
             menuScreen.style.display = 'flex';
             gameScreen.style.display = 'none';
-            trustContainer.style.display = 'none';
+            gameHeaderElements.style.display = 'none';
             overlay.style.display = 'none';
-            headerTitle.innerText = "KANZLEI-SYSTEM v2.4";
+            headerTitle.innerText = "KANZLEI-SYSTEM v3.0";
             activeCase = null;
+            renderMenu(); // Refresh scores
+        }
+
+        function exitToMenu() {
+            // Speichere aktuellen Stand bevor man rausgeht (falls mitten drin)
+            // Hier: Wir speichern nur abgeschlossene Fälle als "Score". 
+            // Aber User möchte "rausgehen", also einfach zurück.
+            showMenu();
         }
 
         // --- GAME LOGIC ---
@@ -539,7 +549,7 @@
             
             menuScreen.style.display = 'none';
             gameScreen.style.display = 'flex';
-            trustContainer.style.display = 'block';
+            gameHeaderElements.style.display = 'flex';
             updateTrustUI();
             
             headerTitle.innerText = `AKTE: ${activeCase.id}`;
@@ -605,7 +615,7 @@
 
             setTimeout(() => {
                 if (correct) {
-                    trust = Math.min(100, trust + 10);
+                    trust = Math.min(100, trust + 15); // +15 Trust bei richtig
                     addMessage('system', 'TRUST INCREASED', 'success');
                     addMessage('partner', q.feedback);
                 } else {
@@ -632,11 +642,20 @@
             if (success) {
                 title.innerText = "AKTE GESCHLOSSEN";
                 title.style.color = "var(--accent-green)";
-                msg.innerText = "Gute Arbeit. Der Mandant ist zufrieden.";
+                msg.innerText = `Endstand Vertrauen: ${trust}%`;
+                
+                // Save Progress (Only if better than before)
+                let oldScore = savedProgress[activeCase.id] || 0;
+                if (trust > oldScore) {
+                    savedProgress[activeCase.id] = trust;
+                    localStorage.setItem('junior_associate_progress', JSON.stringify(savedProgress));
+                }
+
             } else {
                 title.innerText = "GEFEUERT";
                 title.style.color = "var(--accent-red)";
-                msg.innerText = "Das Vertrauen ist aufgebraucht.";
+                msg.innerText = "Das Vertrauen ist aufgebraucht. Akte fehlgeschlagen.";
+                // Kein Score Update bei Fail
             }
         }
 
