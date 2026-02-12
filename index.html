@@ -2,259 +2,522 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEXUS | Legal Core</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUNIOR ASSOCIATE SIMULATOR | Public Law Module</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg: #050505;
-            --primary: #0A84FF;
-            --accent: #BF5AF2;
-            --success: #30D158;
-            --danger: #FF453A;
-            --text: #FFFFFF;
-            --subtext: #86868B;
+            --bg-color: #121212;
+            --panel-bg: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-green: #00e676;
+            --accent-red: #ff5252;
+            --accent-blue: #2979ff;
+            --border-color: #333;
+            --font-serif: 'Playfair Display', serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
             height: 100vh;
+            display: flex;
+            justify-content: center;
             overflow: hidden;
+        }
+
+        /* --- Main Layout --- */
+        #app-container {
+            width: 100%;
+            max-width: 800px;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            background-color: var(--panel-bg);
+            position: relative;
         }
 
-        .grid-bg {
-            position: absolute;
-            width: 200%; height: 200%;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
-            animation: gridMove 20s linear infinite;
-            z-index: -1;
-        }
-
-        @keyframes gridMove {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(40px) translateZ(-200px); }
-        }
-
-        .hud {
+        /* --- Header / Status Bar --- */
+        header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: #181818;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 50px 25px 20px;
-            z-index: 10;
+            height: 70px;
         }
 
-        .level-badge {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 5px 12px;
+        .case-id {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .trust-container {
+            width: 200px;
+            text-align: right;
+        }
+
+        .trust-label {
+            font-size: 0.7rem;
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+        }
+
+        .progress-bg {
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 50%; /* Start at 50% */
+            background: var(--accent-blue);
+            transition: width 0.5s ease, background 0.5s ease;
+        }
+
+        /* --- Chat Interface --- */
+        #chat-window {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 15px 20px;
+            border-radius: 4px;
+            animation: fadeIn 0.3s ease-up;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Partner Styling (Boss) */
+        .message.partner {
+            align-self: flex-start;
+            background-color: #252525;
+            border-left: 3px solid var(--text-secondary);
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .message.partner::before {
+            content: "SENIOR PARTNER";
+            position: absolute;
+            top: -18px;
+            left: 0;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+        }
+
+        /* User Styling (You) */
+        .message.user {
+            align-self: flex-end;
+            background-color: #2a3b4d;
+            border-right: 3px solid var(--accent-blue);
+            text-align: right;
+            font-size: 0.95rem;
+        }
+
+        /* System Feedback */
+        .message.system {
+            align-self: center;
+            font-size: 0.8rem;
+            padding: 8px 15px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            max-width: 100%;
+        }
+        .message.system.success { color: var(--accent-green); border: 1px solid var(--accent-green); background: rgba(0, 230, 118, 0.05); }
+        .message.system.fail { color: var(--accent-red); border: 1px solid var(--accent-red); background: rgba(255, 82, 82, 0.05); }
+
+        /* --- Input Area --- */
+        #input-area {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            background: #181818;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Input Controls */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-option {
+            background: transparent;
+            border: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            padding: 12px;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .btn-option:hover {
+            border-color: var(--accent-blue);
+            background: rgba(41, 121, 255, 0.1);
+        }
+
+        .text-input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            background: transparent;
+            border: 1px solid var(--text-secondary);
+            color: #fff;
+            padding: 12px;
+            font-family: var(--font-mono);
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .btn-submit {
+            background: var(--accent-blue);
+            color: #fff;
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        .btn-submit:hover { opacity: 0.9; }
+
+        /* --- Game Over Screen --- */
+        #game-over-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(18, 18, 18, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            display: none; /* Hidden by default */
+        }
+
+        .fired-text {
+            font-family: var(--font-serif);
+            font-size: 4rem;
+            color: var(--accent-red);
+            font-weight: bold;
+            margin-bottom: 20px;
             text-transform: uppercase;
         }
 
-        .hp-bar-container {
-            width: 100px;
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-        }
-
-        .hp-bar {
-            height: 100%;
-            width: 100%;
-            background: var(--success);
-            transition: width 0.3s ease;
-        }
-
-        .core-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .question-card {
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 30px;
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .q-text { font-size: 22px; font-weight: 700; }
-
-        .answer-slot {
-            min-height: 60px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 30px;
-        }
-
-        .slot-word {
-            background: rgba(255,255,255,0.1);
-            padding: 6px 12px;
-            border-radius: 10px;
-            animation: popIn 0.3s ease;
-        }
-
-        @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-
-        .fragment-field {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .fragment {
-            background: rgba(40, 40, 40, 0.8);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 14px 20px;
-            border-radius: 16px;
-            font-size: 15px;
+        .restart-btn {
+            background: transparent;
+            border: 2px solid var(--text-primary);
+            color: var(--text-primary);
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-family: var(--font-mono);
             cursor: pointer;
+            text-transform: uppercase;
         }
-
-        .overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5,5,5,0.95);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .btn-start {
-            background: white;
-            color: black;
-            border: none;
-            padding: 18px 45px;
-            border-radius: 40px;
-            font-size: 18px;
-            font-weight: 700;
-            margin-top: 20px;
+        .restart-btn:hover { background: var(--text-primary); color: #000; }
+        
+        /* Mobile adjustment */
+        @media (max-width: 600px) {
+            .options-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <div class="grid-bg"></div>
+    <div id="app-container">
+        <header>
+            <div class="case-id">CASE: <span id="case-display">INIT_SEQ_01</span></div>
+            <div class="trust-container">
+                <span class="trust-label">PARTNER'S TRUST</span>
+                <div class="progress-bg">
+                    <div class="progress-fill" id="trust-bar"></div>
+                </div>
+            </div>
+        </header>
 
-    <div class="hud">
-        <div class="level-badge" id="levelDisplay">Ready</div>
-        <div class="hp-bar-container"><div class="hp-bar" id="hpBar"></div></div>
-    </div>
+        <div id="chat-window">
+            </div>
 
-    <div class="core-container">
-        <div class="question-card">
-            <div style="color:var(--primary); font-size:11px; font-weight:800; margin-bottom:10px;">SYSTEM CORE</div>
-            <div class="q-text" id="qText">Initialisiere...</div>
+        <div id="input-area">
+            </div>
+
+        <div id="game-over-screen">
+            <div class="fired-text">FIRED</div>
+            <div style="margin-bottom: 30px; font-family: var(--font-mono); color: #888;">Your performance was unacceptable.</div>
+            <button class="restart-btn" onclick="initGame()">Re-apply</button>
         </div>
-        <div class="answer-slot" id="answerSlot"></div>
-        <div class="fragment-field" id="fragmentField"></div>
-    </div>
-
-    <div class="overlay" id="startScreen">
-        <h1>NEXUS</h1>
-        <p>Baue die Definitionen korrekt zusammen.</p>
-        <button class="btn-start" onclick="startGame()">Starten</button>
-    </div>
-
-    <div class="overlay" id="endScreen" style="display:none">
-        <h1 id="endTitle">FAIL</h1>
-        <button class="btn-start" onclick="location.reload()">Reset</button>
     </div>
 
     <script>
-        const db = [
-            [cite_start]{ q: "Systematische Auslegung [cite: 1, 11][cite_start]", a: "Feststellen des Aussagegehaltes anhand der Stellung im Gesetz [cite: 11, 232]" },
-            [cite_start]{ q: "Historische Auslegung [cite: 13, 233][cite_start]", a: "Ermittlung des Willens des historischen Gesetzgebers durch Materialien [cite: 13, 233]" },
-            [cite_start]{ q: "Verfassungskonforme Auslegung [cite: 14, 235][cite_start]", a: "Wahl der Deutung die mit dem Grundgesetz vereinbar ist [cite: 15, 17]" },
-            [cite_start]{ q: "Staatszielbestimmung [cite: 19, 237][cite_start]", a: "Verfassungsnorm die dem Staat Aufgaben vorgibt ohne subjektive Rechte [cite: 19, 237]" },
-            [cite_start]{ q: "Anstalt [cite: 20, 21][cite_start]", a: "Zusammenfassung von Mitteln zur öffentlichen Aufgabe für Benutzer [cite: 20, 21]" },
-            [cite_start]{ q: "Körperschaft [cite: 239, 240][cite_start]", a: "Mitgliedschaftlich organisierter Hoheitsträger aus Mitgliedern [cite: 239, 240]" },
-            [cite_start]{ q: "Subordinationstheorie [cite: 34, 47][cite_start]", a: "Unterscheidung durch das Bestehen eines Über- und Unterordnungsverhältnisses [cite: 34, 47]" },
-            [cite_start]{ q: "Verwaltungsakt [cite: 57, 258][cite_start]", a: "Hoheitliche Maßnahme einer Behörde zur Regelung eines Einzelfalls [cite: 57, 155]" }
+        // --- GAME DATA ---
+        const questions = [
+            {
+                id: 1,
+                type: 'choice',
+                intro: "Ah, da sind Sie ja. Wir haben einen neuen Mandanten. Die Behörde hat ihm einen Brief geschickt. Ich muss sofort wissen: Was sind die zwingenden Merkmale eines Verwaltungsakts nach § 35 VwVfG?",
+                options: [
+                    "Hoheitliche Maßnahme, Behörde, Regelung, Einzelfall, Außenwirkung",
+                    "Privatrechtliches Handeln, Behörde, Allgemeinverfügung",
+                    "Gesetzgebungsverfahren, Parlament, Innenwirkung"
+                ],
+                correctAnswer: 0, // Index of correct option
+                feedback: "Korrekt. Das ist das Basiswissen, das ich erwarte."
+            },
+            {
+                id: 2,
+                type: 'text',
+                intro: "Gut. Prüfen wir die Verhältnismäßigkeit. Definieren Sie mir kurz den Punkt 'Geeignetheit'. Wann ist eine Maßnahme geeignet?",
+                keywords: ["zweck", "fördern", "erreichen", "mittel"], // Keywords to check in answer
+                explanation: "Eine Maßnahme ist geeignet, wenn sie den legitimen Zweck zumindest fördert.",
+                feedback: "Präzise. Solange der Zweck gefördert wird, ist sie geeignet."
+            },
+            {
+                id: 3,
+                type: 'choice',
+                intro: "Letzte Frage für heute. Die Behörde hatte Ermessen. Sie hat aber gar nicht erkannt, dass sie Ermessen hat und dachte, sie müsse so handeln. Welcher Ermessensfehler liegt vor?",
+                options: [
+                    "Ermessensüberschreitung",
+                    "Ermessensnichtgebrauch (Ermessensausfall)",
+                    "Ermessensfehlgebrauch"
+                ],
+                correctAnswer: 1,
+                feedback: "Richtig. Wer sein Ermessen nicht nutzt, handelt rechtswidrig."
+            }
         ];
 
-        let currentIdx = 0;
-        let hp = 100;
-        let targetWords = [];
-        let completedWords = [];
+        // --- STATE VARIABLES ---
+        let trust = 50;
+        let currentQIndex = 0;
+        let gameActive = true;
 
-        function startGame() {
-            document.getElementById('startScreen').style.display = 'none';
-            db.sort(() => Math.random() - 0.5);
-            loadLevel();
+        // --- DOM ELEMENTS ---
+        const chatWindow = document.getElementById('chat-window');
+        const inputArea = document.getElementById('input-area');
+        const trustBar = document.getElementById('trust-bar');
+        const caseDisplay = document.getElementById('case-display');
+        const gameOverScreen = document.getElementById('game-over-screen');
+
+        // --- FUNCTIONS ---
+
+        function initGame() {
+            // Reset State
+            trust = 50;
+            currentQIndex = 0;
+            gameActive = true;
+            
+            // Reset UI
+            chatWindow.innerHTML = '';
+            gameOverScreen.style.display = 'none';
+            updateTrustUI();
+            
+            // Start Sequence
+            addMessage('system', 'System initialized. Authenticating Associate...');
+            setTimeout(() => {
+                nextQuestion();
+            }, 1000);
         }
 
-        function loadLevel() {
-            if (currentIdx >= db.length) return alert("Klausurreif!");
-            const data = db[currentIdx];
-            document.getElementById('qText').innerText = data.q;
-            document.getElementById('levelDisplay').innerText = (currentIdx + 1) + " / " + db.length;
-            document.getElementById('answerSlot').innerHTML = '';
+        function updateTrustUI() {
+            trustBar.style.width = `${trust}%`;
             
-            targetWords = data.a.split(' ');
-            completedWords = [];
-            
-            let pool = [...targetWords, "Falsch", "Privat", "Gesetz", "Norm"];
-            pool.sort(() => Math.random() - 0.5);
-
-            const field = document.getElementById('fragmentField');
-            field.innerHTML = '';
-            pool.forEach(word => {
-                const div = document.createElement('div');
-                div.className = 'fragment';
-                div.innerText = word;
-                div.onclick = () => handleTap(word, div);
-                field.appendChild(div);
-            });
+            // Color Logic
+            if (trust > 70) trustBar.style.backgroundColor = 'var(--accent-green)';
+            else if (trust < 30) trustBar.style.backgroundColor = 'var(--accent-red)';
+            else trustBar.style.backgroundColor = 'var(--accent-blue)';
         }
 
-        function handleTap(word, el) {
-            if (word === targetWords[completedWords.length]) {
-                completedWords.push(word);
-                const span = document.createElement('span');
-                span.className = 'slot-word';
-                span.innerText = word;
-                document.getElementById('answerSlot').appendChild(span);
-                el.style.visibility = 'hidden';
-                if (completedWords.length === targetWords.length) {
-                    currentIdx++;
-                    setTimeout(loadLevel, 500);
-                }
-            } else {
-                hp -= 20;
-                document.getElementById('hpBar').style.width = hp + "%";
-                if (hp <= 0) {
-                    document.getElementById('endScreen').style.display = 'flex';
-                }
+        function addMessage(sender, text, mood = 'neutral') {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message');
+            msgDiv.classList.add(sender); // 'partner', 'user', 'system'
+            
+            if (sender === 'system') {
+                msgDiv.classList.add(mood); // 'success', 'fail'
+            }
+
+            msgDiv.innerText = text;
+            chatWindow.appendChild(msgDiv);
+            
+            // Scroll to bottom
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function nextQuestion() {
+            if (!gameActive) return;
+
+            if (currentQIndex >= questions.length) {
+                // Win Condition
+                addMessage('partner', "Gute Arbeit heute. Sie dürfen gehen. Wir sehen uns morgen früh.");
+                inputArea.innerHTML = "<div style='color: #666; text-align: center; width: 100%;'>SIMULATION COMPLETE</div>";
+                return;
+            }
+
+            const q = questions[currentQIndex];
+            caseDisplay.innerText = `CASE_00${q.id}_PUB_LAW`;
+            
+            // Partner asks logic
+            setTimeout(() => {
+                addMessage('partner', q.intro);
+                renderInputs(q);
+            }, 800);
+        }
+
+        function renderInputs(question) {
+            inputArea.innerHTML = ''; // Clear previous inputs
+
+            if (question.type === 'choice') {
+                const grid = document.createElement('div');
+                grid.classList.add('options-grid');
+
+                question.options.forEach((opt, index) => {
+                    const btn = document.createElement('button');
+                    btn.classList.add('btn-option');
+                    btn.innerText = `> ${opt}`;
+                    btn.onclick = () => handleAnswer(index, question);
+                    grid.appendChild(btn);
+                });
+                inputArea.appendChild(grid);
+            } 
+            else if (question.type === 'text') {
+                const wrapper = document.createElement('div');
+                wrapper.classList.add('text-input-wrapper');
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = "Geben Sie Ihre Antwort ein...";
+                input.id = 'text-answer';
+                // Allow enter key
+                input.addEventListener("keypress", function(event) {
+                    if (event.key === "Enter") {
+                        handleAnswer(input.value, question);
+                    }
+                });
+
+                const btn = document.createElement('button');
+                btn.classList.add('btn-submit');
+                btn.innerText = "SENDEN";
+                btn.onclick = () => handleAnswer(input.value, question);
+
+                wrapper.appendChild(input);
+                wrapper.appendChild(btn);
+                inputArea.appendChild(wrapper);
+                
+                // Auto focus
+                setTimeout(() => input.focus(), 100);
             }
         }
+
+        function handleAnswer(answer, question) {
+            // Remove inputs immediately to prevent double submission
+            inputArea.innerHTML = '';
+
+            // 1. Display User Answer in Chat
+            let displayAnswer = "";
+            if (question.type === 'choice') {
+                displayAnswer = question.options[answer];
+            } else {
+                displayAnswer = answer;
+            }
+            addMessage('user', displayAnswer);
+
+            // 2. Evaluate
+            let isCorrect = false;
+
+            if (question.type === 'choice') {
+                isCorrect = (answer === question.correctAnswer);
+            } else if (question.type === 'text') {
+                // Simple keyword matching for demo
+                const lowerAns = answer.toLowerCase();
+                // Check if any keyword matches
+                const matchCount = question.keywords.filter(kw => lowerAns.includes(kw)).length;
+                isCorrect = matchCount > 0;
+            }
+
+            // 3. Process Result (Delay slightly for realism)
+            setTimeout(() => {
+                if (isCorrect) {
+                    trust = Math.min(100, trust + 15);
+                    addMessage('system', 'TRUST INCREASED', 'success');
+                    addMessage('partner', question.feedback);
+                } else {
+                    trust = trust - 20;
+                    addMessage('system', 'TRUST DECREASED', 'fail');
+                    
+                    let correction = "";
+                    if (question.type === 'choice') {
+                        correction = `Falsch. Richtige Antwort: ${question.options[question.correctAnswer]}`;
+                    } else {
+                        correction = `Ungenügend. ${question.explanation}`;
+                    }
+                    addMessage('partner', correction);
+                }
+
+                updateTrustUI();
+
+                // Check Game Over
+                if (trust <= 0) {
+                    gameActive = false;
+                    setTimeout(() => {
+                        gameOverScreen.style.display = 'flex';
+                    }, 1000);
+                } else {
+                    currentQIndex++;
+                    setTimeout(nextQuestion, 1500);
+                }
+
+            }, 600);
+        }
+
+        // Start the game on load
+        window.onload = initGame;
+
     </script>
 </body>
 </html>
