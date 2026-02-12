@@ -202,7 +202,7 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v6.0</div>
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v7.0</div>
             
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
@@ -348,11 +348,11 @@
 
         // AUTO-REPAIR STARTUP
         try {
-            const data = localStorage.getItem('junior_lawyer_save_v6');
+            const data = localStorage.getItem('junior_lawyer_save_v7');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
             console.log("Resetting save.");
-            localStorage.removeItem('junior_lawyer_save_v6');
+            localStorage.removeItem('junior_lawyer_save_v7');
             savedProgress = {};
         }
 
@@ -442,4 +442,122 @@
             } else {
                 const wrp = document.createElement('div');
                 wrp.className = 'text-input-wrapper';
-                const
+                const inp = document.createElement('input');
+                inp.type = 'text';
+                inp.placeholder = 'Antwort...';
+                const btn = document.createElement('button');
+                btn.className = 'btn-submit';
+                btn.innerText = 'SENDEN';
+                btn.onclick = () => checkText(inp.value, q);
+                inp.onkeypress = (e) => { if(e.key==='Enter') checkText(inp.value, q); };
+                wrp.append(inp, btn);
+                inputArea.appendChild(wrp);
+                setTimeout(() => inp.focus(), 100);
+            }
+            inputArea.appendChild(btnReveal);
+        }
+
+        function checkChoice(val, q, btn) {
+            if (val === q.correctAnswer) {
+                inputArea.innerHTML = '';
+                addMsg('user', q.options[val]);
+                processSuccess(q);
+            } else {
+                btn.classList.add('wrong');
+                trust = Math.max(0, trust - 5);
+                addMsg('system', 'Falsch. Versuch es erneut.', 'fail');
+                updateTrust();
+                if(trust === 0) endCase(false);
+            }
+        }
+
+        function checkText(val, q) {
+            const ok = q.keywords.some(k => val.toLowerCase().includes(k));
+            if (ok) {
+                inputArea.innerHTML = '';
+                addMsg('user', val);
+                processSuccess(q);
+            } else {
+                trust = Math.max(0, trust - 5);
+                addMsg('system', 'Zu ungenau. Prüfen Sie die Definition.', 'fail');
+                updateTrust();
+                if(trust === 0) endCase(false);
+            }
+        }
+
+        function revealSolution(q) {
+            inputArea.innerHTML = '';
+            addMsg('user', '(Hilfe angefordert)');
+            trust = Math.max(0, trust - 15);
+            addMsg('partner', 'Lösung: ' + q.explanation);
+            addMsg('system', 'STRAFPUNKTE ANGEWANDT', 'fail');
+            updateTrust();
+            if(trust === 0) endCase(false);
+            else {
+                qIndex++;
+                setTimeout(nextQ, 3000);
+            }
+        }
+
+        function processSuccess(q) {
+            trust = Math.min(100, trust + 10);
+            addMsg('partner', q.feedback);
+            addMsg('system', 'VERTRAUEN GESTIEGEN', 'success');
+            updateTrust();
+            qIndex++;
+            setTimeout(nextQ, 1500);
+        }
+
+        function endCase(win) {
+            overlay.style.display = 'flex';
+            const t = document.getElementById('overlay-title');
+            const m = document.getElementById('overlay-msg');
+            if (win) {
+                t.innerText = "AKTE GESCHLOSSEN";
+                t.style.color = "var(--accent-green)";
+                m.innerText = "Score: " + trust + "%";
+                let old = savedProgress[activeCase.id] || 0;
+                if (trust > old) {
+                    savedProgress[activeCase.id] = trust;
+                    localStorage.setItem('junior_lawyer_save_v7', JSON.stringify(savedProgress));
+                }
+            } else {
+                t.innerText = "GESCHEITERT";
+                t.style.color = "var(--accent-red)";
+                m.innerText = "Vertrauen auf 0.";
+            }
+        }
+
+        function addMsg(cls, txt, type) {
+            const d = document.createElement('div');
+            d.className = `message ${cls} ${type||''}`;
+            d.innerText = txt;
+            chatWindow.appendChild(d);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function updateTrust() {
+            const b = document.getElementById('trust-bar');
+            b.style.width = trust + "%";
+            b.style.background = trust > 70 ? 'var(--accent-green)' : (trust < 30 ? 'var(--accent-red)' : 'var(--accent-blue)');
+        }
+
+        function exitToMenu() {
+            menuScreen.style.display = 'flex';
+            gameScreen.style.display = 'none';
+            gameHeader.style.display = 'none';
+            overlay.style.display = 'none';
+            renderMenu();
+        }
+
+        function hardReset() {
+            if(confirm("Spielstand löschen?")) {
+                localStorage.removeItem('junior_lawyer_save_v7');
+                location.reload();
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
