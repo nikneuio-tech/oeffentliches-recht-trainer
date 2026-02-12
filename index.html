@@ -297,38 +297,205 @@
 
     <script>
         // --- GAME DATA ---
-        const questions = [
+       const questions = [
+            // --- BLOCK 1: METHODENLEHRE ---
             {
                 id: 1,
                 type: 'choice',
-                intro: "Ah, da sind Sie ja. Wir haben einen neuen Mandanten. Die Behörde hat ihm einen Brief geschickt. Ich muss sofort wissen: Was sind die zwingenden Merkmale eines Verwaltungsakts nach § 35 VwVfG?",
+                intro: "Guten Morgen. Wir steigen direkt ein. Ich habe hier eine Norm, deren Wortlaut unklar ist. Wenn ich den normativen Aussagegehalt anhand der Stellung im Gesetz ermittle – welche Auslegungsmethode wende ich an?",
                 options: [
-                    "Hoheitliche Maßnahme, Behörde, Regelung, Einzelfall, Außenwirkung",
-                    "Privatrechtliches Handeln, Behörde, Allgemeinverfügung",
-                    "Gesetzgebungsverfahren, Parlament, Innenwirkung"
+                    "Historische Auslegung",
+                    "Systematische Auslegung",
+                    "Teleologische Auslegung"
                 ],
-                correctAnswer: 0, // Index of correct option
-                feedback: "Korrekt. Das ist das Basiswissen, das ich erwarte."
+                correctAnswer: 1,
+                feedback: "Korrekt. Der Kontext im Gesetz ist entscheidend."
             },
             {
                 id: 2,
                 type: 'text',
-                intro: "Gut. Prüfen wir die Verhältnismäßigkeit. Definieren Sie mir kurz den Punkt 'Geeignetheit'. Wann ist eine Maßnahme geeignet?",
-                keywords: ["zweck", "fördern", "erreichen", "mittel"], // Keywords to check in answer
-                explanation: "Eine Maßnahme ist geeignet, wenn sie den legitimen Zweck zumindest fördert.",
-                feedback: "Präzise. Solange der Zweck gefördert wird, ist sie geeignet."
+                intro: "Bleiben wir kurz dabei. Was wäre denn dann die 'Historische Auslegung'? Erklären Sie mir das kurz.",
+                keywords: ["wille", "gesetzgeber", "entstehungsgeschichte", "materialien", "protokolle"],
+                explanation: "Es geht um den Willen des historischen Gesetzgebers und die Entstehungsgeschichte (Materialien/Protokolle).",
+                feedback: "Genau. Wir schauen in die alten Protokolle und Materialien."
             },
             {
                 id: 3,
                 type: 'choice',
-                intro: "Letzte Frage für heute. Die Behörde hatte Ermessen. Sie hat aber gar nicht erkannt, dass sie Ermessen hat und dachte, sie müsse so handeln. Welcher Ermessensfehler liegt vor?",
+                intro: "Ein Gesetz lässt mehrere Deutungen zu. Eine davon verstößt gegen das Grundgesetz, die andere nicht. Was tun wir?",
+                options: [
+                    "Das Gesetz ist nichtig und muss verworfen werden.",
+                    "Wir wenden die verfassungskonforme Auslegung an (Norm bleibt gültig).",
+                    "Wir fragen das Bundesverfassungsgericht um Erlaubnis."
+                ],
+                correctAnswer: 1,
+                feedback: "Richtig. Solange eine verfassungskonforme Auslegung möglich ist, bleibt die Norm gültig."
+            },
+
+            // --- BLOCK 2: ORGANISATIONSFORMEN ---
+            {
+                id: 4,
+                type: 'text',
+                intro: "Themenwechsel. Unser Mandant will eine 'Anstalt des öffentlichen Rechts' gründen. Definieren Sie 'Anstalt'.",
+                keywords: ["personal", "sachmittel", "vermögen", "benutzer", "aufgabe"],
+                explanation: "Zusammenfassung von Personal/Sachmitteln zur Erfüllung einer öff. Aufgabe, die Benutzern zur Verfügung steht.",
+                feedback: "Akzeptabel. Wichtig ist die Abgrenzung: Die Anstalt hat Benutzer, keine Mitglieder."
+            },
+            {
+                id: 5,
+                type: 'choice',
+                intro: "Und wo liegt dann der Unterschied zur Körperschaft?",
+                options: [
+                    "Die Körperschaft ist mitgliedschaftlich organisiert.",
+                    "Die Körperschaft hat Kunden.",
+                    "Die Körperschaft ist privatrechtlich."
+                ],
+                correctAnswer: 0,
+                feedback: "So ist es. Körperschaft = Mitglieder. Anstalt = Benutzer."
+            },
+
+            // --- BLOCK 3: RECHTSWEG & KLAGE ---
+            {
+                id: 6,
+                type: 'choice',
+                intro: "Der Fall 'Nossen gegen Ketzerbachtal'. Es geht um kommunale Zusammenarbeit. Welcher Rechtsweg ist eröffnet und warum?",
+                options: [
+                    "Zivilrechtsweg, weil es um Schadensersatz geht.",
+                    "Verwaltungsrechtsweg (§ 40 VwGO), weil Hoheitsträger berechtigt/verpflichtet sind (Sonderrechtstheorie).",
+                    "Verfassungsrechtsweg, weil Kommunen Teil des Staates sind."
+                ],
+                correctAnswer: 1,
+                feedback: "Korrekt. Es sind originäre öffentliche Interessen betroffen (Interessentheorie) und Träger hoheitlicher Gewalt berechtigt."
+            },
+            {
+                id: 7,
+                type: 'choice',
+                intro: "Mandant Förster (Hotelier) will gegen eine Windkraftanlage klagen. Er will die Genehmigung 'weg' haben. Welche Klageart?",
+                options: [
+                    "Allgemeine Leistungsklage",
+                    "Anfechtungsklage (§ 42 I Alt. 1 VwGO)",
+                    "Verpflichtungsklage"
+                ],
+                correctAnswer: 1,
+                feedback: "Ja. Er begehrt die Aufhebung eines Verwaltungsaktes."
+            },
+            {
+                id: 8,
+                type: 'text',
+                intro: "Bevor wir klagen: Was muss Herr Förster geltend machen können, um überhaupt klagebefugt zu sein? (§ 42 II VwGO)",
+                keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv", "eigene"],
+                explanation: "Er muss die Möglichkeit einer Verletzung in eigenen subjektiven Rechten geltend machen (Möglichkeitstheorie).",
+                feedback: "Richtig. Die bloße Behauptung reicht nicht, die Möglichkeit der Verletzung (z.B. Art. 14 GG) muss bestehen."
+            },
+
+            // --- BLOCK 4: NORMEN & VERFASSUNG ---
+            {
+                id: 9,
+                type: 'choice',
+                intro: "Schauen Sie ins TKG. § 87 Abs. 1 gibt ein Ziel vor. Um welche Normart handelt es sich?",
+                options: [
+                    "Konditional gefasste Norm (Wenn-Dann)",
+                    "Final gefasste Norm (Ziel/Rechtsfolge)",
+                    "Deskriptive Norm (Beschreibung)"
+                ],
+                correctAnswer: 1,
+                feedback: "Gut erkannt. Final = Zielorientiert."
+            },
+            {
+                id: 10,
+                type: 'text',
+                intro: "Ein heikles Thema: Kann sich der Staat (z.B. das ZDF) auf Grundrechte berufen? Wie lautet der Grundsatz?",
+                keywords: ["nein", "grundsätzlich", "nicht", "konfusion", "verpflichteter"],
+                explanation: "Grundsätzlich nein (Konfusionsargument). Der Staat ist Verpflichteter, nicht Berechtigter.",
+                feedback: "Der Grundsatz ist 'Nein'. Aber denken Sie an die Ausnahme bei der Rundfunkfreiheit!"
+            },
+            {
+                id: 11,
+                type: 'choice',
+                intro: "Stichwort Rundfunkrat. Das Gebot der Staatsferne ist verletzt. Wie hoch darf der Anteil staatlicher Mitglieder maximal sein?",
+                options: [
+                    "Maximal 50%",
+                    "Maximal ein Drittel (1/3)",
+                    "Gar keine staatlichen Mitglieder"
+                ],
+                correctAnswer: 1,
+                feedback: "Exakt. Die Drittel-Quote darf nicht überschritten werden."
+            },
+
+            // --- BLOCK 5: EUROPA & AMTSHAFTUNG ---
+            {
+                id: 12,
+                type: 'text',
+                intro: "Nennen Sie mir zwei EU-Grundfreiheiten aus dem AEUV.",
+                keywords: ["waren", "arbeitnehmer", "dienstleistung", "niederlassung", "kapital"],
+                explanation: "Warenverkehr, Arbeitnehmerfreizügigkeit, Dienstleistungsfreiheit, Niederlassungsfreiheit, Kapitalverkehr.",
+                feedback: "Das sind die wichtigsten Säulen des Binnenmarktes."
+            },
+            {
+                id: 13,
+                type: 'choice',
+                intro: "Die Behörde hat Mist gebaut und die Genehmigung verzögert. Unser Mandant will Schadensersatz (Amtshaftung). Was ist die Anspruchsgrundlage?",
+                options: [
+                    "§ 823 BGB",
+                    "§ 839 BGB i.V.m. Art. 34 GG",
+                    "§ 40 VwGO"
+                ],
+                correctAnswer: 1,
+                feedback: "Korrekt. § 839 BGB ist die Haftungsnorm, Art. 34 GG leitet die Haftung auf den Staat über."
+            },
+            {
+                id: 14,
+                type: 'choice',
+                intro: "Eine EU-Richtlinie wurde nicht umgesetzt, die Frist ist abgelaufen. Gilt sie jetzt unmittelbar für den Bürger?",
+                options: [
+                    "Ja, wenn sie inhaltlich unbedingt und hinreichend bestimmt ist.",
+                    "Nein, Richtlinien gelten nie unmittelbar.",
+                    "Nur wenn der EuGH zustimmt."
+                ],
+                correctAnswer: 0,
+                feedback: "Richtig. Das ist die vertikale unmittelbare Wirkung bei Umsetzungsdefiziten."
+            },
+
+            // --- BLOCK 6: VERWALTUNGSHANDELN ---
+            {
+                id: 15,
+                type: 'text',
+                intro: "Standardfrage, muss sitzen: Definieren Sie den Verwaltungsakt nach § 35 VwVfG.",
+                keywords: ["hoheitlich", "maßnahme", "behörde", "regelung", "einzelfall", "außenwirkung"],
+                explanation: "Hoheitliche Maßnahme einer Behörde zur Regelung eines Einzelfalls mit Außenwirkung.",
+                feedback: "Das ist das Handwerkszeug. Hoheitlich, Behörde, Regelung, Einzelfall, Außenwirkung."
+            },
+            {
+                id: 16,
+                type: 'choice',
+                intro: "Die Behörde hat Ermessen, nutzt es aber gar nicht, weil sie denkt, sie 'muss' so handeln. Welcher Fehler?",
                 options: [
                     "Ermessensüberschreitung",
                     "Ermessensnichtgebrauch (Ermessensausfall)",
                     "Ermessensfehlgebrauch"
                 ],
                 correctAnswer: 1,
-                feedback: "Richtig. Wer sein Ermessen nicht nutzt, handelt rechtswidrig."
+                feedback: "Ja. Wer nicht erkennt, dass er die Wahl hat, begeht einen Ermessensnichtgebrauch."
+            },
+            {
+                id: 17,
+                type: 'choice',
+                intro: "Letzter Fall: Der Busunternehmer. Er ist unzuverlässig (Steuerschulden). Wir wollen ihm die Genehmigung entziehen. Welche Rechtsgrundlage?",
+                options: [
+                    "§ 35 GewO (Gewerbeuntersagung)",
+                    "§ 25 PBefG (Widerruf der Genehmigung)",
+                    "§ 48 VwVfG (Rücknahme)"
+                ],
+                correctAnswer: 1,
+                feedback: "Aufpassen! Hier gilt das Spezialgesetz (PBefG), nicht die GewO."
+            },
+            {
+                id: 18,
+                type: 'text',
+                intro: "Wann gilt ein Gewerbetreibender als 'unzuverlässig'? Geben Sie mir die Definition für die Prognose.",
+                keywords: ["gewähr", "künftig", "ordnungsgemäß", "betrieb", "verhalten", "gesamteindruck"],
+                explanation: "Wenn er nach dem Gesamteindruck seines Verhaltens keine Gewähr für den künftigen ordnungsgemäßen Betrieb bietet.",
+                feedback: "Exakt. Es ist eine negative Zukunftsprognose."
             }
         ];
 
