@@ -38,7 +38,7 @@
 
         #app-container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -75,30 +75,23 @@
         }
         .btn-exit:hover { color: var(--accent-red); }
 
-        /* TIMER BAR (NEW) */
+        /* Timer Bar */
         #timer-container {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: transparent; z-index: 15;
-            display: none; /* Only show in game */
+            display: none; 
         }
         #timer-bar { height: 100%; background: var(--accent-green); width: 100%; transition: width 1s linear, background-color 0.5s; }
 
         /* --- MENU SCREEN --- */
         #menu-screen {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;
         }
 
         .menu-header { text-align: center; margin-bottom: 10px; padding-top: 10px; }
         .menu-title { font-family: var(--font-serif); font-size: 1.8rem; color: #fff; margin-bottom: 5px; }
         .menu-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
 
-        .archive-link {
-            text-align: center; margin-bottom: 10px;
-        }
+        .archive-link { text-align: center; margin-bottom: 10px; }
         .btn-archive {
             background: transparent; border: 1px solid var(--text-secondary); color: var(--text-secondary);
             padding: 8px 20px; font-family: var(--font-mono); font-size: 0.8rem; cursor: pointer; text-transform: uppercase;
@@ -107,18 +100,12 @@
         .btn-archive:hover { border-color: var(--accent-blue); color: #fff; }
 
         .case-card {
-            background: #252525;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            transition: transform 0.2s;
-            cursor: pointer;
+            background: #252525; border: 1px solid var(--border-color); border-radius: 8px; padding: 15px;
+            display: flex; flex-direction: column; gap: 10px; transition: transform 0.2s; cursor: pointer;
         }
         .case-card:hover { border-color: var(--text-secondary); background: #2a2a2a; }
         .case-card.completed { border-color: var(--accent-green); }
+        .case-card.complex { border-left: 3px solid var(--accent-gold); }
 
         .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
         .case-title { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
@@ -139,16 +126,35 @@
         }
         .btn-start-case:hover { background: var(--accent-blue); color: #fff; }
 
-        /* --- ARCHIVE SCREEN (NEW) --- */
+        /* --- DIFFICULTY SELECTOR (NEW) --- */
+        #difficulty-screen {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(18, 18, 18, 0.98); flex-direction: column; align-items: center; justify-content: center; z-index: 50; padding: 20px;
+        }
+        .diff-card {
+            background: #252525; border: 1px solid var(--border-color); width: 100%; max-width: 400px; padding: 20px; margin-bottom: 15px;
+            border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: left;
+        }
+        .diff-card:hover { transform: scale(1.02); }
+        .diff-card.easy:hover { border-color: var(--accent-green); box-shadow: 0 0 15px rgba(0, 230, 118, 0.2); }
+        .diff-card.medium:hover { border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(41, 121, 255, 0.2); }
+        .diff-card.hard:hover { border-color: var(--accent-red); box-shadow: 0 0 15px rgba(255, 82, 82, 0.2); }
+        
+        .diff-title { font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 5px; }
+        .diff-desc { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 10px; }
+        .diff-meta { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- ARCHIVE SCREEN --- */
         #archive-screen {
             display: none; flex: 1; padding: 20px; overflow-y: auto; flex-direction: column; background: var(--bg-color);
         }
         .archive-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
-        .archive-list { display: flex; flex-direction: column; gap: 20px; }
-        .archive-item { background: #1a1a1a; padding: 15px; border-radius: 6px; border-left: 3px solid var(--text-secondary); }
-        .archive-q { font-weight: bold; margin-bottom: 8px; color: #fff; font-family: var(--font-serif); }
-        .archive-a { font-size: 0.9rem; color: var(--accent-green); margin-bottom: 5px; }
-        .archive-exp { font-size: 0.8rem; color: var(--text-secondary); font-style: italic; }
+        .archive-list { display: flex; flex-direction: column; gap: 30px; }
+        .archive-group h3 { color: var(--accent-blue); border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 15px; font-family: var(--font-serif); }
+        .archive-item { background: #1a1a1a; padding: 20px; border-radius: 6px; border-left: 3px solid var(--text-secondary); margin-bottom: 15px; }
+        .archive-q { font-weight: bold; margin-bottom: 10px; color: #fff; font-family: var(--font-serif); font-size: 1.1rem; }
+        .archive-sol { font-size: 0.9rem; color: var(--text-primary); white-space: pre-wrap; line-height: 1.6; }
+        .archive-sol strong { color: var(--accent-green); }
 
         /* --- GAME SCREEN --- */
         #game-screen { display: none; flex: 1; flex-direction: column; overflow: hidden; }
@@ -182,13 +188,14 @@
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn-option { background: transparent; border: 1px solid var(--text-secondary); color: var(--text-primary); padding: 12px; font-family: var(--font-mono); cursor: pointer; transition: all 0.2s; text-align: left; }
         .btn-option:hover { border-color: var(--accent-blue); background: rgba(41, 121, 255, 0.1); }
-        
         .btn-option.wrong { border-color: var(--accent-red); color: var(--accent-red); opacity: 0.5; text-decoration: line-through; pointer-events: none; }
         
-        .text-input-wrapper { display: flex; gap: 10px; }
-        input[type="text"] { flex: 1; background: transparent; border: 1px solid var(--text-secondary); color: #fff; padding: 12px; font-family: var(--font-mono); outline: none; }
-        input[type="text"]:focus { border-color: var(--accent-blue); }
-        .btn-submit { background: var(--accent-blue); color: #fff; border: none; padding: 0 20px; cursor: pointer; font-family: var(--font-mono); font-weight: 600; }
+        .text-input-wrapper { display: flex; gap: 10px; flex-direction: column; }
+        textarea { 
+            flex: 1; background: transparent; border: 1px solid var(--text-secondary); color: #fff; padding: 12px; font-family: var(--font-mono); outline: none; resize: none; min-height: 80px; 
+        }
+        textarea:focus { border-color: var(--accent-blue); }
+        .btn-submit { background: var(--accent-blue); color: #fff; border: none; padding: 12px; cursor: pointer; font-family: var(--font-mono); font-weight: 600; text-transform: uppercase; }
         
         .btn-giveup {
             width: 100%; padding: 10px; background: transparent; border: 1px dashed var(--text-secondary); color: var(--text-secondary);
@@ -209,7 +216,6 @@
         .btn-back { background: transparent; border: 1px solid #fff; color: #fff; padding: 12px 30px; cursor: pointer; font-family: var(--font-mono); margin-top: 10px; text-transform: uppercase; }
         .btn-back:hover { background: #fff; color: #000; }
 
-        /* Reset Button hidden in corner */
         .reset-trigger { position: fixed; bottom: 5px; left: 5px; opacity: 0.2; font-size: 1.5rem; cursor: pointer; z-index: 200; }
     </style>
 </head>
@@ -217,7 +223,7 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v8.0</div>
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v9.0</div>
             
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
@@ -239,15 +245,38 @@
             </div>
             
             <div class="archive-link">
-                <button class="btn-archive" onclick="showArchive()">📂 Aktenarchiv (Read-Only)</button>
+                <button class="btn-archive" onclick="showArchive()">📂 Aktenarchiv (Volltext)</button>
             </div>
 
             <div id="case-list"></div>
         </div>
 
+        <div id="difficulty-screen">
+            <div class="menu-title" style="margin-bottom: 30px;">Wählen Sie Ihre Position</div>
+            
+            <div class="diff-card easy" onclick="selectDifficulty('easy')">
+                <div class="diff-title">Junior Associate</div>
+                <div class="diff-desc">Geführtes Vorgehen. Der Partner stellt kleinteilige Fragen. Hinweise verfügbar.</div>
+                <div class="diff-meta">Zeit: 90s | Risiko: Gering</div>
+            </div>
+
+            <div class="diff-card medium" onclick="selectDifficulty('medium')">
+                <div class="diff-title">Associate</div>
+                <div class="diff-desc">Checkliste wird gestellt. Sie müssen die Begriffe selbst einordnen.</div>
+                <div class="diff-meta">Zeit: 60s | Risiko: Mittel</div>
+            </div>
+
+            <div class="diff-card hard" onclick="selectDifficulty('hard')">
+                <div class="diff-title">Partner</div>
+                <div class="diff-desc">High Stakes. Freies Gutachten ohne Hilfestellung. Jedes Wort zählt.</div>
+                <div class="diff-meta">Zeit: 45s | Risiko: Hoch</div>
+            </div>
+            <button class="btn-back" style="margin-top:20px; font-size: 0.8rem;" onclick="exitToMenu()">Abbrechen</button>
+        </div>
+
         <div id="archive-screen">
             <div class="archive-header">
-                <div class="menu-title" style="font-size: 1.2rem;">Aktenarchiv</div>
+                <div class="menu-title" style="font-size: 1.2rem;">Musterlösungen</div>
                 <button class="btn-back" style="margin:0; padding: 5px 15px; font-size: 0.8rem;" onclick="exitToMenu()">Zurück</button>
             </div>
             <div id="archive-content" class="archive-list"></div>
@@ -268,105 +297,117 @@
     </div>
 
     <script>
-        // --- COMPLETE DATABASE ---
+        [cite_start]// --- COMPLETE DATABASE [cite: 1-271] ---
         const cases = [
+            // STANDARD TASKS (1-5)
             {
-                id: "AKTE_001",
-                title: "Grundlagen & Methoden",
-                subtitle: "Aufgaben 1, 2, 5",
-                topics: ["Systematische Auslegung", "Historische Auslegung", "Verfassungskonforme Auslegung", "Richtlinienkonforme Auslegung", "Gesetzesverkündung"],
+                id: "AKTE_001", complexity: 'standard',
+                title: "Grundlagen & Methoden", subtitle: "Aufgaben 1, 2, 5",
+                topics: ["Systematische Auslegung", "Historische Auslegung", "Verfassungskonforme Auslegung", "Richtlinienkonforme Auslegung"],
                 questions: [
                     { type: 'choice', intro: "Ein Gesetz ist unklar. Wir ermitteln den Inhalt anhand der Stellung im Gesetz. Welche Auslegung?", options: ["Historische Auslegung", "Systematische Auslegung", "Teleologische Auslegung"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Systematische Auslegung prüft die Stellung im Gesetz." },
-                    { type: 'text', intro: "Was versteht man unter 'Historischer Auslegung'?", keywords: ["wille", "gesetzgeber", "geschichte", "materialien", "protokolle"], explanation: "Ermittlung des Willens des historischen Gesetzgebers (Materialien/Protokolle).", feedback: "Richtig." },
-                    { type: 'choice', intro: "Ein Gesetz verstößt scheinbar gegen das GG. Was besagt die 'verfassungskonforme Auslegung'?", options: ["Gesetz ist nichtig.", "Diejenige Deutung wählen, die mit dem GG vereinbar ist.", "BVerfG fragen."], correctAnswer: 1, feedback: "Exakt.", explanation: "Normerhalt geht vor." },
-                    { type: 'text', intro: "Was ist 'richtlinienkonforme Auslegung'?", keywords: ["ziel", "richtlinie", "effet", "utile"], explanation: "Auslegung so, dass das Ziel der EU-Richtlinie bestmöglich erreicht wird.", feedback: "Genau." },
-                    { type: 'text', intro: "Wo werden Bundesgesetze veröffentlicht?", keywords: ["bundesgesetzblatt", "bgbl"], explanation: "Im Bundesgesetzblatt.", feedback: "Korrekt." }
-                ]
+                    { type: 'text', intro: "Was versteht man unter 'Historischer Auslegung'?", keywords: ["wille", "gesetzgeber", "geschichte", "materialien"], explanation: "Ermittlung des Willens des historischen Gesetzgebers anhand der Entstehungsgeschichte (Gesetzesmaterialien, Protokolle).", feedback: "Richtig." },
+                    { type: 'choice', intro: "Ein Gesetz verstößt scheinbar gegen das GG. Was besagt die 'verfassungskonforme Auslegung'?", options: ["Gesetz ist nichtig.", "Diejenige Deutung wählen, die mit dem GG vereinbar ist.", "BVerfG fragen."], correctAnswer: 1, feedback: "Exakt.", explanation: "Die Norm bleibt gültig, solange eine verfassungskonforme Auslegung möglich ist." },
+                    { type: 'text', intro: "Wo werden vom Bundespräsidenten ausgefertigte Gesetze veröffentlicht?", keywords: ["bundesgesetzblatt", "bgbl"], explanation: "Im Bundesgesetzblatt.", feedback: "Korrekt." }
+                ],
+                detailed_solution: "Aufgabe 1: Systematische Auslegung ist das Feststellen des normativen Aussagegehaltes einer Norm anhand ihrer Stellung im Gesetz oder im Gesamtzusammenhang der Rechtsordnung.\n\nAufgabe 1 (Alt): Historische Auslegung ist die Ermittlung des Norminhalts durch Erforschung des Willens des historischen Gesetzgebers anhand der Entstehungsgeschichte (Gesetzesmaterialien, Protokolle).\n\nAufgabe 2: Verfassungskonforme Auslegung bedeutet, dass wenn ein Gesetz mehrere Deutungen zulässt, diejenige zu wählen ist, die mit dem Grundgesetz vereinbar ist. Die Norm bleibt gültig.\n\nAufgabe 5: Gesetze werden im Bundesgesetzblatt veröffentlicht."
             },
             {
-                id: "AKTE_002",
-                title: "Staatsorganisation",
-                subtitle: "Aufgaben 3, 4, 11",
-                topics: ["Staatsziele", "Definition Anstalt", "Abgrenzung Körperschaft", "Stiftung", "Demokratieprinzip"],
+                id: "AKTE_002", complexity: 'standard',
+                title: "Staatsorganisation", subtitle: "Aufgaben 3, 4, 11",
+                topics: ["Staatsziele", "Anstalt vs. Körperschaft", "Stiftung", "Demokratieprinzip"],
                 questions: [
-                    { type: 'text', intro: "Was ist eine Staatszielbestimmung? (Def + Bsp)", keywords: ["aufgabe", "staat", "subjektiv", "recht"], explanation: "Verfassungsnorm, die dem Staat Aufgaben vorgibt ohne subjektive Rechte (z.B. Sozialstaat).", feedback: "Gut." },
-                    { type: 'text', intro: "Definieren Sie 'Anstalt des öffentlichen Rechts'.", keywords: ["personal", "sachmittel", "benutzer"], explanation: "Zusammenfassung von Mitteln zur Erfüllung öff. Aufgaben, die Benutzern zur Verfügung steht.", feedback: "Richtig." },
-                    { type: 'choice', intro: "Unterschied zur Körperschaft?", options: ["Körperschaft ist privat.", "Körperschaft ist mitgliedschaftlich organisiert.", "Kein Unterschied."], correctAnswer: 1, feedback: "Richtig.", explanation: "Körperschaft = Mitglieder. Anstalt = Benutzer." },
-                    { type: 'text', intro: "Was ist eine Stiftung?", keywords: ["vermögen", "zweck"], explanation: "Zusammenfassung von Vermögen für einen Stiftungszweck.", feedback: "Korrekt." },
+                    { type: 'text', intro: "Was ist eine Staatszielbestimmung? (Def + Bsp)", keywords: ["aufgabe", "staat", "subjektiv", "recht"], explanation: "Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (z.B. Sozialstaat).", feedback: "Gut." },
+                    { type: 'text', intro: "Definieren Sie 'Anstalt des öffentlichen Rechts'.", keywords: ["personal", "sachmittel", "benutzer"], explanation: "Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe, die Benutzern zur Verfügung steht.", feedback: "Richtig." },
+                    { type: 'choice', intro: "Unterschied zur Körperschaft?", options: ["Körperschaft ist privat.", "Körperschaft ist mitgliedschaftlich organisiert.", "Kein Unterschied."], correctAnswer: 1, feedback: "Richtig.", explanation: "Eine Körperschaft ist mitgliedschaftlich organisiert (besteht aus Mitgliedern). Eine Anstalt hat Benutzer." },
                     { type: 'text', intro: "Nennen Sie ein Beispiel im GG für das Demokratieprinzip.", keywords: ["20", "wahlen", "abstimmung"], explanation: "Art. 20 Abs. 1 und 2 GG (Wahlen / Volkssouveränität).", feedback: "Art. 20 GG ist der Kern." }
-                ]
+                ],
+                detailed_solution: "Aufgabe 3: Staatszielbestimmung ist eine Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (Bsp: Sozialstaat, Umweltschutz).\n\nAufgabe 4: Anstalt ist eine Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe für Benutzer. Eine Körperschaft ist mitgliedschaftlich organisiert.\n\nAufgabe 11: Demokratieprinzip kommt in Art. 20 Abs. 1 und 2 GG zum Ausdruck (Wahlen / Volkssouveränität)."
             },
+            // COMPLEX CASE: NOSSEN (Task 6)
             {
-                id: "AKTE_003",
-                title: "Fall: Nossen vs. Ketzerbachtal",
-                subtitle: "Aufgabe 6",
-                topics: ["Rechtswegeröffnung", "Subordinationstheorie", "Interessentheorie", "Mod. Subjektstheorie"],
-                questions: [
-                    { type: 'choice', intro: "Streit um Verwaltungsgemeinschaft. Welcher Rechtsweg?", options: ["Zivilrechtsweg", "Verwaltungsrechtsweg (§ 40 VwGO)", "Verfassungsrechtsweg"], correctAnswer: 1, feedback: "Richtig.", explanation: "Öffentlich-rechtliche Streitigkeit." },
-                    { type: 'choice', intro: "Welche Theorie fragt nach Über-/Unterordnung?", options: ["Interessentheorie", "Subordinationstheorie", "Sonderrechtstheorie"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Subordination = Hoheitsgewalt." },
-                    { type: 'choice', intro: "Welche Theorie fragt nach 'Sonderrecht des Staates'?", options: ["Interessentheorie", "Subordinationstheorie", "Modifizierte Subjektstheorie"], correctAnswer: 2, feedback: "Richtig.", explanation: "Berechtigt/Verpflichtet Hoheitsträger." }
-                ]
+                id: "AKTE_003", complexity: 'high',
+                title: "Fall: Nossen vs. Ketzerbachtal", subtitle: "Aufgabe 6 (Rechtsweg)",
+                topics: ["Rechtswegeröffnung", "Abgrenzungstheorien", "SächsKomZG"],
+                questions_easy: [
+                    { type: 'choice', intro: "Streit um Verwaltungsgemeinschaft. Welcher Rechtsweg ist eröffnet?", options: ["Zivilrechtsweg", "Verwaltungsrechtsweg (§ 40 VwGO)", "Verfassungsrechtsweg"], correctAnswer: 1, feedback: "Richtig.", explanation: "Öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art." },
+                    { type: 'choice', intro: "Welche Theorie fragt nach einem Über-/Unterordnungsverhältnis?", options: ["Interessentheorie", "Subordinationstheorie", "Sonderrechtstheorie"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Subordinationstheorie." },
+                    { type: 'choice', intro: "Welche Theorie fragt, ob ein Hoheitsträger berechtigt ist?", options: ["Interessentheorie", "Subordinationstheorie", "Modifizierte Subjektstheorie"], correctAnswer: 2, feedback: "Richtig.", explanation: "Modifizierte Subjektstheorie (Sonderrechtstheorie)." }
+                ],
+                questions_medium: [
+                    { type: 'text', intro: "Prüfen Sie die Rechtswegeröffnung. Nennen Sie die drei Theorien.", keywords: ["subordination", "interesse", "subjekt", "sonderrecht"], explanation: "Subordinationstheorie, Interessentheorie, Modifizierte Subjektstheorie.", feedback: "Gut." },
+                    { type: 'text', intro: "Subsumieren Sie: Warum ist es hier öffentliches Recht?", keywords: ["zusammenarbeit", "kommunal", "hoheitsträger", "zuordnung"], explanation: "Es geht um kommunale Zusammenarbeit (originäre öff. Interessen) und das SächsKomZG berechtigt Hoheitsträger.", feedback: "Korrekt." }
+                ],
+                questions_hard: [
+                    { type: 'text', intro: "Gutachten: Prüfen und erläutern Sie, ob der Rechtsweg zu den Verwaltungsgerichten eröffnet ist. Gehen Sie auf die Abgrenzungstheorien ein.", keywords: ["40", "vwgo", "subordination", "interesse", "subjekt", "sonderrecht", "hoheitsträger", "sächskomzg", "zusammenarbeit"], explanation: "§ 40 VwGO eröffnet. Subordinationstheorie (Über/Unterordnung), Interessentheorie (Öff. Interesse), Mod. Subjektstheorie (Sonderrecht für Hoheitsträger). Hier SächsKomZG = Sonderrecht.", feedback: "Umfassend geprüft." }
+                ],
+                detailed_solution: "Aufgabe 6 Lösung:\nRechtsweg: Gemäß § 40 VwGO ist der Verwaltungsrechtsweg eröffnet, wenn eine öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art vorliegt.\n\nAbgrenzungstheorien:\n1. Subordinationstheorie: Liegt ein Über-/Unterordnungsverhältnis vor? (Hier eher Gleichordnung).\n2. Interessentheorie: Dient die Norm dem öffentlichen Interesse? (Ja, kommunale Zusammenarbeit).\n3. Modifizierte Subjektstheorie (Sonderrechtstheorie): Berechtigt oder verpflichtet die Norm einen Hoheitsträger gerade in seiner Eigenschaft als solcher? (Ja, SächsKomZG).\n\nSubsumtion: Da es um kommunale Zusammenarbeit geht (originäre öffentliche Interessen) und das Gesetz die Gemeinden als Hoheitsträger berechtigt/verpflichtet, ist es öffentliches Recht."
             },
+            // COMPLEX CASE: WINDKRAFT (Task 7)
             {
-                id: "AKTE_004",
-                title: "Fall: Windkraft (Förster)",
-                subtitle: "Aufgabe 7",
-                topics: ["VA-Qualifizierung", "Anfechtungsklage", "Widerspruch", "Klagebefugnis", "Gemeinde-Planungshoheit"],
-                questions: [
-                    { type: 'choice', intro: "Genehmigung einer Windkraftanlage. Welcher Rechtsakt?", options: ["Realakt", "Verwaltungsakt (§ 35 VwVfG)", "Verordnung"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Regelung eines Einzelfalls." },
-                    { type: 'choice', intro: "Förster will Aufhebung. Klageart?", options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I VwGO)", "Feststellungsklage"], correctAnswer: 1, feedback: "Richtig.", explanation: "Aufhebung eines VA." },
-                    { type: 'text', intro: "Vorgeschalteter Rechtsbehelf (§ 68 VwGO)?", keywords: ["widerspruch"], explanation: "Widerspruch.", feedback: "Ja." },
-                    { type: 'text', intro: "Klagebefugnis (§ 42 II VwGO): Was muss er geltend machen?", keywords: ["möglichkeit", "verletzung", "rechte"], explanation: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten.", feedback: "Exakt." },
-                    { type: 'text', intro: "Worauf beruft sich eine klagende GEMEINDE?", keywords: ["selbstverwaltung", "planungshoheit", "28"], explanation: "Art. 28 II GG (Kommunale Selbstverwaltung/Planungshoheit).", feedback: "Richtig." }
-                ]
+                id: "AKTE_004", complexity: 'high',
+                title: "Fall: Windkraft (Förster)", subtitle: "Aufgabe 7 (Zulässigkeit)",
+                topics: ["Anfechtungsklage", "Klagebefugnis", "Art. 14 GG", "Gemeinde-Klagerecht"],
+                questions_easy: [
+                    { type: 'choice', intro: "Förster will Aufhebung der Genehmigung. Rechtsnatur der Genehmigung?", options: ["Realakt", "Verwaltungsakt (§ 35 VwVfG)", "Verordnung"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Verwaltungsakt i.S.v. § 35 VwVfG." },
+                    { type: 'choice', intro: "Statthafte Klageart?", options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I VwGO)", "Feststellungsklage"], correctAnswer: 1, feedback: "Richtig.", explanation: "Anfechtungsklage, da Aufhebung begehrt wird." },
+                    { type: 'text', intro: "Voraussetzung für Klagebefugnis (§ 42 II VwGO)?", keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv"], explanation: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten.", feedback: "Exakt." }
+                ],
+                questions_medium: [
+                    { type: 'text', intro: "Bestimmen Sie Klageart und Vorverfahren.", keywords: ["anfechtung", "widerspruch", "68"], explanation: "Anfechtungsklage (§ 42 VwGO). Vorgeschaltet ist der Widerspruch (§ 68 VwGO).", feedback: "Gut." },
+                    { type: 'text', intro: "Begründen Sie die Klagebefugnis des Hoteliers.", keywords: ["eigentum", "14", "betrieb", "möglichkeit"], explanation: "Möglichkeit der Verletzung von Art. 14 GG (Eigentum/Gewerbebetrieb).", feedback: "Richtig." }
+                ],
+                questions_hard: [
+                    { type: 'text', intro: "Gutachten: Prüfen Sie die Zulässigkeit der Klage (Statthafte Klageart, Befugnis). Wie wäre es, wenn die Stadt Löbau klagt?", keywords: ["anfechtung", "verwaltungsakt", "35", "widerspruch", "68", "klagebefugnis", "42", "möglichkeit", "eigentum", "14", "gemeinde", "28", "planungshoheit"], explanation: "VA (§ 35 VwVfG) -> Anfechtungsklage (§ 42 I VwGO). Vorverfahren: Widerspruch (§ 68 VwGO). Befugnis: Möglichkeitstheorie (Art. 14 GG Eigentum). Stadt Löbau: Muss sich auf Art. 28 II GG (Kommunale Selbstverwaltung/Planungshoheit) berufen.", feedback: "Exzellent." }
+                ],
+                detailed_solution: "Aufgabe 7 Lösung:\nVerwaltungsakt: Die Genehmigung ist ein Verwaltungsakt i.S.v. § 35 VwVfG.\nStatthafte Klageart: Anfechtungsklage (§ 42 Abs. 1 Alt. 1 VwGO), da Aufhebung begehrt wird.\nVorgeschalteter Rechtsbehelf: Widerspruch (§ 68 VwGO).\nKlagebefugnis (§ 42 Abs. 2 VwGO): Kläger muss Möglichkeit einer Verletzung in eigenen subjektiven Rechten geltend machen (Möglichkeitstheorie). Hier: Art. 14 GG (Eigentum am Gewerbebetrieb) möglich.\n\nTeil b (Gemeinde): Gemeinden müssen sich auf Art. 28 Abs. 2 GG (Kommunale Selbstverwaltungsgarantie / Planungshoheit) berufen."
             },
+            // STANDARD TASKS (8-12)
             {
-                id: "AKTE_005",
-                title: "Normen & Verfassung",
-                subtitle: "Aufgaben 8, 9, 10, 12",
+                id: "AKTE_005", complexity: 'standard',
+                title: "Normen & Verfassung", subtitle: "Aufgaben 8, 9, 10, 12",
                 topics: ["Normarten (TKG)", "Art. 13 GG", "Grundrechte Staat", "Rundfunkfreiheit", "Gesetzgebungskompetenz"],
                 questions: [
-                    { type: 'choice', intro: "§ 87 I TKG gibt ein Ziel vor. Normart?", options: ["Konditional", "Final", "Deskriptiv"], correctAnswer: 1, feedback: "Final = Ziel.", explanation: "Finalnorm." },
-                    { type: 'choice', intro: "§ 110 I TKG (Wenn-Dann)?", options: ["Konditional", "Final", "Deskriptiv"], correctAnswer: 0, feedback: "Korrekt.", explanation: "Konditionalnorm." },
-                    { type: 'text', intro: "Art. 13 GG. Sind Geschäftsräume geschützt?", keywords: ["ja", "öffnungszeiten", "ladenschluss"], explanation: "Ja. Eingeschränkt während Öffnungszeiten.", feedback: "Richtig." },
-                    { type: 'text', intro: "Kann sich der Staat (ZDF) auf Grundrechte berufen?", keywords: ["nein", "grundsätzlich", "nicht", "konfusion"], explanation: "Grundsatz nein. Ausnahme: Rundfunkfreiheit.", feedback: "Korrekt." },
-                    { type: 'choice', intro: "Rundfunkrat: Max. Quote staatlicher Mitglieder?", options: ["50%", "Ein Drittel (1/3)", "10%"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Drittel-Quote." },
-                    { type: 'choice', intro: "Kompetenz 'Corona-Notbremse'?", options: ["Länder", "Bund", "EU"], correctAnswer: 1, feedback: "Richtig.", explanation: "Art. 74 GG (Gemeingefährliche Krankheiten)." }
-                ]
+                    { type: 'choice', intro: "§ 87 I TKG gibt ein Ziel vor. Normart?", options: ["Konditional", "Final", "Deskriptiv"], correctAnswer: 1, feedback: "Final = Ziel.", explanation: "Final gefasste Norm." },
+                    { type: 'choice', intro: "§ 110 I TKG (Wenn-Dann)?", options: ["Konditional", "Final", "Deskriptiv"], correctAnswer: 0, feedback: "Korrekt.", explanation: "Konditional gefasste Norm." },
+                    { type: 'text', intro: "Art. 13 GG. Sind Geschäftsräume geschützt?", keywords: ["ja", "öffnungszeiten", "ladenschluss"], explanation: "Ja. Aber während Öffnungszeiten geringerer Schutz.", feedback: "Richtig." },
+                    { type: 'text', intro: "ZDF-Fall. Kann sich der Staat auf Grundrechte berufen?", keywords: ["nein", "konfusion", "rundfunkfreiheit"], explanation: "Grundsatz: Nein (Konfusionsargument). Ausnahme: Rundfunkfreiheit.", feedback: "Korrekt." },
+                    { type: 'choice', intro: "Corona-Notbremse Kompetenz?", options: ["Länder", "Bund", "EU"], correctAnswer: 1, feedback: "Richtig.", explanation: "Bund. Art. 74 GG (Gemeingefährliche Krankheiten)." }
+                ],
+                detailed_solution: "Aufgabe 8: a) § 87 TKG: Final (Ziel). b) § 110 TKG: Konditional (Wenn-Dann). c) § 3 TKG: Deskriptiv (Begriff).\n\nAufgabe 9: Geschäftsräume fallen unter 'Wohnung' (Art. 13 GG). Während Öffnungszeiten geringerer Schutz, nach Ladenschluss voller Schutz.\n\nAufgabe 10 (ZDF): Grundsatz: Staat kann sich nicht auf Grundrechte berufen (Konfusionsargument). Ausnahme: Rundfunkfreiheit (Art. 5 I 2 GG). Aufsichtsgremien: Gebot der Vielfaltsicherung und Staatsferne (Drittel-Quote).\n\nAufgabe 12: Bund hat Kompetenz (Art. 74 I Nr. 19 GG - gemeingefährliche Krankheiten)."
             },
+            // STANDARD TASKS (13-19)
             {
-                id: "AKTE_006",
-                title: "Verwaltungshandeln",
-                subtitle: "Aufgaben 15, 16, 17",
-                topics: ["Definition VA", "Ermessensfehler", "Widerruf § 49 VwVfG"],
+                id: "AKTE_006", complexity: 'standard',
+                title: "Verwaltung & Europa", subtitle: "Aufgaben 13-19",
+                topics: ["EU-Grundfreiheiten", "Amtshaftung", "VA-Definition", "Ermessen", "Widerruf", "EU-Grundrechte"],
                 questions: [
-                    { type: 'text', intro: "Definition Verwaltungsakt (§ 35 VwVfG).", keywords: ["hoheitlich", "behörde", "regelung", "einzelfall", "außenwirkung"], explanation: "Hoheitliche Maßnahme einer Behörde auf dem Gebiet des öff. Rechts zur Regelung eines Einzelfalls mit Außenwirkung.", feedback: "Das muss sitzen." },
+                    { type: 'text', intro: "Nennen Sie zwei EU-Grundfreiheiten.", keywords: ["waren", "arbeitnehmer", "dienstleistung", "kapital"], explanation: "Warenverkehr, Arbeitnehmerfreizügigkeit, Dienstleistung, Niederlassung.", feedback: "Gut." },
+                    { type: 'choice', intro: "Amtshaftung Anspruchsgrundlage?", options: ["§ 823 BGB", "§ 839 BGB i.V.m. Art. 34 GG", "VwGO"], correctAnswer: 1, feedback: "Richtig.", explanation: "§ 839 BGB + Art. 34 GG." },
+                    { type: 'text', intro: "Definition Verwaltungsakt (§ 35 VwVfG).", keywords: ["hoheitlich", "behörde", "regelung", "einzelfall", "außenwirkung"], explanation: "Hoheitliche Maßnahme einer Behörde auf Gebiet des öff. Rechts zur Regelung eines Einzelfalls mit Außenwirkung.", feedback: "Wichtig!" },
                     { type: 'text', intro: "Nennen Sie einen Ermessensfehler.", keywords: ["nichtgebrauch", "überschreitung", "fehlgebrauch"], explanation: "Ermessensnichtgebrauch, -überschreitung, -fehlgebrauch.", feedback: "Richtig." },
-                    { type: 'text', intro: "Nachträgliche Aufhebung eines rechtmäßigen VA?", keywords: ["widerruf", "49"], explanation: "Widerruf nach § 49 VwVfG.", feedback: "Korrekt." }
-                ]
+                    { type: 'text', intro: "Norm für Widerruf?", keywords: ["49"], explanation: "§ 49 VwVfG.", feedback: "Korrekt." }
+                ],
+                detailed_solution: "Aufgabe 13: Diskriminierungsverbot, Warenverkehr, Arbeitnehmerfreizügigkeit, Niederlassung, Dienstleistung, Kapitalverkehr.\n\nAufgabe 14: Amtshaftung: § 839 I BGB i.V.m. Art. 34 GG. Voraussetzung: Verletzung drittgerichteter Amtspflicht.\n\nAufgabe 15: VA = Hoheitliche Maßnahme einer Behörde auf dem Gebiet des öff. Rechts zur Regelung eines Einzelfalls mit Außenwirkung (§ 35 VwVfG).\n\nAufgabe 16: Ermessensfehler: Nichtgebrauch, Überschreitung, Fehlgebrauch.\n\nAufgabe 17: Widerruf geregelt in § 49 VwVfG.\n\nAufgabe 18: EU-Richtlinien unmittelbar, wenn Frist abgelaufen und inhaltlich unbedingt/bestimmt.\n\nAufgabe 19: Art. 6 EUV (Charta, EMRK, Verfassungsüberlieferungen)."
             },
+            // COMPLEX CASE: BUS (Task 20)
             {
-                id: "AKTE_007",
-                title: "Europa & Haftung",
-                subtitle: "Aufgaben 13, 14, 18, 19",
-                topics: ["EU-Grundfreiheiten", "Amtshaftung", "Richtlinienwirkung", "EU-Grundrechte"],
-                questions: [
-                    { type: 'text', intro: "Nennen Sie zwei EU-Grundfreiheiten.", keywords: ["waren", "arbeitnehmer", "dienstleistung", "kapital"], explanation: "Warenverkehr, Arbeitnehmer, Dienstleistung, Niederlassung, Kapital.", feedback: "Gut." },
-                    { type: 'choice', intro: "Behördenfehler -> Schaden. Anspruchsgrundlage?", options: ["§ 823 BGB", "§ 839 BGB i.V.m. Art. 34 GG", "VwGO"], correctAnswer: 1, feedback: "Richtig.", explanation: "Amtshaftung." },
-                    { type: 'choice', intro: "Wann wirken EU-Richtlinien unmittelbar?", options: ["Nie", "Fristablauf & bestimmt (vertikal)", "Immer"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Vertikale Wirkung." },
-                    { type: 'text', intro: "Quellen der EU-Grundrechte?", keywords: ["charta", "emrk", "verfassungsüberlieferung"], explanation: "Grundrechtecharta, EMRK, Verfassungsüberlieferungen.", feedback: "Sehr gut." }
-                ]
-            },
-            {
-                id: "AKTE_008",
-                title: "Fall: Busunternehmer",
-                subtitle: "Aufgabe 20",
-                topics: ["Spezialgesetz PBefG", "Unzuverlässigkeit", "Widerruf Voraussetzungen"],
-                questions: [
-                    { type: 'choice', intro: "Busunternehmer zahlt Steuern nicht. Lizenzentzug. Rechtsgrundlage?", options: ["§ 35 GewO", "§ 25 PBefG", "§ 48 VwVfG"], correctAnswer: 1, feedback: "Wichtig! Spezialgesetz.", explanation: "PBefG vor GewO." },
-                    { type: 'text', intro: "Definieren Sie 'Unzuverlässigkeit'.", keywords: ["gewähr", "künftig", "ordnungsgemäß", "prognose"], explanation: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb (Prognose).", feedback: "Genau." },
-                    { type: 'choice', intro: "Voraussetzungen Widerruf § 25 PBefG?", options: ["Nur Schulden", "Wegfall Voraussetzungen + Tatsachen + Unzuverlässigkeit", "Ermessen"], correctAnswer: 1, feedback: "Richtig.", explanation: "Wegfall Voraussetzungen, Tatsachen, Unzuverlässigkeit." }
-                ]
+                id: "AKTE_007", complexity: 'high',
+                title: "Fall: Busunternehmer", subtitle: "Aufgabe 20 (Gewerbe)",
+                topics: ["Spezialgesetz PBefG", "Unzuverlässigkeit", "Widerruf"],
+                questions_easy: [
+                    { type: 'choice', intro: "Busunternehmer zahlt Steuern nicht. Rechtsgrundlage?", options: ["§ 35 GewO", "§ 25 PBefG", "§ 48 VwVfG"], correctAnswer: 1, feedback: "Wichtig! Spezialgesetz.", explanation: "PBefG vor GewO." },
+                    { type: 'text', intro: "Maßnahme?", keywords: ["widerruf", "genehmigung"], explanation: "Widerruf der Genehmigung.", feedback: "Ja." },
+                    { type: 'text', intro: "Begriff der 'Unzuverlässigkeit'?", keywords: ["gewähr", "künftig", "ordnungsgemäß"], explanation: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb.", feedback: "Genau." }
+                ],
+                questions_medium: [
+                    { type: 'text', intro: "Bestimmen Sie Ermächtigungsgrundlage und Maßnahme.", keywords: ["25", "pbefg", "widerruf"], explanation: "Widerruf nach § 25 Abs. 1 PBefG.", feedback: "Gut." },
+                    { type: 'text', intro: "Nennen Sie die Tatbestandsvoraussetzungen.", keywords: ["wegfall", "tatsachen", "unzuverlässigkeit"], explanation: "Wegfall Voraussetzungen, Konkrete Tatsachen, Unzuverlässigkeit.", feedback: "Richtig." }
+                ],
+                questions_hard: [
+                    { type: 'text', intro: "Gutachten: Nach welcher Ermächtigungsgrundlage kann vorgegangen werden? Nennen Sie alle Tatbestandsvoraussetzungen und definieren Sie die Unzuverlässigkeit.", keywords: ["25", "pbefg", "widerruf", "spezialgesetz", "wegfall", "voraussetzungen", "tatsachen", "unzuverlässigkeit", "prognose", "gewähr", "künftig", "ordnungsgemäß"], explanation: "EGL: § 25 I PBefG (Spezialgesetz vor GewO). Maßnahme: Widerruf. Voraussetzungen: 1. Wegfall Genehmigungsvoraussetzungen, 2. Konkrete Tatsachen (Steuerschulden), 3. Unzuverlässigkeit (Negative Zukunftsprognose: Keine Gewähr für künftigen ordnungsgemäßen Betrieb), 4. Erforderlichkeit.", feedback: "Perfekt." }
+                ],
+                detailed_solution: "Aufgabe 20 Lösung:\n1. Rechtsgrundlage: Spezialgesetz Personenbeförderungsgesetz (PBefG), nicht GewO! Maßnahme: Widerruf der Genehmigung gemäß § 25 Abs. 1 PBefG.\n\n2. Tatbestandsvoraussetzungen:\n- Wegfall der Genehmigungsvoraussetzungen (§ 13 PBefG).\n- Konkrete Tatsachen (z.B. Steuerschulden).\n- Unzuverlässigkeit: Gewerbetreibender bietet nach Gesamteindruck nicht die Gewähr für künftigen ordnungsgemäßen Betrieb (Negative Zukunftsprognose).\n- Erforderlichkeit (Verhältnismäßigkeit)."
             }
         ];
 
@@ -375,23 +416,24 @@
         let qIndex = 0;
         let trust = 50;
         let savedProgress = {};
+        let currentQuestions = [];
         
         // Timer Logic
         let timerInterval = null;
-        const TIME_LIMIT = 60; // Seconds
-        let timeLeft = TIME_LIMIT;
+        let timeLimit = 60;
+        let timeLeft = 60;
 
-        // AUTO-REPAIR STARTUP
+        // Init
         try {
-            const data = localStorage.getItem('junior_lawyer_save_v8');
+            const data = localStorage.getItem('junior_lawyer_save_v9');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
             console.log("Resetting save.");
-            localStorage.removeItem('junior_lawyer_save_v8');
             savedProgress = {};
         }
 
         const menuScreen = document.getElementById('menu-screen');
+        const diffScreen = document.getElementById('difficulty-screen');
         const gameScreen = document.getElementById('game-screen');
         const archiveScreen = document.getElementById('archive-screen');
         const caseList = document.getElementById('case-list');
@@ -403,35 +445,31 @@
         const timerContainer = document.getElementById('timer-container');
         const timerBar = document.getElementById('timer-bar');
 
-        function init() {
-            renderMenu();
-        }
+        function init() { renderMenu(); }
 
-        // --- RENDER MENU ---
         function renderMenu() {
             caseList.innerHTML = '';
             cases.forEach((c, idx) => {
                 let highScore = savedProgress[c.id] || 0;
                 let barW = highScore + "%";
                 let barC = highScore > 70 ? 'var(--accent-green)' : (highScore > 0 ? 'var(--accent-blue)' : '#333');
-                
-                // GENERATE PILLS
-                let topicPills = c.topics.map(t => `<span class="topic-pill">${t}</span>`).join('');
+                let topics = c.topics.map(t => `<span class="topic-pill">${t}</span>`).join('');
+                let isComplex = c.complexity === 'high';
 
                 const card = document.createElement('div');
-                card.className = 'case-card';
+                card.className = `case-card ${isComplex ? 'complex' : ''}`;
                 if(highScore >= 100) card.classList.add('completed');
-                card.onclick = (e) => { if(!e.target.classList.contains('btn-start-case')) start(idx); };
+                card.onclick = (e) => { if(!e.target.classList.contains('btn-start-case')) prepareCase(idx); };
                 
                 card.innerHTML = `
                     <div class="card-top">
                         <div style="flex:1">
                             <div class="case-title">${c.title}</div>
-                            <div class="case-subtitle">${c.subtitle}</div>
+                            <div class="case-subtitle">${c.subtitle} ${isComplex ? '★' : ''}</div>
                         </div>
-                        <button class="btn-start-case" onclick="event.stopPropagation(); start(${idx})">${highScore>0 ? 'Weiter' : 'Start'}</button>
+                        <button class="btn-start-case" onclick="event.stopPropagation(); prepareCase(${idx})">Start</button>
                     </div>
-                    <div class="topics-preview">${topicPills}</div>
+                    <div class="topics-preview">${topics}</div>
                     <div class="case-mastery">
                         <div class="mastery-label"><span>Wissen:</span><span>${highScore}%</span></div>
                         <div class="mastery-bg"><div class="mastery-fill" style="width:${barW}; background:${barC}"></div></div>
@@ -441,37 +479,49 @@
             });
         }
 
-        // --- ARCHIVE ---
-        function showArchive() {
-            menuScreen.style.display = 'none';
-            archiveScreen.style.display = 'flex';
-            archiveContent.innerHTML = '';
-            
-            cases.forEach(c => {
-                const grp = document.createElement('div');
-                grp.innerHTML = `<h3 style="color:var(--accent-blue); border-bottom:1px solid #333; margin-top:20px;">${c.title}</h3>`;
-                archiveContent.appendChild(grp);
-                c.questions.forEach(q => {
-                    const item = document.createElement('div');
-                    item.className = 'archive-item';
-                    let ansTxt = q.type === 'choice' ? q.options[q.correctAnswer] : (q.explanation);
-                    item.innerHTML = `
-                        <div class="archive-q">${q.intro}</div>
-                        <div class="archive-a">Lösung: ${ansTxt}</div>
-                        <div class="archive-exp">${q.explanation}</div>
-                    `;
-                    archiveContent.appendChild(item);
-                });
-            });
+        // --- FLOW ---
+        let selectedCaseIdx = -1;
+
+        function prepareCase(idx) {
+            selectedCaseIdx = idx;
+            const c = cases[idx];
+            if (c.complexity === 'high') {
+                menuScreen.style.display = 'none';
+                diffScreen.style.display = 'flex';
+            } else {
+                startStandard(idx);
+            }
         }
 
-        // --- GAMEPLAY ---
-        function start(idx) {
-            activeCase = cases[idx];
+        function selectDifficulty(diff) {
+            diffScreen.style.display = 'none';
+            const c = cases[selectedCaseIdx];
+            
+            if (diff === 'easy') {
+                currentQuestions = c.questions_easy;
+                timeLimit = 90;
+            } else if (diff === 'medium') {
+                currentQuestions = c.questions_medium;
+                timeLimit = 60;
+            } else {
+                currentQuestions = c.questions_hard;
+                timeLimit = 45;
+            }
+            launchGame(c);
+        }
+
+        function startStandard(idx) {
+            const c = cases[idx];
+            currentQuestions = c.questions;
+            timeLimit = 60;
+            menuScreen.style.display = 'none';
+            launchGame(c);
+        }
+
+        function launchGame(c) {
+            activeCase = c;
             qIndex = 0;
             trust = 50;
-            
-            menuScreen.style.display = 'none';
             gameScreen.style.display = 'flex';
             gameHeader.style.display = 'flex';
             timerContainer.style.display = 'block';
@@ -482,16 +532,15 @@
         }
 
         function startTimer() {
-            timeLeft = TIME_LIMIT;
+            timeLeft = timeLimit;
             timerBar.style.width = '100%';
             timerBar.style.backgroundColor = 'var(--accent-green)';
             
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 timeLeft--;
-                let pct = (timeLeft / TIME_LIMIT) * 100;
+                let pct = (timeLeft / timeLimit) * 100;
                 timerBar.style.width = pct + '%';
-                
                 if (timeLeft < 10) timerBar.style.backgroundColor = 'var(--accent-red)';
                 
                 if (timeLeft <= 0) {
@@ -501,31 +550,28 @@
             }, 1000);
         }
 
-        function stopTimer() {
-            clearInterval(timerInterval);
-        }
+        function stopTimer() { clearInterval(timerInterval); }
 
         function handleTimeout() {
             inputArea.innerHTML = '';
             trust = Math.max(0, trust - 10);
             addMsg('system', 'ZEIT ABGELAUFEN', 'fail');
-            addMsg('partner', "Sie brauchen zu lange! Mandant wird ungeduldig. Antwort falsch.");
+            addMsg('partner', "Zu langsam! Mandant verärgert. " + currentQuestions[qIndex].explanation);
             updateTrust();
-            
             if(trust === 0) endCase(false);
             else {
-                // Generate a "Give Up" button to proceed since they timed out
+                // Next Question Button
                 const btn = document.createElement('button');
                 btn.className = 'btn-giveup';
-                btn.innerText = 'Lösung anzeigen & Weiter';
-                btn.onclick = () => revealSolution(activeCase.questions[qIndex]);
+                btn.innerText = 'Weiter';
+                btn.onclick = () => { qIndex++; nextQ(); };
                 inputArea.appendChild(btn);
             }
         }
 
         function nextQ() {
-            if (qIndex >= activeCase.questions.length) return endCase(true);
-            const q = activeCase.questions[qIndex];
+            if (qIndex >= currentQuestions.length) return endCase(true);
+            const q = currentQuestions[qIndex];
             addMsg('partner', q.intro);
             renderInp(q);
             startTimer();
@@ -535,7 +581,7 @@
             inputArea.innerHTML = '';
             const btnReveal = document.createElement('button');
             btnReveal.className = 'btn-giveup';
-            btnReveal.innerText = 'Aktennotiz anfordern (Lösung aufdecken) -15%';
+            btnReveal.innerText = 'Auflösen (Joker) -15%';
             btnReveal.onclick = () => revealSolution(q);
 
             if (q.type === 'choice') {
@@ -552,14 +598,13 @@
             } else {
                 const wrp = document.createElement('div');
                 wrp.className = 'text-input-wrapper';
-                const inp = document.createElement('input');
-                inp.type = 'text';
-                inp.placeholder = 'Antwort...';
+                const inp = document.createElement('textarea'); // Changed to textarea for bigger inputs
+                inp.placeholder = 'Ihre Antwort...';
                 const btn = document.createElement('button');
                 btn.className = 'btn-submit';
                 btn.innerText = 'SENDEN';
                 btn.onclick = () => checkText(inp.value, q);
-                inp.onkeypress = (e) => { if(e.key==='Enter') checkText(inp.value, q); };
+                // No enter key submit for textarea
                 wrp.append(inp, btn);
                 inputArea.appendChild(wrp);
                 setTimeout(() => inp.focus(), 100);
@@ -574,9 +619,6 @@
                 addMsg('user', q.options[val]);
                 processSuccess(q);
             } else {
-                // Wrong - Retry mode
-                // Don't stop timer yet unless we penalize heavily. 
-                // Let's keep timer running for pressure, but penalize trust.
                 btn.classList.add('wrong');
                 trust = Math.max(0, trust - 5);
                 addMsg('system', 'Falsch. Versuch es erneut.', 'fail');
@@ -586,22 +628,22 @@
         }
 
         function checkText(val, q) {
-            // Smart Keyword Check
             const lowerVal = val.toLowerCase();
-            const hits = q.keywords.filter(k => lowerVal.includes(k));
+            // Smart Check: ALL keywords must be present for full points in 'Schwer' logic, or loose for standard
+            // We use simple 'includes' logic for robust matching
+            const missing = q.keywords.filter(k => !lowerVal.includes(k.toLowerCase()));
             
-            if (hits.length > 0) {
+            if (missing.length === 0) {
                 stopTimer();
                 inputArea.innerHTML = '';
                 addMsg('user', val);
                 processSuccess(q);
             } else {
-                // Smart Feedback: Hint at what's missing (if input is not empty)
-                trust = Math.max(0, trust - 5);
-                if(val.length > 2) {
-                    addMsg('system', `Richtig gedacht, aber das Schlagwort '${q.keywords[0]}' fehlte!`, 'info');
+                trust = Math.max(0, trust - 10);
+                if (missing.length < 3 && q.keywords.length > 3) {
+                     addMsg('system', `Fast richtig. Es fehlt: ${missing[0]}`, 'info');
                 } else {
-                    addMsg('system', 'Zu ungenau.', 'fail');
+                     addMsg('system', 'Ungenügend. Wichtige Schlagworte fehlen.', 'fail');
                 }
                 updateTrust();
                 if(trust === 0) { stopTimer(); endCase(false); }
@@ -611,10 +653,10 @@
         function revealSolution(q) {
             stopTimer();
             inputArea.innerHTML = '';
-            addMsg('user', '(Hilfe angefordert)');
+            addMsg('user', '(Joker)');
             trust = Math.max(0, trust - 15);
             addMsg('partner', 'Lösung: ' + q.explanation);
-            addMsg('system', 'STRAFPUNKTE ANGEWANDT', 'fail');
+            addMsg('system', 'STRAFE -15%', 'fail');
             updateTrust();
             if(trust === 0) endCase(false);
             else {
@@ -638,19 +680,39 @@
             const t = document.getElementById('overlay-title');
             const m = document.getElementById('overlay-msg');
             if (win) {
-                t.innerText = "AKTE GESCHLOSSEN";
+                t.innerText = "FALL ABGESCHLOSSEN";
                 t.style.color = "var(--accent-green)";
                 m.innerText = "Score: " + trust + "%";
                 let old = savedProgress[activeCase.id] || 0;
                 if (trust > old) {
                     savedProgress[activeCase.id] = trust;
-                    localStorage.setItem('junior_lawyer_save_v8', JSON.stringify(savedProgress));
+                    localStorage.setItem('junior_lawyer_save_v9', JSON.stringify(savedProgress));
                 }
             } else {
                 t.innerText = "GESCHEITERT";
                 t.style.color = "var(--accent-red)";
                 m.innerText = "Vertrauen auf 0.";
             }
+        }
+
+        // --- ARCHIVE ---
+        function showArchive() {
+            menuScreen.style.display = 'none';
+            archiveScreen.style.display = 'flex';
+            archiveContent.innerHTML = '';
+            
+            cases.forEach(c => {
+                const grp = document.createElement('div');
+                grp.className = 'archive-group';
+                grp.innerHTML = `<h3>${c.title}</h3>`;
+                
+                const sol = document.createElement('div');
+                sol.className = 'archive-item';
+                sol.innerHTML = `<div class="archive-q">Musterlösung (Volltext)</div><div class="archive-sol">${c.detailed_solution}</div>`;
+                
+                grp.appendChild(sol);
+                archiveContent.appendChild(grp);
+            });
         }
 
         function addMsg(cls, txt, type) {
@@ -674,13 +736,14 @@
             archiveScreen.style.display = 'none';
             gameHeader.style.display = 'none';
             timerContainer.style.display = 'none';
+            diffScreen.style.display = 'none';
             overlay.style.display = 'none';
             renderMenu();
         }
 
         function hardReset() {
             if(confirm("Spielstand löschen?")) {
-                localStorage.removeItem('junior_lawyer_save_v8');
+                localStorage.removeItem('junior_lawyer_save_v9');
                 location.reload();
             }
         }
