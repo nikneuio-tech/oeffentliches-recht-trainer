@@ -60,13 +60,19 @@
         .message.system { align-self: center; font-size: 0.8rem; padding: 8px 15px; border-radius: 20px; }
         .message.system.success { color: var(--accent-green); border: 1px solid var(--accent-green); background: rgba(0, 230, 118, 0.05); }
         .message.system.fail { color: var(--accent-red); border: 1px solid var(--accent-red); background: rgba(255, 82, 82, 0.05); }
+        .message.system.hint { color: #ffd700; border: 1px solid #ffd700; background: rgba(255, 215, 0, 0.05); }
 
-        #input-area { padding: 20px; border-top: 1px solid var(--border-color); background: #181818; min-height: 100px; display: flex; flex-direction: column; justify-content: center; }
+        #input-area { padding: 20px; border-top: 1px solid var(--border-color); background: #181818; min-height: 100px; display: flex; flex-direction: column; justify-content: center; gap: 10px;}
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn-option { background: transparent; border: 1px solid var(--text-secondary); color: var(--text-primary); padding: 12px; font-family: var(--font-mono); cursor: pointer; text-align: left; }
+        .btn-option:disabled { opacity: 0.5; border-color: var(--accent-red); color: var(--accent-red); cursor: not-allowed; text-decoration: line-through; }
+        
         .text-input-wrapper { display: flex; gap: 10px; }
         input[type="text"] { flex: 1; background: transparent; border: 1px solid var(--text-secondary); color: #fff; padding: 12px; font-family: var(--font-mono); outline: none; }
         .btn-submit { background: var(--accent-blue); color: #fff; border: none; padding: 0 20px; cursor: pointer; font-family: var(--font-mono); font-weight: 600; }
+        
+        .btn-reveal { width: 100%; background: transparent; border: 1px dashed #555; color: #777; padding: 8px; font-size: 0.8rem; cursor: pointer; margin-top: 5px; font-family: var(--font-mono); text-transform: uppercase; }
+        .btn-reveal:hover { border-color: var(--accent-red); color: var(--accent-red); }
 
         #game-over-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 18, 18, 0.98); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
         .btn-back { background: transparent; border: 1px solid #fff; color: #fff; padding: 12px 30px; cursor: pointer; font-family: var(--font-mono); margin-top: 10px; text-transform: uppercase; }
@@ -78,7 +84,7 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v4.0</div>
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v5.0</div>
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
                     <span class="trust-label">PARTNER'S TRUST</span>
@@ -91,7 +97,7 @@
         <div id="menu-screen">
             <div class="menu-header">
                 <div class="menu-title">Aktenbestand</div>
-                <div class="menu-subtitle">Öffentliches Recht (Alle 20 Aufgaben)</div>
+                <div class="menu-subtitle">Öffentliches Recht - Training Mode</div>
             </div>
             <div id="case-list"></div>
         </div>
@@ -111,7 +117,7 @@
     </div>
 
     <script>
-        // --- COMPLETE DATABASE (All 20 Questions + Alternatives) ---
+        [cite_start]// --- COMPLETE DATABASE [cite: 1-271] ---
         const cases = [
             {
                 id: "AKTE_001",
@@ -439,7 +445,7 @@
 
         // Auto-Fix Save File
         try {
-            const data = localStorage.getItem('junior_lawyer_save_v1');
+            const data = localStorage.getItem('junior_lawyer_save_v2');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
             console.log("Save error, resetting.");
@@ -520,10 +526,18 @@
                     const btn = document.createElement('button');
                     btn.className = 'btn-option';
                     btn.innerText = "> " + opt;
-                    btn.onclick = () => ans(i, q);
+                    btn.onclick = (e) => checkChoice(i, q, e.target);
                     grid.appendChild(btn);
                 });
+                
+                const revealBtn = document.createElement('button');
+                revealBtn.className = 'btn-reveal';
+                revealBtn.innerText = "Ich weiß es nicht / Auflösen";
+                revealBtn.onclick = () => reveal(q);
+                
                 inputArea.appendChild(grid);
+                inputArea.appendChild(revealBtn);
+
             } else {
                 const wrp = document.createElement('div');
                 wrp.className = 'text-input-wrapper';
@@ -532,38 +546,72 @@
                 const btn = document.createElement('button');
                 btn.className = 'btn-submit';
                 btn.innerText = 'SENDEN';
-                btn.onclick = () => ans(inp.value, q);
-                inp.onkeypress = (e) => { if(e.key==='Enter') ans(inp.value, q); };
+                btn.onclick = () => checkText(inp.value, q);
+                inp.onkeypress = (e) => { if(e.key==='Enter') checkText(inp.value, q); };
                 wrp.append(inp, btn);
+
+                const revealBtn = document.createElement('button');
+                revealBtn.className = 'btn-reveal';
+                revealBtn.innerText = "Ich weiß es nicht / Auflösen";
+                revealBtn.onclick = () => reveal(q);
+
                 inputArea.appendChild(wrp);
+                inputArea.appendChild(revealBtn);
                 setTimeout(() => inp.focus(), 100);
             }
         }
 
-        function ans(val, q) {
-            inputArea.innerHTML = '';
-            let disp = q.type === 'choice' ? q.options[val] : val;
-            addMsg('user', disp);
-            
-            let ok = false;
-            if (q.type === 'choice') ok = (val === q.correctAnswer);
-            else ok = q.keywords.some(k => val.toLowerCase().includes(k));
-
-            setTimeout(() => {
-                if (ok) {
-                    trust = Math.min(100, trust + 15);
-                    addMsg('system', 'TRUST +', 'success');
-                    addMsg('partner', q.feedback);
-                } else {
-                    trust -= 20;
-                    addMsg('system', 'TRUST -', 'fail');
-                    addMsg('partner', "Falsch. " + q.explanation);
-                }
+        function checkChoice(val, q, btnElement) {
+            // Check if correct
+            if (val === q.correctAnswer) {
+                // Correct
+                success(q.options[val], q);
+            } else {
+                // Wrong - Retry mode
+                btnElement.disabled = true; // Disable this option
+                addMsg('system', 'Eingabe inkorrekt. Versuch es erneut.', 'hint');
+                trust = Math.max(0, trust - 2); // Small penalty
                 updateTrust();
+            }
+        }
+
+        function checkText(val, q) {
+            const ok = q.keywords.some(k => val.toLowerCase().includes(k));
+            if (ok) {
+                success(val, q);
+            } else {
+                addMsg('system', 'Das ist nicht präzise genug. Versuch es erneut.', 'hint');
+                trust = Math.max(0, trust - 2); // Small penalty
+                updateTrust();
+            }
+        }
+
+        function success(userAnswer, q) {
+            inputArea.innerHTML = '';
+            addMsg('user', userAnswer);
+            setTimeout(() => {
+                trust = Math.min(100, trust + 15);
+                addMsg('system', 'AKZEPTIERT', 'success');
+                addMsg('partner', q.feedback);
+                updateTrust();
+                qIndex++;
+                setTimeout(nextQ, 1500);
+            }, 500);
+        }
+
+        function reveal(q) {
+            inputArea.innerHTML = '';
+            addMsg('user', "Ich bitte um Auflösung.");
+            setTimeout(() => {
+                trust = Math.max(0, trust - 15); // Big penalty
+                addMsg('system', 'LÖSUNG ANGEFORDERT', 'fail');
+                addMsg('partner', "Die Lösung lautet: " + q.explanation);
+                updateTrust();
+                
                 if (trust <= 0) endCase(false);
                 else {
                     qIndex++;
-                    setTimeout(nextQ, 1500);
+                    setTimeout(nextQ, 2500); // Longer wait to read explanation
                 }
             }, 500);
         }
@@ -579,7 +627,7 @@
                 let old = savedProgress[activeCase.id] || 0;
                 if (trust > old) {
                     savedProgress[activeCase.id] = trust;
-                    localStorage.setItem('junior_lawyer_save_v1', JSON.stringify(savedProgress));
+                    localStorage.setItem('junior_lawyer_save_v2', JSON.stringify(savedProgress));
                 }
             } else {
                 t.innerText = "GEFEUERT";
@@ -611,8 +659,10 @@
         }
 
         function hardReset() {
-            localStorage.clear();
-            location.reload();
+            if(confirm("Spielstand wirklich löschen?")) {
+                localStorage.clear();
+                location.reload();
+            }
         }
 
         window.onload = init;
