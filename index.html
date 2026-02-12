@@ -62,7 +62,6 @@
 
         .case-id { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
         
-        /* Game Header Elements */
         .game-header-elements { display: none; align-items: center; gap: 15px; width: 100%; justify-content: space-between; }
         .trust-container { width: 150px; text-align: right; }
         .trust-label { font-size: 0.6rem; display: block; margin-bottom: 3px; color: var(--text-secondary); }
@@ -111,13 +110,11 @@
         .case-title { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 2px; }
         .case-subtitle { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; }
 
-        /* Progress Bar in Menu */
         .case-mastery { margin-top: 5px; }
         .mastery-label { font-size: 0.7rem; color: var(--text-secondary); display: flex; justify-content: space-between; margin-bottom: 3px; }
         .mastery-bg { width: 100%; height: 4px; background: #111; border-radius: 2px; overflow: hidden; }
         .mastery-fill { height: 100%; width: 0%; background: var(--accent-blue); }
         
-        /* Actions */
         .card-actions { display: flex; gap: 10px; align-items: center; }
 
         .info-btn {
@@ -133,7 +130,6 @@
         }
         .btn-start-case:hover { background: var(--accent-blue); color: #fff; }
 
-        /* Topics Dropdown */
         .topics-container {
             background: #1a1a1a; padding: 10px; border-radius: 4px; display: none; margin-top: 5px; border-left: 2px solid var(--accent-blue);
         }
@@ -215,8 +211,7 @@
                 <div class="menu-title">Aktenbestand</div>
                 <div class="menu-subtitle">Öffentliches Recht - Prüfungsrelevante Fälle</div>
             </div>
-            <div id="case-list">
-                </div>
+            <div id="case-list"></div>
         </div>
 
         <div id="game-screen">
@@ -233,13 +228,13 @@
     </div>
 
     <script>
-        [cite_start]// --- DATA [cite: 1-271] ---
+        // DATENBANK DER FÄLLE
         const cases = [
             {
                 id: "AKTE_001",
                 title: "Grundlagen & Methoden",
                 subtitle: "Einführung in das System",
-                topics: ["Systematische Auslegung", "Historische Auslegung", "Verfassungskonforme Auslegung", "Staatszielbestimmungen", "Richtlinienkonforme Auslegung"],
+                topics: ["Systematische Auslegung", "Historische Auslegung", "Verfassungskonforme Auslegung", "Staatszielbestimmungen"],
                 questions: [
                     {
                         type: 'choice',
@@ -247,13 +242,13 @@
                         options: ["Historische Auslegung", "Systematische Auslegung", "Teleologische Auslegung"],
                         correctAnswer: 1,
                         feedback: "Korrekt. Systematik = Kontext.",
-                        explanation: "Systematische Auslegung prüft die Stellung im Gesetz."
+                        [cite_start]explanation: "Systematische Auslegung prüft die Stellung im Gesetz[cite: 11]."
                     },
                     {
                         type: 'text',
                         intro: "Und wenn wir Protokolle und Materialien prüfen? Wie heißt diese Methode?",
                         keywords: ["historisch", "wille", "geschichte", "entstehung"],
-                        explanation: "Historische Auslegung (Wille des historischen Gesetzgebers).",
+                        [cite_start]explanation: "Historische Auslegung (Wille des historischen Gesetzgebers)[cite: 13].",
                         feedback: "Richtig. Der historische Wille zählt."
                     },
                     {
@@ -262,14 +257,14 @@
                         options: ["Norm ist nichtig.", "Norm bleibt gültig, solange eine GG-konforme Deutung möglich ist.", "Norm wird ignoriert."],
                         correctAnswer: 1,
                         feedback: "Exakt. Die Norm wird erhalten.",
-                        explanation: "Vorrang des Gesetzeserhalts, solange Auslegung möglich."
+                        [cite_start]explanation: "Vorrang des Gesetzeserhalts, solange Auslegung möglich[cite: 15]."
                     },
                     {
                         type: 'text',
                         intro: "Nennen Sie ein Beispiel für eine Staatszielbestimmung.",
                         keywords: ["sozialstaat", "rechtsstaat", "umweltschutz", "tierschutz"],
-                        explanation: "Sozialstaat, Rechtsstaat, Umweltschutz.",
-                        feedback: "Akzeptiert. Das sind Normen ohne subjektive Rechte für Einzelne."
+                        [cite_start]explanation: "Sozialstaat, Rechtsstaat, Umweltschutz[cite: 19].",
+                        feedback: "Akzeptiert."
                     }
                 ]
             },
@@ -283,7 +278,7 @@
                         type: 'text',
                         intro: "Mandant will eine Anstalt gründen. Definieren Sie 'Anstalt'.",
                         keywords: ["personal", "sachmittel", "benutzer", "aufgabe"],
-                        explanation: "Zusammenfassung von Personal/Sachen zur Erfüllung öffentlicher Aufgaben für Benutzer.",
+                        [cite_start]explanation: "Zusammenfassung von Personal/Sachen zur Erfüllung öffentlicher Aufgaben für Benutzer[cite: 20, 21].",
                         feedback: "Gut. Wichtig: Benutzer, keine Mitglieder."
                     },
                     {
@@ -292,15 +287,15 @@
                         options: ["Körperschaft hat Mitglieder.", "Körperschaft ist privat.", "Körperschaft hat Kunden."],
                         correctAnswer: 0,
                         feedback: "Richtig. Mitgliedschaftliche Organisation ist das Merkmal.",
-                        explanation: "Körperschaften bestehen aus Mitgliedern."
+                        [cite_start]explanation: "Körperschaften bestehen aus Mitgliedern[cite: 21]."
                     },
                     {
                         type: 'choice',
                         intro: "Streit Nossen vs. Ketzerbachtal. Warum Verwaltungsrechtsweg? Welche Theorie nutzt das 'Über-/Unterordnungsverhältnis'?",
                         options: ["Interessentheorie", "Subordinationstheorie", "Sonderrechtstheorie"],
                         correctAnswer: 1,
-                        feedback: "Korrekt. Subordination = Über/Unterordnung.",
-                        explanation: "Subordinationstheorie fragt nach Hoheitsgewalt."
+                        feedback: "Korrekt.",
+                        [cite_start]explanation: "Subordinationstheorie fragt nach Hoheitsgewalt[cite: 34, 50]."
                     }
                 ]
             },
@@ -316,7 +311,7 @@
                         options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I Alt. 1 VwGO)", "Feststellungsklage"],
                         correctAnswer: 1,
                         feedback: "Richtig. Aufhebung eines VA.",
-                        explanation: "Anfechtungsklage richtet sich auf Aufhebung."
+                        [cite_start]explanation: "Anfechtungsklage richtet sich auf Aufhebung eines VA[cite: 59]."
                     },
                     {
                         type: 'choice',
@@ -324,20 +319,20 @@
                         options: ["Klageerzwingungsverfahren", "Widerspruch", "Mediation"],
                         correctAnswer: 1,
                         feedback: "Korrekt.",
-                        explanation: "Vor der Anfechtungsklage kommt der Widerspruch."
+                        [cite_start]explanation: "Vor der Anfechtungsklage kommt der Widerspruch[cite: 60]."
                     },
                     {
                         type: 'text',
                         intro: "Was muss Förster geltend machen, um klagebefugt zu sein? (§ 42 II VwGO)",
                         keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv"],
-                        explanation: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten.",
-                        feedback: "Exakt. Bloße Behauptung reicht, Möglichkeit muss bestehen."
+                        [cite_start]explanation: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten[cite: 63].",
+                        feedback: "Exakt. Bloße Behauptung reicht."
                     },
                     {
                         type: 'text',
                         intro: "Und worauf muss sich eine Gemeinde berufen, um zu klagen?",
                         keywords: ["selbstverwaltung", "planungshoheit", "28"],
-                        explanation: "Kommunale Selbstverwaltungsgarantie / Planungshoheit (Art. 28 II GG).",
+                        [cite_start]explanation: "Kommunale Selbstverwaltungsgarantie / Planungshoheit (Art. 28 II GG)[cite: 78].",
                         feedback: "Ja. Art. 28 Abs. 2 GG ist der Schlüssel."
                     }
                 ]
@@ -354,14 +349,14 @@
                         options: ["Konditional", "Final", "Deskriptiv"],
                         correctAnswer: 1,
                         feedback: "Gut. Zielorientiert = Final.",
-                        explanation: "Finalnormen geben Ziele vor."
+                        [cite_start]explanation: "Finalnormen geben Ziele vor[cite: 88]."
                     },
                     {
                         type: 'text',
                         intro: "Kann sich der Staat (ZDF) auf Grundrechte berufen? Grundsatz?",
                         keywords: ["nein", "grundsätzlich", "nicht"],
-                        explanation: "Grundsatz: Nein (Konfusionsargument).",
-                        feedback: "Grundsatz nein. Aber Ausnahme Rundfunkfreiheit beachten."
+                        [cite_start]explanation: "Grundsatz: Nein (Konfusionsargument)[cite: 109].",
+                        feedback: "Grundsatz nein."
                     },
                     {
                         type: 'choice',
@@ -369,7 +364,7 @@
                         options: ["50%", "Ein Drittel (1/3)", "10%"],
                         correctAnswer: 1,
                         feedback: "Korrekt.",
-                        explanation: "BVerfG sagt: Max 1/3 staatliche Vertreter."
+                        [cite_start]explanation: "BVerfG sagt: Max 1/3 staatliche Vertreter[cite: 121]."
                     }
                 ]
             },
@@ -383,7 +378,7 @@
                         type: 'text',
                         intro: "Nennen Sie zwei EU-Grundfreiheiten.",
                         keywords: ["waren", "arbeitnehmer", "dienstleistung", "kapital", "niederlassung"],
-                        explanation: "Warenverkehr, Arbeitnehmer, Dienstleistung, Niederlassung.",
+                        [cite_start]explanation: "Warenverkehr, Arbeitnehmer, Dienstleistung, Niederlassung[cite: 140, 141, 142].",
                         feedback: "Akzeptiert."
                     },
                     {
@@ -392,7 +387,7 @@
                         options: ["§ 823 BGB", "§ 839 BGB i.V.m. Art. 34 GG", "VwGO"],
                         correctAnswer: 1,
                         feedback: "Richtig.",
-                        explanation: "§ 839 BGB + Art. 34 GG."
+                        explanation: "§ 839 BGB + Art. [cite_start]34 GG[cite: 154]."
                     },
                     {
                         type: 'choice',
@@ -400,7 +395,7 @@
                         options: ["Nie", "Wenn Frist abgelaufen & inhaltlich bestimmt", "Immer"],
                         correctAnswer: 1,
                         feedback: "Korrekt.",
-                        explanation: "Vertikale Wirkung bei Umsetzungsfehlern."
+                        [cite_start]explanation: "Bei Umsetzungsfehlern/Fristablauf[cite: 184]."
                     }
                 ]
             },
@@ -416,13 +411,13 @@
                         options: ["§ 35 GewO", "§ 25 PBefG", "§ 48 VwVfG"],
                         correctAnswer: 1,
                         feedback: "Wichtig! Spezialgesetz vor GewO.",
-                        explanation: "Personenbeförderungsgesetz ist lex specialis."
+                        [cite_start]explanation: "Personenbeförderungsgesetz ist lex specialis[cite: 205]."
                     },
                     {
                         type: 'text',
                         intro: "Definition 'Unzuverlässigkeit'?",
                         keywords: ["gewähr", "künftig", "ordnungsgemäß", "betrieb", "prognose"],
-                        explanation: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb (Prognose).",
+                        [cite_start]explanation: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb[cite: 215].",
                         feedback: "Genau. Negative Zukunftsprognose."
                     },
                     {
@@ -431,21 +426,28 @@
                         options: ["Nur Schulden", "Wegfall Voraussetzungen + Tatsachen + Unzuverlässigkeit", "Belieben"],
                         correctAnswer: 1,
                         feedback: "Richtig.",
-                        explanation: "Tatbestandsvoraussetzungen müssen erfüllt sein."
+                        [cite_start]explanation: "Voraussetzungen, Tatsachen und Unzuverlässigkeit[cite: 210, 211, 215]."
                     }
                 ]
             }
         ];
 
-        // --- STATE ---
+        // --- GAME LOGIC ---
         let activeCase = null;
         let qIndex = 0;
         let trust = 50;
         
-        // Speicherstand laden
-        let savedProgress = JSON.parse(localStorage.getItem('junior_associate_progress')) || {};
+        // Save System: Try to load or init empty
+        let savedProgress = {};
+        try {
+            const data = localStorage.getItem('junior_associate_progress');
+            if (data) savedProgress = JSON.parse(data);
+        } catch (e) {
+            console.log("Save file corrupt, resetting.");
+            savedProgress = {};
+        }
 
-        // --- DOM ELEMENTS ---
+        // DOM ELEMENTS
         const menuScreen = document.getElementById('menu-screen');
         const gameScreen = document.getElementById('game-screen');
         const caseList = document.getElementById('case-list');
@@ -456,23 +458,17 @@
         const inputArea = document.getElementById('input-area');
         const overlay = document.getElementById('game-over-screen');
 
-        // --- INIT ---
         function init() {
             renderMenu();
         }
 
-        // --- MENU LOGIC ---
         function renderMenu() {
             caseList.innerHTML = '';
-            
             cases.forEach((c, idx) => {
-                // Berechne Fortschritt
                 let highScore = savedProgress[c.id] || 0;
-                let colorClass = highScore > 0 ? (highScore >= 80 ? 'green' : 'blue') : 'grey';
                 let masteryWidth = highScore + "%";
                 let masteryColor = highScore >= 70 ? 'var(--accent-green)' : (highScore > 0 ? 'var(--accent-blue)' : '#333');
 
-                // Topics List
                 let topicTags = c.topics.map(t => `<li class="topic-tag">${t}</li>`).join('');
 
                 const card = document.createElement('div');
@@ -490,17 +486,14 @@
                             <button class="btn-start-case" onclick="startCase(${idx})">${highScore > 0 ? 'Weiter' : 'Öffnen'}</button>
                         </div>
                     </div>
-                    
                     <div class="case-mastery">
                         <div class="mastery-label">
-                            <span>MASTER:</span>
-                            <span>${highScore}%</span>
+                            <span>MASTER:</span><span>${highScore}%</span>
                         </div>
                         <div class="mastery-bg">
                             <div class="mastery-fill" style="width: ${masteryWidth}; background: ${masteryColor}"></div>
                         </div>
                     </div>
-
                     <div class="topics-container">
                         <div class="topics-title">Relevante Themen:</div>
                         <ul class="topics-list">${topicTags}</ul>
@@ -513,12 +506,10 @@
         function toggleTopics(btn) {
             const card = btn.closest('.case-card');
             const container = card.querySelector('.topics-container');
-            
             if (container.style.display === 'block') {
                 container.style.display = 'none';
                 btn.classList.remove('active');
             } else {
-                // Close others first? Optional.
                 container.style.display = 'block';
                 btn.classList.add('active');
             }
@@ -531,17 +522,13 @@
             overlay.style.display = 'none';
             headerTitle.innerText = "KANZLEI-SYSTEM v3.0";
             activeCase = null;
-            renderMenu(); // Refresh scores
+            renderMenu();
         }
 
         function exitToMenu() {
-            // Speichere aktuellen Stand bevor man rausgeht (falls mitten drin)
-            // Hier: Wir speichern nur abgeschlossene Fälle als "Score". 
-            // Aber User möchte "rausgehen", also einfach zurück.
             showMenu();
         }
 
-        // --- GAME LOGIC ---
         function startCase(idx) {
             activeCase = cases[idx];
             qIndex = 0;
@@ -615,7 +602,7 @@
 
             setTimeout(() => {
                 if (correct) {
-                    trust = Math.min(100, trust + 15); // +15 Trust bei richtig
+                    trust = Math.min(100, trust + 15);
                     addMessage('system', 'TRUST INCREASED', 'success');
                     addMessage('partner', q.feedback);
                 } else {
@@ -644,18 +631,15 @@
                 title.style.color = "var(--accent-green)";
                 msg.innerText = `Endstand Vertrauen: ${trust}%`;
                 
-                // Save Progress (Only if better than before)
                 let oldScore = savedProgress[activeCase.id] || 0;
                 if (trust > oldScore) {
                     savedProgress[activeCase.id] = trust;
                     localStorage.setItem('junior_associate_progress', JSON.stringify(savedProgress));
                 }
-
             } else {
                 title.innerText = "GEFEUERT";
                 title.style.color = "var(--accent-red)";
                 msg.innerText = "Das Vertrauen ist aufgebraucht. Akte fehlgeschlagen.";
-                // Kein Score Update bei Fail
             }
         }
 
@@ -676,7 +660,6 @@
         }
 
         window.onload = init;
-
     </script>
 </body>
 </html>
