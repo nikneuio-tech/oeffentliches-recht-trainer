@@ -126,7 +126,7 @@
         }
         .btn-start-case:hover { background: var(--accent-blue); color: #fff; }
 
-        /* --- DIFFICULTY SELECTOR (NEW) --- */
+        /* --- DIFFICULTY SELECTOR --- */
         #difficulty-screen {
             display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(18, 18, 18, 0.98); flex-direction: column; align-items: center; justify-content: center; z-index: 50; padding: 20px;
@@ -154,7 +154,6 @@
         .archive-item { background: #1a1a1a; padding: 20px; border-radius: 6px; border-left: 3px solid var(--text-secondary); margin-bottom: 15px; }
         .archive-q { font-weight: bold; margin-bottom: 10px; color: #fff; font-family: var(--font-serif); font-size: 1.1rem; }
         .archive-sol { font-size: 0.9rem; color: var(--text-primary); white-space: pre-wrap; line-height: 1.6; }
-        .archive-sol strong { color: var(--accent-green); }
 
         /* --- GAME SCREEN --- */
         #game-screen { display: none; flex: 1; flex-direction: column; overflow: hidden; }
@@ -223,7 +222,7 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v9.0</div>
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v10.0</div>
             
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
@@ -293,76 +292,77 @@
             <button class="btn-back" onclick="exitToMenu()">Zurück zur Übersicht</button>
         </div>
         
-        <div class="reset-trigger" onclick="hardReset()" title="Spielstand löschen">🗑️</div>
+        <div class="reset-trigger" onclick="hardReset()" title="Spielstand löschen (Reset)">🗑️</div>
     </div>
 
     <script>
-        [cite_start]// --- COMPLETE DATABASE [cite: 1-271] ---
+        // --- CONTENT DATABASE ---
+        // Using backticks for safe multi-line text
         const cases = [
-            // STANDARD TASKS (1-5)
+            // STANDARD TASKS
             {
                 id: "AKTE_001", complexity: 'standard',
                 title: "Grundlagen & Methoden", subtitle: "Aufgaben 1, 2, 5",
                 topics: ["Systematische Auslegung", "Historische Auslegung", "Verfassungskonforme Auslegung", "Richtlinienkonforme Auslegung"],
                 questions: [
                     { type: 'choice', intro: "Ein Gesetz ist unklar. Wir ermitteln den Inhalt anhand der Stellung im Gesetz. Welche Auslegung?", options: ["Historische Auslegung", "Systematische Auslegung", "Teleologische Auslegung"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Systematische Auslegung prüft die Stellung im Gesetz." },
-                    { type: 'text', intro: "Was versteht man unter 'Historischer Auslegung'?", keywords: ["wille", "gesetzgeber", "geschichte", "materialien"], explanation: "Ermittlung des Willens des historischen Gesetzgebers anhand der Entstehungsgeschichte (Gesetzesmaterialien, Protokolle).", feedback: "Richtig." },
-                    { type: 'choice', intro: "Ein Gesetz verstößt scheinbar gegen das GG. Was besagt die 'verfassungskonforme Auslegung'?", options: ["Gesetz ist nichtig.", "Diejenige Deutung wählen, die mit dem GG vereinbar ist.", "BVerfG fragen."], correctAnswer: 1, feedback: "Exakt.", explanation: "Die Norm bleibt gültig, solange eine verfassungskonforme Auslegung möglich ist." },
+                    { type: 'text', intro: "Was versteht man unter 'Historischer Auslegung'?", keywords: ["wille", "gesetzgeber", "geschichte", "materialien"], explanation: "Ermittlung des Willens des historischen Gesetzgebers.", feedback: "Richtig." },
+                    { type: 'choice', intro: "Ein Gesetz verstößt scheinbar gegen das GG. Was besagt die 'verfassungskonforme Auslegung'?", options: ["Gesetz ist nichtig.", "Diejenige Deutung wählen, die mit dem GG vereinbar ist.", "BVerfG fragen."], correctAnswer: 1, feedback: "Exakt.", explanation: "Die Norm bleibt gültig." },
                     { type: 'text', intro: "Wo werden vom Bundespräsidenten ausgefertigte Gesetze veröffentlicht?", keywords: ["bundesgesetzblatt", "bgbl"], explanation: "Im Bundesgesetzblatt.", feedback: "Korrekt." }
                 ],
-                detailed_solution: "Aufgabe 1: Systematische Auslegung ist das Feststellen des normativen Aussagegehaltes einer Norm anhand ihrer Stellung im Gesetz oder im Gesamtzusammenhang der Rechtsordnung.\n\nAufgabe 1 (Alt): Historische Auslegung ist die Ermittlung des Norminhalts durch Erforschung des Willens des historischen Gesetzgebers anhand der Entstehungsgeschichte (Gesetzesmaterialien, Protokolle).\n\nAufgabe 2: Verfassungskonforme Auslegung bedeutet, dass wenn ein Gesetz mehrere Deutungen zulässt, diejenige zu wählen ist, die mit dem Grundgesetz vereinbar ist. Die Norm bleibt gültig.\n\nAufgabe 5: Gesetze werden im Bundesgesetzblatt veröffentlicht."
+                detailed_solution: `Aufgabe 1: Systematische Auslegung ist das Feststellen des normativen Aussagegehaltes einer Norm anhand ihrer Stellung im Gesetz oder im Gesamtzusammenhang der Rechtsordnung.\nAufgabe 2: Verfassungskonforme Auslegung bedeutet, dass wenn ein Gesetz mehrere Deutungen zulässt, diejenige zu wählen ist, die mit dem Grundgesetz vereinbar ist.`
             },
             {
                 id: "AKTE_002", complexity: 'standard',
                 title: "Staatsorganisation", subtitle: "Aufgaben 3, 4, 11",
                 topics: ["Staatsziele", "Anstalt vs. Körperschaft", "Stiftung", "Demokratieprinzip"],
                 questions: [
-                    { type: 'text', intro: "Was ist eine Staatszielbestimmung? (Def + Bsp)", keywords: ["aufgabe", "staat", "subjektiv", "recht"], explanation: "Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (z.B. Sozialstaat).", feedback: "Gut." },
-                    { type: 'text', intro: "Definieren Sie 'Anstalt des öffentlichen Rechts'.", keywords: ["personal", "sachmittel", "benutzer"], explanation: "Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe, die Benutzern zur Verfügung steht.", feedback: "Richtig." },
-                    { type: 'choice', intro: "Unterschied zur Körperschaft?", options: ["Körperschaft ist privat.", "Körperschaft ist mitgliedschaftlich organisiert.", "Kein Unterschied."], correctAnswer: 1, feedback: "Richtig.", explanation: "Eine Körperschaft ist mitgliedschaftlich organisiert (besteht aus Mitgliedern). Eine Anstalt hat Benutzer." },
-                    { type: 'text', intro: "Nennen Sie ein Beispiel im GG für das Demokratieprinzip.", keywords: ["20", "wahlen", "abstimmung"], explanation: "Art. 20 Abs. 1 und 2 GG (Wahlen / Volkssouveränität).", feedback: "Art. 20 GG ist der Kern." }
+                    { type: 'text', intro: "Was ist eine Staatszielbestimmung? (Def + Bsp)", keywords: ["aufgabe", "staat", "subjektiv", "recht"], explanation: "Verfassungsnorm, die dem Staat Aufgaben vorgibt.", feedback: "Gut." },
+                    { type: 'text', intro: "Definieren Sie 'Anstalt des öffentlichen Rechts'.", keywords: ["personal", "sachmittel", "benutzer"], explanation: "Zusammenfassung von Personal/Sachen zur Erfüllung einer öff. Aufgabe für Benutzer.", feedback: "Richtig." },
+                    { type: 'choice', intro: "Unterschied zur Körperschaft?", options: ["Körperschaft ist privat.", "Körperschaft ist mitgliedschaftlich organisiert.", "Kein Unterschied."], correctAnswer: 1, feedback: "Richtig.", explanation: "Körperschaft = Mitglieder. Anstalt = Benutzer." },
+                    { type: 'text', intro: "Nennen Sie ein Beispiel im GG für das Demokratieprinzip.", keywords: ["20", "wahlen", "abstimmung"], explanation: "Art. 20 Abs. 1 und 2 GG.", feedback: "Kernvorschrift." }
                 ],
-                detailed_solution: "Aufgabe 3: Staatszielbestimmung ist eine Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (Bsp: Sozialstaat, Umweltschutz).\n\nAufgabe 4: Anstalt ist eine Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe für Benutzer. Eine Körperschaft ist mitgliedschaftlich organisiert.\n\nAufgabe 11: Demokratieprinzip kommt in Art. 20 Abs. 1 und 2 GG zum Ausdruck (Wahlen / Volkssouveränität)."
+                detailed_solution: `Aufgabe 3: Staatszielbestimmung ist eine Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (Bsp: Sozialstaat).\nAufgabe 4: Anstalt ist eine Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe für Benutzer. Eine Körperschaft ist mitgliedschaftlich organisiert.`
             },
-            // COMPLEX CASE: NOSSEN (Task 6)
+            // COMPLEX: NOSSEN
             {
                 id: "AKTE_003", complexity: 'high',
                 title: "Fall: Nossen vs. Ketzerbachtal", subtitle: "Aufgabe 6 (Rechtsweg)",
                 topics: ["Rechtswegeröffnung", "Abgrenzungstheorien", "SächsKomZG"],
                 questions_easy: [
-                    { type: 'choice', intro: "Streit um Verwaltungsgemeinschaft. Welcher Rechtsweg ist eröffnet?", options: ["Zivilrechtsweg", "Verwaltungsrechtsweg (§ 40 VwGO)", "Verfassungsrechtsweg"], correctAnswer: 1, feedback: "Richtig.", explanation: "Öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art." },
+                    { type: 'choice', intro: "Streit um Verwaltungsgemeinschaft. Welcher Rechtsweg ist eröffnet?", options: ["Zivilrechtsweg", "Verwaltungsrechtsweg (§ 40 VwGO)", "Verfassungsrechtsweg"], correctAnswer: 1, feedback: "Richtig.", explanation: "Öffentlich-rechtliche Streitigkeit." },
                     { type: 'choice', intro: "Welche Theorie fragt nach einem Über-/Unterordnungsverhältnis?", options: ["Interessentheorie", "Subordinationstheorie", "Sonderrechtstheorie"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Subordinationstheorie." },
-                    { type: 'choice', intro: "Welche Theorie fragt, ob ein Hoheitsträger berechtigt ist?", options: ["Interessentheorie", "Subordinationstheorie", "Modifizierte Subjektstheorie"], correctAnswer: 2, feedback: "Richtig.", explanation: "Modifizierte Subjektstheorie (Sonderrechtstheorie)." }
+                    { type: 'choice', intro: "Welche Theorie fragt, ob ein Hoheitsträger berechtigt ist?", options: ["Interessentheorie", "Subordinationstheorie", "Modifizierte Subjektstheorie"], correctAnswer: 2, feedback: "Richtig.", explanation: "Modifizierte Subjektstheorie." }
                 ],
                 questions_medium: [
                     { type: 'text', intro: "Prüfen Sie die Rechtswegeröffnung. Nennen Sie die drei Theorien.", keywords: ["subordination", "interesse", "subjekt", "sonderrecht"], explanation: "Subordinationstheorie, Interessentheorie, Modifizierte Subjektstheorie.", feedback: "Gut." },
-                    { type: 'text', intro: "Subsumieren Sie: Warum ist es hier öffentliches Recht?", keywords: ["zusammenarbeit", "kommunal", "hoheitsträger", "zuordnung"], explanation: "Es geht um kommunale Zusammenarbeit (originäre öff. Interessen) und das SächsKomZG berechtigt Hoheitsträger.", feedback: "Korrekt." }
+                    { type: 'text', intro: "Subsumieren Sie: Warum ist es hier öffentliches Recht?", keywords: ["zusammenarbeit", "kommunal", "hoheitsträger", "zuordnung"], explanation: "Kommunale Zusammenarbeit = Öff. Interesse. SächsKomZG = Sonderrecht.", feedback: "Korrekt." }
                 ],
                 questions_hard: [
-                    { type: 'text', intro: "Gutachten: Prüfen und erläutern Sie, ob der Rechtsweg zu den Verwaltungsgerichten eröffnet ist. Gehen Sie auf die Abgrenzungstheorien ein.", keywords: ["40", "vwgo", "subordination", "interesse", "subjekt", "sonderrecht", "hoheitsträger", "sächskomzg", "zusammenarbeit"], explanation: "§ 40 VwGO eröffnet. Subordinationstheorie (Über/Unterordnung), Interessentheorie (Öff. Interesse), Mod. Subjektstheorie (Sonderrecht für Hoheitsträger). Hier SächsKomZG = Sonderrecht.", feedback: "Umfassend geprüft." }
+                    { type: 'text', intro: "Gutachten: Prüfen und erläutern Sie, ob der Rechtsweg zu den Verwaltungsgerichten eröffnet ist. Gehen Sie auf die Abgrenzungstheorien ein.", keywords: ["40", "vwgo", "subordination", "interesse", "subjekt", "sonderrecht", "hoheitsträger", "sächskomzg", "zusammenarbeit"], explanation: "§ 40 VwGO. Subordinationstheorie (Über/Unterordnung), Interessentheorie (Öff. Interesse), Mod. Subjektstheorie (Sonderrecht). Hier: SächsKomZG.", feedback: "Umfassend geprüft." }
                 ],
-                detailed_solution: "Aufgabe 6 Lösung:\nRechtsweg: Gemäß § 40 VwGO ist der Verwaltungsrechtsweg eröffnet, wenn eine öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art vorliegt.\n\nAbgrenzungstheorien:\n1. Subordinationstheorie: Liegt ein Über-/Unterordnungsverhältnis vor? (Hier eher Gleichordnung).\n2. Interessentheorie: Dient die Norm dem öffentlichen Interesse? (Ja, kommunale Zusammenarbeit).\n3. Modifizierte Subjektstheorie (Sonderrechtstheorie): Berechtigt oder verpflichtet die Norm einen Hoheitsträger gerade in seiner Eigenschaft als solcher? (Ja, SächsKomZG).\n\nSubsumtion: Da es um kommunale Zusammenarbeit geht (originäre öffentliche Interessen) und das Gesetz die Gemeinden als Hoheitsträger berechtigt/verpflichtet, ist es öffentliches Recht."
+                detailed_solution: `Aufgabe 6 Lösung:\nRechtsweg: Gemäß § 40 VwGO ist der Verwaltungsrechtsweg eröffnet, wenn eine öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art vorliegt.\nAbgrenzungstheorien:\n1. Subordinationstheorie: Liegt ein Über-/Unterordnungsverhältnis vor?\n2. Interessentheorie: Dient die Norm dem öffentlichen Interesse?\n3. Modifizierte Subjektstheorie: Berechtigt oder verpflichtet die Norm einen Hoheitsträger gerade in seiner Eigenschaft als solcher?`
             },
-            // COMPLEX CASE: WINDKRAFT (Task 7)
+            // COMPLEX: WINDKRAFT
             {
                 id: "AKTE_004", complexity: 'high',
                 title: "Fall: Windkraft (Förster)", subtitle: "Aufgabe 7 (Zulässigkeit)",
                 topics: ["Anfechtungsklage", "Klagebefugnis", "Art. 14 GG", "Gemeinde-Klagerecht"],
                 questions_easy: [
-                    { type: 'choice', intro: "Förster will Aufhebung der Genehmigung. Rechtsnatur der Genehmigung?", options: ["Realakt", "Verwaltungsakt (§ 35 VwVfG)", "Verordnung"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Verwaltungsakt i.S.v. § 35 VwVfG." },
-                    { type: 'choice', intro: "Statthafte Klageart?", options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I VwGO)", "Feststellungsklage"], correctAnswer: 1, feedback: "Richtig.", explanation: "Anfechtungsklage, da Aufhebung begehrt wird." },
+                    { type: 'choice', intro: "Rechtsnatur der Genehmigung?", options: ["Realakt", "Verwaltungsakt (§ 35 VwVfG)", "Verordnung"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Verwaltungsakt." },
+                    { type: 'choice', intro: "Statthafte Klageart für Aufhebung?", options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I VwGO)", "Feststellungsklage"], correctAnswer: 1, feedback: "Richtig.", explanation: "Anfechtungsklage." },
                     { type: 'text', intro: "Voraussetzung für Klagebefugnis (§ 42 II VwGO)?", keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv"], explanation: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten.", feedback: "Exakt." }
                 ],
                 questions_medium: [
-                    { type: 'text', intro: "Bestimmen Sie Klageart und Vorverfahren.", keywords: ["anfechtung", "widerspruch", "68"], explanation: "Anfechtungsklage (§ 42 VwGO). Vorgeschaltet ist der Widerspruch (§ 68 VwGO).", feedback: "Gut." },
-                    { type: 'text', intro: "Begründen Sie die Klagebefugnis des Hoteliers.", keywords: ["eigentum", "14", "betrieb", "möglichkeit"], explanation: "Möglichkeit der Verletzung von Art. 14 GG (Eigentum/Gewerbebetrieb).", feedback: "Richtig." }
+                    { type: 'text', intro: "Bestimmen Sie Klageart und Vorverfahren.", keywords: ["anfechtung", "widerspruch", "68"], explanation: "Anfechtungsklage (§ 42 VwGO). Vorgeschaltet: Widerspruch (§ 68 VwGO).", feedback: "Gut." },
+                    { type: 'text', intro: "Begründen Sie die Klagebefugnis des Hoteliers.", keywords: ["eigentum", "14", "betrieb", "möglichkeit"], explanation: "Möglichkeit der Verletzung von Art. 14 GG (Eigentum).", feedback: "Richtig." }
                 ],
                 questions_hard: [
-                    { type: 'text', intro: "Gutachten: Prüfen Sie die Zulässigkeit der Klage (Statthafte Klageart, Befugnis). Wie wäre es, wenn die Stadt Löbau klagt?", keywords: ["anfechtung", "verwaltungsakt", "35", "widerspruch", "68", "klagebefugnis", "42", "möglichkeit", "eigentum", "14", "gemeinde", "28", "planungshoheit"], explanation: "VA (§ 35 VwVfG) -> Anfechtungsklage (§ 42 I VwGO). Vorverfahren: Widerspruch (§ 68 VwGO). Befugnis: Möglichkeitstheorie (Art. 14 GG Eigentum). Stadt Löbau: Muss sich auf Art. 28 II GG (Kommunale Selbstverwaltung/Planungshoheit) berufen.", feedback: "Exzellent." }
+                    { type: 'text', intro: "Gutachten: Prüfen Sie die Zulässigkeit der Klage (Statthafte Klageart, Befugnis). Wie wäre es, wenn die Stadt Löbau klagt?", keywords: ["anfechtung", "verwaltungsakt", "35", "widerspruch", "68", "klagebefugnis", "42", "möglichkeit", "eigentum", "14", "gemeinde", "28", "planungshoheit"], explanation: "VA -> Anfechtungsklage. Vorverfahren: Widerspruch. Befugnis: Möglichkeitstheorie (Art. 14 GG). Stadt Löbau: Art. 28 II GG (Planungshoheit).", feedback: "Exzellent." }
                 ],
-                detailed_solution: "Aufgabe 7 Lösung:\nVerwaltungsakt: Die Genehmigung ist ein Verwaltungsakt i.S.v. § 35 VwVfG.\nStatthafte Klageart: Anfechtungsklage (§ 42 Abs. 1 Alt. 1 VwGO), da Aufhebung begehrt wird.\nVorgeschalteter Rechtsbehelf: Widerspruch (§ 68 VwGO).\nKlagebefugnis (§ 42 Abs. 2 VwGO): Kläger muss Möglichkeit einer Verletzung in eigenen subjektiven Rechten geltend machen (Möglichkeitstheorie). Hier: Art. 14 GG (Eigentum am Gewerbebetrieb) möglich.\n\nTeil b (Gemeinde): Gemeinden müssen sich auf Art. 28 Abs. 2 GG (Kommunale Selbstverwaltungsgarantie / Planungshoheit) berufen."
+                detailed_solution: `Aufgabe 7 Lösung:\nGenehmigung ist VA (§ 35 VwVfG).\nStatthafte Klageart: Anfechtungsklage (§ 42 I VwGO).\nRechtsbehelf: Widerspruch (§ 68 VwGO).\nKlagebefugnis: Kläger muss Möglichkeit einer Verletzung in eigenen subjektiven Rechten geltend machen (Art. 14 GG).\nGemeinden: Müssen sich auf Art. 28 Abs. 2 GG (Kommunale Selbstverwaltung) berufen.`
             },
-            // STANDARD TASKS (8-12)
+            // STANDARD TASKS
             {
                 id: "AKTE_005", complexity: 'standard',
                 title: "Normen & Verfassung", subtitle: "Aufgaben 8, 9, 10, 12",
@@ -371,12 +371,11 @@
                     { type: 'choice', intro: "§ 87 I TKG gibt ein Ziel vor. Normart?", options: ["Konditional", "Final", "Deskriptiv"], correctAnswer: 1, feedback: "Final = Ziel.", explanation: "Final gefasste Norm." },
                     { type: 'choice', intro: "§ 110 I TKG (Wenn-Dann)?", options: ["Konditional", "Final", "Deskriptiv"], correctAnswer: 0, feedback: "Korrekt.", explanation: "Konditional gefasste Norm." },
                     { type: 'text', intro: "Art. 13 GG. Sind Geschäftsräume geschützt?", keywords: ["ja", "öffnungszeiten", "ladenschluss"], explanation: "Ja. Aber während Öffnungszeiten geringerer Schutz.", feedback: "Richtig." },
-                    { type: 'text', intro: "ZDF-Fall. Kann sich der Staat auf Grundrechte berufen?", keywords: ["nein", "konfusion", "rundfunkfreiheit"], explanation: "Grundsatz: Nein (Konfusionsargument). Ausnahme: Rundfunkfreiheit.", feedback: "Korrekt." },
+                    { type: 'text', intro: "ZDF-Fall. Kann sich der Staat auf Grundrechte berufen?", keywords: ["nein", "konfusion", "rundfunkfreiheit"], explanation: "Grundsatz: Nein. Ausnahme: Rundfunkfreiheit.", feedback: "Korrekt." },
                     { type: 'choice', intro: "Corona-Notbremse Kompetenz?", options: ["Länder", "Bund", "EU"], correctAnswer: 1, feedback: "Richtig.", explanation: "Bund. Art. 74 GG (Gemeingefährliche Krankheiten)." }
                 ],
-                detailed_solution: "Aufgabe 8: a) § 87 TKG: Final (Ziel). b) § 110 TKG: Konditional (Wenn-Dann). c) § 3 TKG: Deskriptiv (Begriff).\n\nAufgabe 9: Geschäftsräume fallen unter 'Wohnung' (Art. 13 GG). Während Öffnungszeiten geringerer Schutz, nach Ladenschluss voller Schutz.\n\nAufgabe 10 (ZDF): Grundsatz: Staat kann sich nicht auf Grundrechte berufen (Konfusionsargument). Ausnahme: Rundfunkfreiheit (Art. 5 I 2 GG). Aufsichtsgremien: Gebot der Vielfaltsicherung und Staatsferne (Drittel-Quote).\n\nAufgabe 12: Bund hat Kompetenz (Art. 74 I Nr. 19 GG - gemeingefährliche Krankheiten)."
+                detailed_solution: `Aufgabe 8: a) § 87 TKG: Final. b) § 110 TKG: Konditional. c) § 3 TKG: Deskriptiv.\nAufgabe 9: Geschäftsräume fallen unter 'Wohnung' (Art. 13 GG). Während Öffnungszeiten geringerer Schutz.\nAufgabe 10: Grundsatz: Staat kann sich nicht auf Grundrechte berufen (Konfusionsargument). Ausnahme: Rundfunkfreiheit. Gremien: Gebot der Vielfaltsicherung und Staatsferne (Drittel-Quote).`
             },
-            // STANDARD TASKS (13-19)
             {
                 id: "AKTE_006", complexity: 'standard',
                 title: "Verwaltung & Europa", subtitle: "Aufgaben 13-19",
@@ -388,9 +387,9 @@
                     { type: 'text', intro: "Nennen Sie einen Ermessensfehler.", keywords: ["nichtgebrauch", "überschreitung", "fehlgebrauch"], explanation: "Ermessensnichtgebrauch, -überschreitung, -fehlgebrauch.", feedback: "Richtig." },
                     { type: 'text', intro: "Norm für Widerruf?", keywords: ["49"], explanation: "§ 49 VwVfG.", feedback: "Korrekt." }
                 ],
-                detailed_solution: "Aufgabe 13: Diskriminierungsverbot, Warenverkehr, Arbeitnehmerfreizügigkeit, Niederlassung, Dienstleistung, Kapitalverkehr.\n\nAufgabe 14: Amtshaftung: § 839 I BGB i.V.m. Art. 34 GG. Voraussetzung: Verletzung drittgerichteter Amtspflicht.\n\nAufgabe 15: VA = Hoheitliche Maßnahme einer Behörde auf dem Gebiet des öff. Rechts zur Regelung eines Einzelfalls mit Außenwirkung (§ 35 VwVfG).\n\nAufgabe 16: Ermessensfehler: Nichtgebrauch, Überschreitung, Fehlgebrauch.\n\nAufgabe 17: Widerruf geregelt in § 49 VwVfG.\n\nAufgabe 18: EU-Richtlinien unmittelbar, wenn Frist abgelaufen und inhaltlich unbedingt/bestimmt.\n\nAufgabe 19: Art. 6 EUV (Charta, EMRK, Verfassungsüberlieferungen)."
+                detailed_solution: `Aufgabe 14: Amtshaftung: § 839 I BGB i.V.m. Art. 34 GG.\nAufgabe 15: VA = Hoheitliche Maßnahme einer Behörde auf dem Gebiet des öff. Rechts zur Regelung eines Einzelfalls mit Außenwirkung (§ 35 VwVfG).\nAufgabe 17: Widerruf geregelt in § 49 VwVfG.`
             },
-            // COMPLEX CASE: BUS (Task 20)
+            // COMPLEX: BUS (Task 20)
             {
                 id: "AKTE_007", complexity: 'high',
                 title: "Fall: Busunternehmer", subtitle: "Aufgabe 20 (Gewerbe)",
@@ -405,33 +404,34 @@
                     { type: 'text', intro: "Nennen Sie die Tatbestandsvoraussetzungen.", keywords: ["wegfall", "tatsachen", "unzuverlässigkeit"], explanation: "Wegfall Voraussetzungen, Konkrete Tatsachen, Unzuverlässigkeit.", feedback: "Richtig." }
                 ],
                 questions_hard: [
-                    { type: 'text', intro: "Gutachten: Nach welcher Ermächtigungsgrundlage kann vorgegangen werden? Nennen Sie alle Tatbestandsvoraussetzungen und definieren Sie die Unzuverlässigkeit.", keywords: ["25", "pbefg", "widerruf", "spezialgesetz", "wegfall", "voraussetzungen", "tatsachen", "unzuverlässigkeit", "prognose", "gewähr", "künftig", "ordnungsgemäß"], explanation: "EGL: § 25 I PBefG (Spezialgesetz vor GewO). Maßnahme: Widerruf. Voraussetzungen: 1. Wegfall Genehmigungsvoraussetzungen, 2. Konkrete Tatsachen (Steuerschulden), 3. Unzuverlässigkeit (Negative Zukunftsprognose: Keine Gewähr für künftigen ordnungsgemäßen Betrieb), 4. Erforderlichkeit.", feedback: "Perfekt." }
+                    { type: 'text', intro: "Gutachten: Nach welcher Ermächtigungsgrundlage kann vorgegangen werden? Nennen Sie alle Tatbestandsvoraussetzungen und definieren Sie die Unzuverlässigkeit.", keywords: ["25", "pbefg", "widerruf", "spezialgesetz", "wegfall", "voraussetzungen", "tatsachen", "unzuverlässigkeit", "prognose", "gewähr", "künftig", "ordnungsgemäß"], explanation: "EGL: § 25 I PBefG (Spezialgesetz). Maßnahme: Widerruf. Voraussetzungen: 1. Wegfall Genehmigungsvoraussetzungen, 2. Konkrete Tatsachen, 3. Unzuverlässigkeit (Negative Zukunftsprognose).", feedback: "Perfekt." }
                 ],
-                detailed_solution: "Aufgabe 20 Lösung:\n1. Rechtsgrundlage: Spezialgesetz Personenbeförderungsgesetz (PBefG), nicht GewO! Maßnahme: Widerruf der Genehmigung gemäß § 25 Abs. 1 PBefG.\n\n2. Tatbestandsvoraussetzungen:\n- Wegfall der Genehmigungsvoraussetzungen (§ 13 PBefG).\n- Konkrete Tatsachen (z.B. Steuerschulden).\n- Unzuverlässigkeit: Gewerbetreibender bietet nach Gesamteindruck nicht die Gewähr für künftigen ordnungsgemäßen Betrieb (Negative Zukunftsprognose).\n- Erforderlichkeit (Verhältnismäßigkeit)."
+                detailed_solution: `Aufgabe 20 Lösung:\n1. Rechtsgrundlage: Spezialgesetz Personenbeförderungsgesetz (PBefG), nicht GewO! Maßnahme: Widerruf der Genehmigung gemäß § 25 Abs. 1 PBefG.\n2. Tatbestandsvoraussetzungen:\n- Wegfall der Genehmigungsvoraussetzungen.\n- Konkrete Tatsachen (z.B. Steuerschulden).\n- Unzuverlässigkeit: Gewerbetreibender bietet nach Gesamteindruck nicht die Gewähr für künftigen ordnungsgemäßen Betrieb (Negative Zukunftsprognose).`
             }
         ];
 
-        // --- ENGINE ---
+        // --- LOGIC ---
         let activeCase = null;
         let qIndex = 0;
         let trust = 50;
         let savedProgress = {};
         let currentQuestions = [];
         
-        // Timer Logic
+        // Timer
         let timerInterval = null;
         let timeLimit = 60;
         let timeLeft = 60;
 
-        // Init
+        // SAFE INIT
         try {
-            const data = localStorage.getItem('junior_lawyer_save_v9');
+            const data = localStorage.getItem('junior_lawyer_save_v10');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
             console.log("Resetting save.");
             savedProgress = {};
         }
 
+        // DOM ELEMENTS
         const menuScreen = document.getElementById('menu-screen');
         const diffScreen = document.getElementById('difficulty-screen');
         const gameScreen = document.getElementById('game-screen');
@@ -444,6 +444,11 @@
         const overlay = document.getElementById('game-over-screen');
         const timerContainer = document.getElementById('timer-container');
         const timerBar = document.getElementById('timer-bar');
+
+        // ERROR TRAP
+        window.onerror = function(msg, url, line) {
+            alert("App Fehler: " + msg + " (Zeile: " + line + ")");
+        };
 
         function init() { renderMenu(); }
 
@@ -556,11 +561,10 @@
             inputArea.innerHTML = '';
             trust = Math.max(0, trust - 10);
             addMsg('system', 'ZEIT ABGELAUFEN', 'fail');
-            addMsg('partner', "Zu langsam! Mandant verärgert. " + currentQuestions[qIndex].explanation);
+            addMsg('partner', "Zu langsam! Antwort gilt als falsch.");
             updateTrust();
             if(trust === 0) endCase(false);
             else {
-                // Next Question Button
                 const btn = document.createElement('button');
                 btn.className = 'btn-giveup';
                 btn.innerText = 'Weiter';
@@ -581,7 +585,7 @@
             inputArea.innerHTML = '';
             const btnReveal = document.createElement('button');
             btnReveal.className = 'btn-giveup';
-            btnReveal.innerText = 'Auflösen (Joker) -15%';
+            btnReveal.innerText = 'Lösung aufdecken (Joker) -15%';
             btnReveal.onclick = () => revealSolution(q);
 
             if (q.type === 'choice') {
@@ -598,13 +602,12 @@
             } else {
                 const wrp = document.createElement('div');
                 wrp.className = 'text-input-wrapper';
-                const inp = document.createElement('textarea'); // Changed to textarea for bigger inputs
+                const inp = document.createElement('textarea');
                 inp.placeholder = 'Ihre Antwort...';
                 const btn = document.createElement('button');
                 btn.className = 'btn-submit';
                 btn.innerText = 'SENDEN';
                 btn.onclick = () => checkText(inp.value, q);
-                // No enter key submit for textarea
                 wrp.append(inp, btn);
                 inputArea.appendChild(wrp);
                 setTimeout(() => inp.focus(), 100);
@@ -629,8 +632,7 @@
 
         function checkText(val, q) {
             const lowerVal = val.toLowerCase();
-            // Smart Check: ALL keywords must be present for full points in 'Schwer' logic, or loose for standard
-            // We use simple 'includes' logic for robust matching
+            // Smart Keyword Check using strict matching for high difficulty
             const missing = q.keywords.filter(k => !lowerVal.includes(k.toLowerCase()));
             
             if (missing.length === 0) {
@@ -639,9 +641,9 @@
                 addMsg('user', val);
                 processSuccess(q);
             } else {
-                trust = Math.max(0, trust - 10);
+                trust = Math.max(0, trust - 5);
                 if (missing.length < 3 && q.keywords.length > 3) {
-                     addMsg('system', `Fast richtig. Es fehlt: ${missing[0]}`, 'info');
+                     addMsg('system', 'Fast richtig. Ein Begriff fehlt.', 'info');
                 } else {
                      addMsg('system', 'Ungenügend. Wichtige Schlagworte fehlen.', 'fail');
                 }
@@ -686,7 +688,7 @@
                 let old = savedProgress[activeCase.id] || 0;
                 if (trust > old) {
                     savedProgress[activeCase.id] = trust;
-                    localStorage.setItem('junior_lawyer_save_v9', JSON.stringify(savedProgress));
+                    localStorage.setItem('junior_lawyer_save_v10', JSON.stringify(savedProgress));
                 }
             } else {
                 t.innerText = "GESCHEITERT";
@@ -708,7 +710,7 @@
                 
                 const sol = document.createElement('div');
                 sol.className = 'archive-item';
-                sol.innerHTML = `<div class="archive-q">Musterlösung (Volltext)</div><div class="archive-sol">${c.detailed_solution}</div>`;
+                sol.innerHTML = `<div class="archive-q">Musterlösung</div><div class="archive-sol">${c.detailed_solution}</div>`;
                 
                 grp.appendChild(sol);
                 archiveContent.appendChild(grp);
@@ -743,7 +745,7 @@
 
         function hardReset() {
             if(confirm("Spielstand löschen?")) {
-                localStorage.removeItem('junior_lawyer_save_v9');
+                localStorage.removeItem('junior_lawyer_save_v10');
                 location.reload();
             }
         }
