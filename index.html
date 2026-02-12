@@ -60,7 +60,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 25px;
-            padding-top: 50px;
+            padding-top: 50px; /* Safe Area */
             z-index: 10;
         }
 
@@ -154,8 +154,8 @@
             font-weight: 600;
             animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background: rgba(255,255,255,0.1);
-            padding: 4px 10px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
         }
 
         @keyframes slideUp {
@@ -170,7 +170,7 @@
             gap: 12px;
             width: 100%;
             max-width: 400px;
-            padding-bottom: 50px;
+            padding-bottom: 80px; /* Space for scrolling */
         }
 
         .fragment {
@@ -178,12 +178,13 @@
             border: 1px solid rgba(255,255,255,0.1);
             padding: 14px 24px;
             border-radius: 16px;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 500;
             cursor: pointer;
             transition: transform 0.1s, background 0.2s;
             position: relative;
             overflow: hidden;
+            touch-action: manipulation; /* Improves touch response */
         }
         
         .fragment:active {
@@ -218,7 +219,7 @@
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5,5,5,0.9);
+            background: rgba(5,5,5,0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             z-index: 100;
@@ -250,13 +251,14 @@
             background: white;
             color: black;
             border: none;
-            padding: 16px 40px;
+            padding: 18px 45px;
             border-radius: 40px;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 0 30px rgba(255,255,255,0.2);
             transition: transform 0.2s;
+            -webkit-appearance: none; /* iOS Button Fix */
         }
         .btn-start:active { transform: scale(0.95); }
 
@@ -288,7 +290,7 @@
         <div style="font-size: 50px; margin-bottom: 20px;">💠</div>
         <h1>NEXUS</h1>
         <p>Tippe die Definitionen in der richtigen Reihenfolge an.<br>Vermeide die "Viren" (falsche Wörter).</p>
-        <button class="btn-start" onclick="startGame()">System Starten</button>
+        <button class="btn-start" onclick="startGameSafely()">System Starten</button>
     </div>
 
     <div class="overlay" id="endScreen" style="display: none;">
@@ -298,6 +300,11 @@
     </div>
 
     <script>
+        // ERROR HANDLER (Zeigt Fehler an, falls etwas kaputt geht)
+        window.onerror = function(msg, url, line) {
+            alert("Fehler: " + msg + "\nZeile: " + line);
+        };
+
         [cite_start]// DATENBANK [cite: 1-271]
         const db = [
             { cat: "Aufgabe 1", q: "Systematische Auslegung", a: "Feststellen des Aussagegehaltes anhand der Stellung im Gesetz", dist: ["Willen", "Historie", "Zweck", "Entstehung"] },
@@ -328,13 +335,15 @@
 
         // SOUND SYSTEM (Safe Init)
         function initAudio() {
-            if (!audioCtx) {
-                try {
+            try {
+                if (!audioCtx) {
                     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                } catch(e) { console.log("Audio not supported"); }
-            }
-            if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume();
+                }
+                if (audioCtx && audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+            } catch(e) { 
+                console.log("Audio Error (Ignored):", e); 
             }
         }
 
@@ -375,18 +384,22 @@
             } catch(e) { /* ignore sound errors */ }
         }
 
-        // SPIEL STARTEN
-        function startGame() {
-            initAudio(); // Wichtig: Audio erst hier starten
-            document.getElementById('startScreen').style.display = 'none';
+        // SPIEL STARTEN (SAFE WRAPPER)
+        function startGameSafely() {
+            try {
+                initAudio(); // Versuch Audio zu starten
+            } catch(e) { console.log("Audio failed to init"); }
+
+            // UI Wechseln
+            const startScreen = document.getElementById('startScreen');
+            if (startScreen) startScreen.style.display = 'none';
             document.getElementById('endScreen').style.display = 'none';
             
-            // Datenbank mischen
-            db.sort(() => Math.random() - 0.5);
-            
+            // Logic Start
             currentIdx = 0;
             hp = 100;
             updateHP();
+            db.sort(() => Math.random() - 0.5); // Mischen
             gameActive = true;
             loadLevel();
         }
@@ -399,7 +412,7 @@
 
             const data = db[currentIdx];
             document.getElementById('catDisplay').innerText = data.cat;
-            document.getElementById('levelDisplay').innerText = (currentIdx + 1) + " / " + db.length;
+            document.getElementById('levelDisplay').innerText = "SEQUENCE " + (currentIdx + 1) + " / " + db.length;
             document.getElementById('qText').innerText = data.q;
             
             // Reset
@@ -443,7 +456,7 @@
             if (frag.type === 'valid' && frag.word === expectedWord) {
                 // RICHTIG
                 playSound('tap');
-                spawnParticles(e.clientX, e.clientY, '#30D158');
+                try { spawnParticles(e.clientX, e.clientY, '#30D158'); } catch(err){}
                 
                 // Wort in Slot schieben
                 const slotWord = document.createElement('span');
@@ -469,7 +482,7 @@
             } else {
                 // FALSCH
                 playSound('error');
-                spawnParticles(e.clientX, e.clientY, '#FF453A');
+                try { spawnParticles(e.clientX, e.clientY, '#FF453A'); } catch(err){}
                 hp -= 15;
                 updateHP();
                 
@@ -514,8 +527,10 @@
         let particles = [];
 
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            if(canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
@@ -533,6 +548,7 @@
         }
 
         function animate() {
+            if(!ctx) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             // Rückwärts iterieren für sicheres Löschen
             for (let i = particles.length - 1; i >= 0; i--) {
