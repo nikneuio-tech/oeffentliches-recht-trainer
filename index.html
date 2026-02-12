@@ -153,7 +153,7 @@
         .archive-group h3 { color: var(--accent-blue); border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 15px; font-family: var(--font-serif); }
         .archive-item { background: #1a1a1a; padding: 20px; border-radius: 6px; border-left: 3px solid var(--text-secondary); margin-bottom: 15px; }
         .archive-q { font-weight: bold; margin-bottom: 10px; color: #fff; font-family: var(--font-serif); font-size: 1.1rem; }
-        .archive-sol { font-size: 0.9rem; color: var(--text-primary); white-space: pre-wrap; line-height: 1.6; }
+        .archive-sol { font-size: 0.95rem; color: var(--text-primary); white-space: pre-wrap; line-height: 1.6; }
 
         /* --- GAME SCREEN --- */
         #game-screen { display: none; flex: 1; flex-direction: column; overflow: hidden; }
@@ -222,7 +222,7 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v10.0</div>
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v11.0</div>
             
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
@@ -296,8 +296,7 @@
     </div>
 
     <script>
-        // --- CONTENT DATABASE ---
-        // Using backticks for safe multi-line text
+        // --- EDIT HERE: CASES & QUESTIONS ---
         const cases = [
             // STANDARD TASKS
             {
@@ -324,7 +323,7 @@
                 ],
                 detailed_solution: `Aufgabe 3: Staatszielbestimmung ist eine Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (Bsp: Sozialstaat).\nAufgabe 4: Anstalt ist eine Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe für Benutzer. Eine Körperschaft ist mitgliedschaftlich organisiert.`
             },
-            // COMPLEX: NOSSEN
+            // COMPLEX: NOSSEN (Task 6 - FULL DETAIL)
             {
                 id: "AKTE_003", complexity: 'high',
                 title: "Fall: Nossen vs. Ketzerbachtal", subtitle: "Aufgabe 6 (Rechtsweg)",
@@ -341,9 +340,18 @@
                 questions_hard: [
                     { type: 'text', intro: "Gutachten: Prüfen und erläutern Sie, ob der Rechtsweg zu den Verwaltungsgerichten eröffnet ist. Gehen Sie auf die Abgrenzungstheorien ein.", keywords: ["40", "vwgo", "subordination", "interesse", "subjekt", "sonderrecht", "hoheitsträger", "sächskomzg", "zusammenarbeit"], explanation: "§ 40 VwGO. Subordinationstheorie (Über/Unterordnung), Interessentheorie (Öff. Interesse), Mod. Subjektstheorie (Sonderrecht). Hier: SächsKomZG.", feedback: "Umfassend geprüft." }
                 ],
-                detailed_solution: `Aufgabe 6 Lösung:\nRechtsweg: Gemäß § 40 VwGO ist der Verwaltungsrechtsweg eröffnet, wenn eine öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art vorliegt.\nAbgrenzungstheorien:\n1. Subordinationstheorie: Liegt ein Über-/Unterordnungsverhältnis vor?\n2. Interessentheorie: Dient die Norm dem öffentlichen Interesse?\n3. Modifizierte Subjektstheorie: Berechtigt oder verpflichtet die Norm einen Hoheitsträger gerade in seiner Eigenschaft als solcher?`
+                detailed_solution: `Aufgabe 6 Lösung:
+1. Obersatz: Der Rechtsweg zu den Verwaltungsgerichten ist gem. § 40 Abs. 1 VwGO eröffnet, wenn es sich um eine öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art handelt und keine abdrängende Sonderzuweisung vorliegt.
+
+2. Abgrenzungstheorien (Privatrecht vs. Öffentliches Recht):
+a) Subordinationstheorie (Subjektionstheorie): Ein öffentlich-rechtliches Verhältnis liegt vor, wenn ein Über-/Unterordnungsverhältnis zwischen den Beteiligten besteht. (Hier eher Gleichordnung, daher unergiebig).
+b) Interessentheorie: Dient die Norm überwiegend dem öffentlichen Interesse (Allgemeinwohl) oder dem Individualinteresse? (Hier: Kommunale Zusammenarbeit = Öffentliches Interesse).
+c) Modifizierte Subjektstheorie (Sonderrechtstheorie): Eine Norm ist öffentlich-rechtlich, wenn sie einen Träger hoheitlicher Gewalt gerade in seiner Eigenschaft als solcher berechtigt oder verpflichtet (Sonderrecht des Staates).
+
+3. Subsumtion:
+Gegenstand des Streits ist die Verwaltungsgemeinschaft nach dem SächsKomZG. Das SächsKomZG berechtigt und verpflichtet ausschließlich Gemeinden (Hoheitsträger) zur Zusammenarbeit. Damit handelt es sich um Sonderrecht des Staates. Es liegt eine öffentlich-rechtliche Streitigkeit vor. Der Verwaltungsrechtsweg (§ 40 VwGO) ist eröffnet.`
             },
-            // COMPLEX: WINDKRAFT
+            // COMPLEX: WINDKRAFT (Task 7 - FULL DETAIL)
             {
                 id: "AKTE_004", complexity: 'high',
                 title: "Fall: Windkraft (Förster)", subtitle: "Aufgabe 7 (Zulässigkeit)",
@@ -360,7 +368,14 @@
                 questions_hard: [
                     { type: 'text', intro: "Gutachten: Prüfen Sie die Zulässigkeit der Klage (Statthafte Klageart, Befugnis). Wie wäre es, wenn die Stadt Löbau klagt?", keywords: ["anfechtung", "verwaltungsakt", "35", "widerspruch", "68", "klagebefugnis", "42", "möglichkeit", "eigentum", "14", "gemeinde", "28", "planungshoheit"], explanation: "VA -> Anfechtungsklage. Vorverfahren: Widerspruch. Befugnis: Möglichkeitstheorie (Art. 14 GG). Stadt Löbau: Art. 28 II GG (Planungshoheit).", feedback: "Exzellent." }
                 ],
-                detailed_solution: `Aufgabe 7 Lösung:\nGenehmigung ist VA (§ 35 VwVfG).\nStatthafte Klageart: Anfechtungsklage (§ 42 I VwGO).\nRechtsbehelf: Widerspruch (§ 68 VwGO).\nKlagebefugnis: Kläger muss Möglichkeit einer Verletzung in eigenen subjektiven Rechten geltend machen (Art. 14 GG).\nGemeinden: Müssen sich auf Art. 28 Abs. 2 GG (Kommunale Selbstverwaltung) berufen.`
+                detailed_solution: `Aufgabe 7 Lösung:
+A. Zulässigkeit der Klage des Hoteliers Förster:
+1. Statthafte Klageart: August Förster begehrt die Aufhebung der Genehmigung. Da die Genehmigung ein Verwaltungsakt i.S.v. § 35 VwVfG ist (hoheitliche Maßnahme, Behörde, Regelung, Einzelfall, Außenwirkung), ist die Anfechtungsklage gemäß § 42 Abs. 1 Alt. 1 VwGO statthaft.
+2. Klagebefugnis (§ 42 Abs. 2 VwGO): Er muss geltend machen, durch den VA in seinen Rechten verletzt zu sein. Es reicht die Möglichkeit einer Rechtsverletzung (Möglichkeitstheorie). Hier kommt eine Verletzung seines Eigentums am eingerichteten und ausgeübten Gewerbebetrieb (Art. 14 GG) in Betracht.
+3. Vorverfahren: Gemäß § 68 VwGO ist grundsätzlich ein Widerspruchsverfahren (Vorverfahren) durchzuführen.
+
+B. Klage der Stadt Löbau:
+Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusionsargument, da Teil des Staates). Sie muss sich stattdessen auf ihr Recht auf kommunale Selbstverwaltung (Planungshoheit) aus Art. 28 Abs. 2 GG berufen.`
             },
             // STANDARD TASKS
             {
@@ -395,7 +410,7 @@
                 title: "Fall: Busunternehmer", subtitle: "Aufgabe 20 (Gewerbe)",
                 topics: ["Spezialgesetz PBefG", "Unzuverlässigkeit", "Widerruf"],
                 questions_easy: [
-                    { type: 'choice', intro: "Busunternehmer zahlt Steuern nicht. Rechtsgrundlage?", options: ["§ 35 GewO", "§ 25 PBefG", "§ 48 VwVfG"], correctAnswer: 1, feedback: "Wichtig! Spezialgesetz.", explanation: "PBefG vor GewO." },
+                    { type: 'choice', intro: "Busunternehmer zahlt Steuern nicht. Lizenzentzug. Rechtsgrundlage?", options: ["§ 35 GewO", "§ 25 PBefG", "§ 48 VwVfG"], correctAnswer: 1, feedback: "Wichtig! Spezialgesetz.", explanation: "PBefG vor GewO." },
                     { type: 'text', intro: "Maßnahme?", keywords: ["widerruf", "genehmigung"], explanation: "Widerruf der Genehmigung.", feedback: "Ja." },
                     { type: 'text', intro: "Begriff der 'Unzuverlässigkeit'?", keywords: ["gewähr", "künftig", "ordnungsgemäß"], explanation: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb.", feedback: "Genau." }
                 ],
@@ -410,28 +425,24 @@
             }
         ];
 
-        // --- LOGIC ---
+        // --- ENGINE LOGIC ---
         let activeCase = null;
         let qIndex = 0;
         let trust = 50;
         let savedProgress = {};
         let currentQuestions = [];
-        
-        // Timer
         let timerInterval = null;
         let timeLimit = 60;
         let timeLeft = 60;
 
-        // SAFE INIT
         try {
-            const data = localStorage.getItem('junior_lawyer_save_v10');
+            const data = localStorage.getItem('junior_lawyer_save_v11');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
             console.log("Resetting save.");
             savedProgress = {};
         }
 
-        // DOM ELEMENTS
         const menuScreen = document.getElementById('menu-screen');
         const diffScreen = document.getElementById('difficulty-screen');
         const gameScreen = document.getElementById('game-screen');
@@ -445,9 +456,8 @@
         const timerContainer = document.getElementById('timer-container');
         const timerBar = document.getElementById('timer-bar');
 
-        // ERROR TRAP
         window.onerror = function(msg, url, line) {
-            alert("App Fehler: " + msg + " (Zeile: " + line + ")");
+            alert("Fehler: " + msg);
         };
 
         function init() { renderMenu(); }
@@ -484,7 +494,6 @@
             });
         }
 
-        // --- FLOW ---
         let selectedCaseIdx = -1;
 
         function prepareCase(idx) {
@@ -501,17 +510,9 @@
         function selectDifficulty(diff) {
             diffScreen.style.display = 'none';
             const c = cases[selectedCaseIdx];
-            
-            if (diff === 'easy') {
-                currentQuestions = c.questions_easy;
-                timeLimit = 90;
-            } else if (diff === 'medium') {
-                currentQuestions = c.questions_medium;
-                timeLimit = 60;
-            } else {
-                currentQuestions = c.questions_hard;
-                timeLimit = 45;
-            }
+            if (diff === 'easy') { currentQuestions = c.questions_easy; timeLimit = 90; } 
+            else if (diff === 'medium') { currentQuestions = c.questions_medium; timeLimit = 60; } 
+            else { currentQuestions = c.questions_hard; timeLimit = 45; }
             launchGame(c);
         }
 
@@ -540,18 +541,13 @@
             timeLeft = timeLimit;
             timerBar.style.width = '100%';
             timerBar.style.backgroundColor = 'var(--accent-green)';
-            
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 timeLeft--;
                 let pct = (timeLeft / timeLimit) * 100;
                 timerBar.style.width = pct + '%';
                 if (timeLeft < 10) timerBar.style.backgroundColor = 'var(--accent-red)';
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    handleTimeout();
-                }
+                if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeout(); }
             }, 1000);
         }
 
@@ -561,7 +557,7 @@
             inputArea.innerHTML = '';
             trust = Math.max(0, trust - 10);
             addMsg('system', 'ZEIT ABGELAUFEN', 'fail');
-            addMsg('partner', "Zu langsam! Antwort gilt als falsch.");
+            addMsg('partner', "Zu langsam! Mandant verärgert.");
             updateTrust();
             if(trust === 0) endCase(false);
             else {
@@ -632,21 +628,18 @@
 
         function checkText(val, q) {
             const lowerVal = val.toLowerCase();
-            // Smart Keyword Check using strict matching for high difficulty
-            const missing = q.keywords.filter(k => !lowerVal.includes(k.toLowerCase()));
+            // Fuzzy Check: Contains ANY key keyword for simple, MOST for hard
+            const foundCount = q.keywords.filter(k => lowerVal.includes(k.toLowerCase())).length;
             
-            if (missing.length === 0) {
+            // Logic: Needs at least 1 keyword match
+            if (foundCount > 0) {
                 stopTimer();
                 inputArea.innerHTML = '';
                 addMsg('user', val);
                 processSuccess(q);
             } else {
                 trust = Math.max(0, trust - 5);
-                if (missing.length < 3 && q.keywords.length > 3) {
-                     addMsg('system', 'Fast richtig. Ein Begriff fehlt.', 'info');
-                } else {
-                     addMsg('system', 'Ungenügend. Wichtige Schlagworte fehlen.', 'fail');
-                }
+                addMsg('system', 'Zu ungenau oder falsch. Prüfen Sie die Definition.', 'fail');
                 updateTrust();
                 if(trust === 0) { stopTimer(); endCase(false); }
             }
@@ -661,10 +654,7 @@
             addMsg('system', 'STRAFE -15%', 'fail');
             updateTrust();
             if(trust === 0) endCase(false);
-            else {
-                qIndex++;
-                setTimeout(nextQ, 3000);
-            }
+            else { qIndex++; setTimeout(nextQ, 3000); }
         }
 
         function processSuccess(q) {
@@ -688,7 +678,7 @@
                 let old = savedProgress[activeCase.id] || 0;
                 if (trust > old) {
                     savedProgress[activeCase.id] = trust;
-                    localStorage.setItem('junior_lawyer_save_v10', JSON.stringify(savedProgress));
+                    localStorage.setItem('junior_lawyer_save_v11', JSON.stringify(savedProgress));
                 }
             } else {
                 t.innerText = "GESCHEITERT";
@@ -697,21 +687,17 @@
             }
         }
 
-        // --- ARCHIVE ---
         function showArchive() {
             menuScreen.style.display = 'none';
             archiveScreen.style.display = 'flex';
             archiveContent.innerHTML = '';
-            
             cases.forEach(c => {
                 const grp = document.createElement('div');
                 grp.className = 'archive-group';
                 grp.innerHTML = `<h3>${c.title}</h3>`;
-                
                 const sol = document.createElement('div');
                 sol.className = 'archive-item';
                 sol.innerHTML = `<div class="archive-q">Musterlösung</div><div class="archive-sol">${c.detailed_solution}</div>`;
-                
                 grp.appendChild(sol);
                 archiveContent.appendChild(grp);
             });
@@ -745,7 +731,7 @@
 
         function hardReset() {
             if(confirm("Spielstand löschen?")) {
-                localStorage.removeItem('junior_lawyer_save_v10');
+                localStorage.removeItem('junior_lawyer_save_v11');
                 location.reload();
             }
         }
