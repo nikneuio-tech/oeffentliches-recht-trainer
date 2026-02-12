@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JUNIOR ASSOCIATE SIMULATOR | Public Law Module</title>
+    <title>JUNIOR ASSOCIATE | Case Files</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,11 +23,7 @@
             --font-mono: 'Fira Code', monospace;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--bg-color);
@@ -39,7 +35,6 @@
             overflow: hidden;
         }
 
-        /* --- Main Layout --- */
         #app-container {
             width: 100%;
             max-width: 800px;
@@ -52,7 +47,7 @@
             position: relative;
         }
 
-        /* --- Header / Status Bar --- */
+        /* --- HEADER --- */
         header {
             padding: 15px 20px;
             border-bottom: 1px solid var(--border-color);
@@ -61,43 +56,116 @@
             justify-content: space-between;
             align-items: center;
             height: 70px;
+            flex-shrink: 0;
         }
 
-        .case-id {
+        .case-id { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+        .trust-container { width: 200px; text-align: right; display: none; } /* Hidden in Menu */
+        .trust-label { font-size: 0.7rem; display: block; margin-bottom: 5px; color: var(--text-secondary); }
+        .progress-bg { width: 100%; height: 6px; background: #333; border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 50%; background: var(--accent-blue); transition: width 0.5s ease, background 0.5s ease; }
+
+        /* --- MENU SCREEN (Aktenregal) --- */
+        #menu-screen {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: #fff;
+            padding-top: 20px;
+        }
+
+        .case-card {
+            background: #252525;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .case-card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
+
+        .case-info { flex: 1; }
+        .case-title { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 5px; }
+        .case-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
+
+        /* INFO ICON & TOOLTIP */
+        .info-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid var(--text-secondary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            margin-right: 15px;
+            cursor: help;
+            position: relative;
+        }
+
+        .info-icon:hover { color: var(--accent-blue); border-color: var(--accent-blue); background: rgba(41, 121, 255, 0.1); }
+
+        .tooltip {
+            visibility: hidden;
+            width: 250px;
+            background-color: #111;
+            color: #ccc;
+            text-align: left;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 10;
+            top: 130%;
+            right: 0; /* Align right to icon */
+            opacity: 0;
+            transition: opacity 0.3s;
             font-size: 0.8rem;
-            color: var(--text-secondary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+        
+        .tooltip ul { list-style-type: none; padding: 0; }
+        .tooltip li { margin-bottom: 4px; padding-left: 10px; border-left: 2px solid var(--accent-blue); }
+
+        .info-icon:hover .tooltip { visibility: visible; opacity: 1; }
+
+        .btn-start-case {
+            background: transparent;
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 8px 16px;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
+        .btn-start-case:hover { background: var(--accent-blue); color: #fff; }
 
-        .trust-container {
-            width: 200px;
-            text-align: right;
-        }
 
-        .trust-label {
-            font-size: 0.7rem;
-            display: block;
-            margin-bottom: 5px;
-            color: var(--text-secondary);
-        }
-
-        .progress-bg {
-            width: 100%;
-            height: 6px;
-            background: #333;
-            border-radius: 3px;
+        /* --- GAME SCREEN (Chat) --- */
+        #game-screen {
+            display: none; /* Hidden by default */
+            flex: 1;
+            flex-direction: column;
             overflow: hidden;
         }
 
-        .progress-fill {
-            height: 100%;
-            width: 50%; /* Start at 50% */
-            background: var(--accent-blue);
-            transition: width 0.5s ease, background 0.5s ease;
-        }
-
-        /* --- Chat Interface --- */
         #chat-window {
             flex: 1;
             padding: 20px;
@@ -117,12 +185,8 @@
             position: relative;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Partner Styling (Boss) */
         .message.partner {
             align-self: flex-start;
             background-color: #252525;
@@ -132,39 +196,15 @@
             color: #fff;
         }
 
-        .message.partner::before {
-            content: "SENIOR PARTNER";
-            position: absolute;
-            top: -18px;
-            left: 0;
-            font-family: var(--font-mono);
-            font-size: 0.6rem;
-            color: var(--text-secondary);
-        }
+        .message.partner::before { content: "SENIOR PARTNER"; position: absolute; top: -18px; left: 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-secondary); }
 
-        /* User Styling (You) */
-        .message.user {
-            align-self: flex-end;
-            background-color: #2a3b4d;
-            border-right: 3px solid var(--accent-blue);
-            text-align: right;
-            font-size: 0.95rem;
-        }
+        .message.user { align-self: flex-end; background-color: #2a3b4d; border-right: 3px solid var(--accent-blue); text-align: right; font-size: 0.95rem; }
 
-        /* System Feedback */
-        .message.system {
-            align-self: center;
-            font-size: 0.8rem;
-            padding: 8px 15px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            max-width: 100%;
-        }
+        .message.system { align-self: center; font-size: 0.8rem; padding: 8px 15px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; }
         .message.system.success { color: var(--accent-green); border: 1px solid var(--accent-green); background: rgba(0, 230, 118, 0.05); }
         .message.system.fail { color: var(--accent-red); border: 1px solid var(--accent-red); background: rgba(255, 82, 82, 0.05); }
 
-        /* --- Input Area --- */
+        /* --- INPUT AREA --- */
         #input-area {
             padding: 20px;
             border-top: 1px solid var(--border-color);
@@ -175,106 +215,36 @@
             justify-content: center;
         }
 
-        /* Input Controls */
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .btn-option {
-            background: transparent;
-            border: 1px solid var(--text-secondary);
-            color: var(--text-primary);
-            padding: 12px;
-            font-family: var(--font-mono);
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: left;
-        }
-
-        .btn-option:hover {
-            border-color: var(--accent-blue);
-            background: rgba(41, 121, 255, 0.1);
-        }
-
-        .text-input-wrapper {
-            display: flex;
-            gap: 10px;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            background: transparent;
-            border: 1px solid var(--text-secondary);
-            color: #fff;
-            padding: 12px;
-            font-family: var(--font-mono);
-            outline: none;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--accent-blue);
-        }
-
-        .btn-submit {
-            background: var(--accent-blue);
-            color: #fff;
-            border: none;
-            padding: 0 20px;
-            cursor: pointer;
-            font-family: var(--font-mono);
-            font-weight: 600;
-        }
-
-        .btn-submit:hover { opacity: 0.9; }
-
-        /* --- Game Over Screen --- */
-        #game-over-screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(18, 18, 18, 0.95);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            display: none; /* Hidden by default */
-        }
-
-        .fired-text {
-            font-family: var(--font-serif);
-            font-size: 4rem;
-            color: var(--accent-red);
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        .restart-btn {
-            background: transparent;
-            border: 2px solid var(--text-primary);
-            color: var(--text-primary);
-            padding: 15px 40px;
-            font-size: 1rem;
-            font-family: var(--font-mono);
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        .restart-btn:hover { background: var(--text-primary); color: #000; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-option { background: transparent; border: 1px solid var(--text-secondary); color: var(--text-primary); padding: 12px; font-family: var(--font-mono); cursor: pointer; transition: all 0.2s; text-align: left; }
+        .btn-option:hover { border-color: var(--accent-blue); background: rgba(41, 121, 255, 0.1); }
         
-        /* Mobile adjustment */
-        @media (max-width: 600px) {
-            .options-grid { grid-template-columns: 1fr; }
+        .text-input-wrapper { display: flex; gap: 10px; }
+        input[type="text"] { flex: 1; background: transparent; border: 1px solid var(--text-secondary); color: #fff; padding: 12px; font-family: var(--font-mono); outline: none; }
+        input[type="text"]:focus { border-color: var(--accent-blue); }
+        .btn-submit { background: var(--accent-blue); color: #fff; border: none; padding: 0 20px; cursor: pointer; font-family: var(--font-mono); font-weight: 600; }
+        
+        /* Mobile Input fix */
+        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+
+        /* --- OVERLAYS --- */
+        #game-over-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(18, 18, 18, 0.98);
+            display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100;
         }
+        .status-text { font-family: var(--font-serif); font-size: 3rem; margin-bottom: 20px; text-transform: uppercase; }
+        .btn-back { background: transparent; border: 1px solid #fff; color: #fff; padding: 10px 30px; cursor: pointer; font-family: var(--font-mono); margin-top: 20px; }
+        .btn-back:hover { background: #fff; color: #000; }
+
     </style>
 </head>
 <body>
 
     <div id="app-container">
         <header>
-            <div class="case-id">CASE: <span id="case-display">INIT_SEQ_01</span></div>
-            <div class="trust-container">
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v2.4</div>
+            <div class="trust-container" id="trust-container">
                 <span class="trust-label">PARTNER'S TRUST</span>
                 <div class="progress-bg">
                     <div class="progress-fill" id="trust-bar"></div>
@@ -282,302 +252,412 @@
             </div>
         </header>
 
-        <div id="chat-window">
-            </div>
+        <div id="menu-screen">
+            <div class="menu-header">Aktenbestand</div>
+            <div id="case-list">
+                </div>
+        </div>
 
-        <div id="input-area">
-            </div>
+        <div id="game-screen">
+            <div id="chat-window"></div>
+            <div id="input-area"></div>
+        </div>
 
         <div id="game-over-screen">
-            <div class="fired-text">FIRED</div>
-            <div style="margin-bottom: 30px; font-family: var(--font-mono); color: #888;">Your performance was unacceptable.</div>
-            <button class="restart-btn" onclick="initGame()">Re-apply</button>
+            <div class="status-text" id="overlay-title">FIRED</div>
+            <div id="overlay-msg" style="color: #888;"></div>
+            <button class="btn-back" onclick="showMenu()">Zurück zur Übersicht</button>
         </div>
     </div>
 
     <script>
-        // --- GAME DATA ---
-       // --- GAME DATA (Gruppiert in "Akten") ---
-    const cases = [
-        {
-            id: "AKTE_001_METHODEN",
-            title: "Die Grundlagen",
-            questions: [
-                {
-                    type: 'choice',
-                    intro: "Guten Morgen. Wir haben eine Norm mit unklarem Wortlaut. Wenn ich den Inhalt anhand der Stellung im Gesetz ermittle – welche Auslegung ist das?",
-                    options: ["Historische Auslegung", "Systematische Auslegung", "Teleologische Auslegung"],
-                    correctAnswer: 1,
-                    feedback: "Korrekt. Der Kontext im Gesetz ist entscheidend.",
-                    explanation: "Systematische Auslegung schaut auf den Zusammenhang im Gesetz."
-                },
-                {
-                    type: 'text',
-                    intro: "Gut. Und wenn wir in die alten Protokolle und Materialien schauen? Wie nennt man diese Auslegung?",
-                    keywords: ["historisch", "wille", "gesetzgeber", "geschichte"],
-                    explanation: "Das ist die Historische Auslegung (Wille des historischen Gesetzgebers).",
-                    feedback: "Richtig. Der Wille des historischen Gesetzgebers zählt."
-                },
-                {
-                    type: 'choice',
-                    intro: "Eine Norm verstößt scheinbar gegen das Grundgesetz. Was besagt die 'verfassungskonforme Auslegung'?",
-                    options: ["Norm ist nichtig.", "Norm bleibt gültig, solange eine GG-konforme Deutung möglich ist.", "Norm muss geändert werden."],
-                    correctAnswer: 1,
-                    feedback: "Exakt. Die Norm wird 'gerettet'."
-                }
-            ]
-        },
-        {
-            id: "AKTE_002_WINDKRAFT",
-            title: "Fall: August Förster",
-            questions: [
-                {
-                    type: 'choice',
-                    intro: "Herr Förster will gegen die Genehmigung einer Windkraftanlage vorgehen. Er will, dass die Genehmigung aufgehoben wird. Welche Klageart?",
-                    options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I Alt. 1 VwGO)", "Feststellungsklage"],
-                    correctAnswer: 1,
-                    feedback: "Richtig. Er will die Aufhebung eines VA.",
-                    explanation: "Statthaft ist die Anfechtungsklage, da die Aufhebung eines VA begehrt wird."
-                },
-                {
-                    type: 'choice',
-                    intro: "Bevor wir klagen: Welches Vorverfahren müssen wir durchlaufen (§ 68 VwGO)?",
-                    options: ["Schlichtungsverfahren", "Widerspruch (Anfechtungswiderspruch)", "Direktklage"],
-                    correctAnswer: 1,
-                    feedback: "Korrekt. Der Widerspruch ist vorgeschaltet.",
-                    explanation: "Nach § 68 VwGO ist der Widerspruch vorgeschaltet."
-                },
-                {
-                    type: 'text',
-                    intro: "Damit Herr Förster überhaupt klagebefugt ist (§ 42 II VwGO), was muss er geltend machen?",
-                    keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv", "eigene"],
-                    explanation: "Die Möglichkeit einer Verletzung in eigenen subjektiven Rechten (Möglichkeitstheorie).",
-                    feedback: "Genau. Die Möglichkeit einer Rechtsverletzung (z.B. Art. 14 GG) muss bestehen."
-                }
-            ]
-        },
-        {
-            id: "AKTE_003_BUSUNTERNEHMER",
-            title: "Fall: Der Unzuverlässige",
-            questions: [
-                {
-                    type: 'choice',
-                    intro: "Unser Busunternehmer zahlt keine Steuern mehr. Wir wollen ihm die Lizenz entziehen. Welche Rechtsgrundlage nutzen wir?",
-                    options: ["§ 35 GewO (Gewerbeuntersagung)", "§ 25 PBefG (Widerruf)", "§ 48 VwVfG (Rücknahme)"],
-                    correctAnswer: 1,
-                    feedback: "Aufpassen! Spezialgesetz vor Allgemeingesetz.",
-                    explanation: "Hier gilt das Personenbeförderungsgesetz (PBefG) als Spezialgesetz, nicht die GewO."
-                },
-                {
-                    type: 'text',
-                    intro: "Wann gilt ein Unternehmer als 'unzuverlässig'? Definieren Sie die Prognose.",
-                    keywords: ["zukunft", "gewähr", "ordnungsgemäß", "betrieb", "verhalten"],
-                    explanation: "Wenn er keine Gewähr für den künftigen ordnungsgemäßen Betrieb bietet (negative Zukunftsprognose).",
-                    feedback: "Exakt. Es geht um die negative Zukunftsprognose."
-                },
-                {
-                    type: 'choice',
-                    intro: "Was sind die Tatbestandsvoraussetzungen für den Widerruf nach § 25 PBefG?",
-                    options: ["Nur Steuerschulden", "Wegfall Genehmigungsvoraussetzung + Tatsachen + Unzuverlässigkeit", "Insolvenzverfahren"],
-                    correctAnswer: 1,
-                    feedback: "Richtig. Das ist die Checkliste.",
-                    explanation: "Wegfall der Voraussetzungen, konkrete Tatsachen und Unzuverlässigkeit müssen vorliegen."
-                }
-            ]
-        },
-        {
-            id: "AKTE_004_EUROPA_HAFTUNG",
-            title: "Europa & Staatshaftung",
-            questions: [
-                {
-                    type: 'text',
-                    intro: "Nennen Sie mir zwei EU-Grundfreiheiten.",
-                    keywords: ["waren", "arbeitnehmer", "dienstleistung", "niederlassung", "kapital"],
-                    explanation: "Warenverkehr, Arbeitnehmerfreizügigkeit, Dienstleistungs-, Niederlassungs-, Kapitalverkehrsfreiheit.",
-                    feedback: "Das sind die Säulen des Binnenmarkts."
-                },
-                {
-                    type: 'choice',
-                    intro: "Die Behörde hat geschlampt, der Mandant will Schadensersatz. Anspruchsgrundlage?",
-                    options: ["§ 823 BGB", "§ 839 BGB i.V.m. Art. 34 GG", "§ 1 VwVfG"],
-                    correctAnswer: 1,
-                    feedback: "Korrekt. Amtshaftung.",
-                    explanation: "Amtspflichtverletzung führt zu § 839 BGB i.V.m. Art. 34 GG."
-                },
-                {
-                    type: 'choice',
-                    intro: "Wann gelten EU-Richtlinien unmittelbar für den Bürger?",
-                    options: ["Nie", "Wenn Frist abgelaufen & inhaltlich bestimmt (vertikale Wirkung)", "Immer"],
-                    correctAnswer: 1,
-                    feedback: "Richtig. Nur ausnahmsweise bei Umsetzungsdefiziten.",
-                    explanation: "Voraussetzungen: Fristablauf, inhaltliche Bestimmtheit, Begünstigung des Bürgers."
-                }
-            ]
+        // --- DATA ---
+        // Hier sind die Themen jetzt im Feld 'topics' für das Info-Symbol hinterlegt.
+        const cases = [
+            {
+                id: "AKTE_001",
+                title: "Grundlagen & Methoden",
+                subtitle: "Einführung in das System",
+                topics: ["Systematische Auslegung", "Historische Auslegung", "Verfassungskonforme Auslegung", "Staatszielbestimmungen", "Richtlinienkonforme Auslegung"],
+                questions: [
+                    {
+                        type: 'choice',
+                        intro: "Wir beginnen mit den Basics. Wortlaut unklar. Wir schauen auf die Stellung im Gesetz. Welche Auslegung?",
+                        options: ["Historische Auslegung", "Systematische Auslegung", "Teleologische Auslegung"],
+                        correctAnswer: 1,
+                        feedback: "Korrekt. Systematik = Kontext.",
+                        explanation: "Systematische Auslegung prüft die Stellung im Gesetz."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Und wenn wir Protokolle und Materialien prüfen? Wie heißt diese Methode?",
+                        keywords: ["historisch", "wille", "geschichte"],
+                        explanation: "Historische Auslegung (Wille des historischen Gesetzgebers).",
+                        feedback: "Richtig. Der historische Wille zählt."
+                    },
+                    {
+                        type: 'choice',
+                        intro: "Eine Norm verstößt gegen das GG. Was bedeutet 'verfassungskonforme Auslegung'?",
+                        options: ["Norm ist nichtig.", "Norm bleibt gültig, solange eine GG-konforme Deutung möglich ist.", "Norm wird ignoriert."],
+                        correctAnswer: 1,
+                        feedback: "Exakt. Die Norm wird erhalten.",
+                        explanation: "Vorrang des Gesetzeserhalts, solange Auslegung möglich."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Nennen Sie ein Beispiel für eine Staatszielbestimmung.",
+                        keywords: ["sozialstaat", "rechtsstaat", "umweltschutz", "tierschutz"],
+                        explanation: "Sozialstaat, Rechtsstaat, Umweltschutz.",
+                        feedback: "Akzeptiert. Das sind Normen ohne subjektive Rechte für Einzelne."
+                    }
+                ]
+            },
+            {
+                id: "AKTE_002",
+                title: "Organisationsrecht",
+                subtitle: "Körperschaften & Anstalten",
+                topics: ["Definition Anstalt", "Abgrenzung zur Körperschaft", "Subordinationstheorie", "Interessentheorie"],
+                questions: [
+                    {
+                        type: 'text',
+                        intro: "Mandant will eine Anstalt gründen. Definieren Sie 'Anstalt'.",
+                        keywords: ["personal", "sachmittel", "benutzer", "aufgabe"],
+                        explanation: "Zusammenfassung von Personal/Sachen zur Erfüllung öffentlicher Aufgaben für Benutzer.",
+                        feedback: "Gut. Wichtig: Benutzer, keine Mitglieder."
+                    },
+                    {
+                        type: 'choice',
+                        intro: "Was ist der Unterschied zur Körperschaft?",
+                        options: ["Körperschaft hat Mitglieder.", "Körperschaft ist privat.", "Körperschaft hat Kunden."],
+                        correctAnswer: 0,
+                        feedback: "Richtig. Mitgliedschaftliche Organisation ist das Merkmal.",
+                        explanation: "Körperschaften bestehen aus Mitgliedern."
+                    },
+                    {
+                        type: 'choice',
+                        intro: "Streit Nossen vs. Ketzerbachtal. Warum Verwaltungsrechtsweg? Welche Theorie nutzt das 'Über-/Unterordnungsverhältnis'?",
+                        options: ["Interessentheorie", "Subordinationstheorie", "Sonderrechtstheorie"],
+                        correctAnswer: 1,
+                        feedback: "Korrekt. Subordination = Über/Unterordnung.",
+                        explanation: "Subordinationstheorie fragt nach Hoheitsgewalt."
+                    }
+                ]
+            },
+            {
+                id: "AKTE_003",
+                title: "Fall: Windkraft",
+                subtitle: "Verwaltungsakt & Klage",
+                topics: ["Anfechtungsklage", "Widerspruch", "Klagebefugnis", "Möglichkeitstheorie", "Gemeinde-Klagerecht"],
+                questions: [
+                    {
+                        type: 'choice',
+                        intro: "Hotelier Förster will die Genehmigung der Windkraftanlage 'weg' haben. Welche Klageart?",
+                        options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I Alt. 1 VwGO)", "Feststellungsklage"],
+                        correctAnswer: 1,
+                        feedback: "Richtig. Aufhebung eines VA.",
+                        explanation: "Anfechtungsklage richtet sich auf Aufhebung."
+                    },
+                    {
+                        type: 'choice',
+                        intro: "Welches Verfahren ist nach § 68 VwGO vorgeschaltet?",
+                        options: ["Klageerzwingungsverfahren", "Widerspruch", "Mediation"],
+                        correctAnswer: 1,
+                        feedback: "Korrekt.",
+                        explanation: "Vor der Anfechtungsklage kommt der Widerspruch."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Was muss Förster geltend machen, um klagebefugt zu sein? (§ 42 II VwGO)",
+                        keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv"],
+                        explanation: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten.",
+                        feedback: "Exakt. Bloße Behauptung reicht, Möglichkeit muss bestehen."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Und worauf muss sich eine Gemeinde berufen, um zu klagen?",
+                        keywords: ["selbstverwaltung", "planungshoheit", "28"],
+                        explanation: "Kommunale Selbstverwaltungsgarantie / Planungshoheit (Art. 28 II GG).",
+                        feedback: "Ja. Art. 28 Abs. 2 GG ist der Schlüssel."
+                    }
+                ]
+            },
+            {
+                id: "AKTE_004",
+                title: "Normen & Grundrechte",
+                subtitle: "TKG & Rundfunk",
+                topics: ["Final/Konditional Normen", "Art. 13 GG Wohnung", "Grundrechtsfähigkeit Staat", "Rundfunkfreiheit"],
+                questions: [
+                    {
+                        type: 'choice',
+                        intro: "§ 87 Abs. 1 TKG gibt ein Ziel vor. Welche Normart?",
+                        options: ["Konditional", "Final", "Deskriptiv"],
+                        correctAnswer: 1,
+                        feedback: "Gut. Zielorientiert = Final.",
+                        explanation: "Finalnormen geben Ziele vor."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Kann sich der Staat (ZDF) auf Grundrechte berufen? Grundsatz?",
+                        keywords: ["nein", "grundsätzlich", "nicht"],
+                        explanation: "Grundsatz: Nein (Konfusionsargument).",
+                        feedback: "Grundsatz nein. Aber Ausnahme Rundfunkfreiheit beachten."
+                    },
+                    {
+                        type: 'choice',
+                        intro: "Gebot der Staatsferne im Rundfunkrat. Maximale Quote staatlicher Mitglieder?",
+                        options: ["50%", "Ein Drittel (1/3)", "10%"],
+                        correctAnswer: 1,
+                        feedback: "Korrekt.",
+                        explanation: "BVerfG sagt: Max 1/3 staatliche Vertreter."
+                    }
+                ]
+            },
+            {
+                id: "AKTE_005",
+                title: "Europa & Haftung",
+                subtitle: "EU-Recht & Amtshaftung",
+                topics: ["EU-Grundfreiheiten", "Amtshaftung § 839 BGB", "Richtlinien-Wirkung", "EU-Grundrechte"],
+                questions: [
+                    {
+                        type: 'text',
+                        intro: "Nennen Sie zwei EU-Grundfreiheiten.",
+                        keywords: ["waren", "arbeitnehmer", "dienstleistung", "kapital", "niederlassung"],
+                        explanation: "Warenverkehr, Arbeitnehmer, Dienstleistung, Niederlassung.",
+                        feedback: "Akzeptiert."
+                    },
+                    {
+                        type: 'choice',
+                        intro: "Anspruchsgrundlage bei Amtspflichtverletzung (Schadensersatz)?",
+                        options: ["§ 823 BGB", "§ 839 BGB i.V.m. Art. 34 GG", "VwGO"],
+                        correctAnswer: 1,
+                        feedback: "Richtig.",
+                        explanation: "§ 839 BGB + Art. 34 GG."
+                    },
+                    {
+                        type: 'choice',
+                        intro: "Wann wirken EU-Richtlinien unmittelbar?",
+                        options: ["Nie", "Wenn Frist abgelaufen & inhaltlich bestimmt", "Immer"],
+                        correctAnswer: 1,
+                        feedback: "Korrekt.",
+                        explanation: "Vertikale Wirkung bei Umsetzungsfehlern."
+                    }
+                ]
+            },
+            {
+                id: "AKTE_006",
+                title: "Fall: Busunternehmer",
+                subtitle: "Gewerberecht & Widerruf",
+                topics: ["Spezialgesetz PBefG", "Unzuverlässigkeit", "Widerruf Voraussetzungen"],
+                questions: [
+                    {
+                        type: 'choice',
+                        intro: "Busunternehmer zahlt Steuern nicht. Lizenzentzug. Welche Rechtsgrundlage?",
+                        options: ["§ 35 GewO", "§ 25 PBefG", "§ 48 VwVfG"],
+                        correctAnswer: 1,
+                        feedback: "Wichtig! Spezialgesetz vor GewO.",
+                        explanation: "Personenbeförderungsgesetz ist lex specialis."
+                    },
+                    {
+                        type: 'text',
+                        intro: "Definition 'Unzuverlässigkeit'?",
+                        keywords: ["gewähr", "künftig", "ordnungsgemäß", "betrieb", "prognose"],
+                        explanation: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb (Prognose).",
+                        feedback: "Genau. Negative Zukunftsprognose."
+                    },
+                    {
+                        type: 'choice',
+                        intro: "Was prüft man beim Widerruf nach § 25 PBefG?",
+                        options: ["Nur Schulden", "Wegfall Voraussetzungen + Tatsachen + Unzuverlässigkeit", "Belieben"],
+                        correctAnswer: 1,
+                        feedback: "Richtig.",
+                        explanation: "Tatbestandsvoraussetzungen müssen erfüllt sein."
+                    }
+                ]
+            }
+        ];
+
+        // --- STATE ---
+        let activeCase = null;
+        let qIndex = 0;
+        let trust = 50;
+
+        // --- DOM ---
+        const menuScreen = document.getElementById('menu-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const caseList = document.getElementById('case-list');
+        const trustContainer = document.getElementById('trust-container');
+        const chatWindow = document.getElementById('chat-window');
+        const inputArea = document.getElementById('input-area');
+        const headerTitle = document.getElementById('header-title');
+        const overlay = document.getElementById('game-over-screen');
+
+        // --- INIT ---
+        function init() {
+            renderMenu();
         }
-    ];
 
-    // --- STATE VARIABLES ---
-    let trust = 50;
-    let currentCaseIndex = 0;
-    let currentQuestionIndex = 0;
-    let gameActive = true;
+        // --- MENU LOGIC ---
+        function renderMenu() {
+            caseList.innerHTML = '';
+            cases.forEach((c, idx) => {
+                // Build Tooltip List
+                let topicList = c.topics.map(t => `<li>${t}</li>`).join('');
 
-    // --- DOM ELEMENTS ---
-    const chatWindow = document.getElementById('chat-window');
-    const inputArea = document.getElementById('input-area');
-    const trustBar = document.getElementById('trust-bar');
-    const caseDisplay = document.getElementById('case-display');
-    const gameOverScreen = document.getElementById('game-over-screen');
-
-    // --- FUNCTIONS ---
-
-    function initGame() {
-        trust = 50;
-        currentCaseIndex = 0;
-        currentQuestionIndex = 0;
-        gameActive = true;
-        
-        chatWindow.innerHTML = '';
-        gameOverScreen.style.display = 'none';
-        updateTrustUI();
-        
-        addMessage('system', 'System initialized. Loading Case Files...');
-        setTimeout(() => {
-            startCase();
-        }, 1000);
-    }
-
-    function updateTrustUI() {
-        trustBar.style.width = `${trust}%`;
-        if (trust > 70) trustBar.style.backgroundColor = 'var(--accent-green)';
-        else if (trust < 30) trustBar.style.backgroundColor = 'var(--accent-red)';
-        else trustBar.style.backgroundColor = 'var(--accent-blue)';
-    }
-
-    function addMessage(sender, text, mood = 'neutral') {
-        const msgDiv = document.createElement('div');
-        msgDiv.classList.add('message', sender);
-        if (sender === 'system') msgDiv.classList.add(mood);
-        msgDiv.innerText = text;
-        chatWindow.appendChild(msgDiv);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-
-    function startCase() {
-        if (currentCaseIndex >= cases.length) {
-            addMessage('partner', "Hervorragende Arbeit. Sie haben alle Akten bearbeitet. Sie sind bereit für die Prüfung.");
-            inputArea.innerHTML = "<div style='color: #666; text-align: center; width: 100%; padding: 20px;'>SIMULATION COMPLETE - READY FOR EXAM</div>";
-            return;
+                const card = document.createElement('div');
+                card.className = 'case-card';
+                card.innerHTML = `
+                    <div class="case-info">
+                        <div class="case-title">${c.title}</div>
+                        <div class="case-subtitle">${c.subtitle}</div>
+                    </div>
+                    <div class="info-icon">i
+                        <div class="tooltip">
+                            <strong>Abgedeckte Themen:</strong>
+                            <ul>${topicList}</ul>
+                        </div>
+                    </div>
+                    <button class="btn-start-case" onclick="startCase(${idx})">Öffnen</button>
+                `;
+                caseList.appendChild(card);
+            });
         }
 
-        const currentCase = cases[currentCaseIndex];
-        caseDisplay.innerText = currentCase.id;
-        
-        addMessage('system', `OPENING FILE: ${currentCase.title}`, 'neutral');
-        
-        setTimeout(() => {
-            askQuestion();
-        }, 1000);
-    }
-
-    function askQuestion() {
-        if (!gameActive) return;
-        
-        const currentCase = cases[currentCaseIndex];
-        
-        if (currentQuestionIndex >= currentCase.questions.length) {
-            // Case done, next case
-            currentCaseIndex++;
-            currentQuestionIndex = 0;
-            setTimeout(startCase, 1500);
-            return;
+        function showMenu() {
+            menuScreen.style.display = 'flex';
+            gameScreen.style.display = 'none';
+            trustContainer.style.display = 'none';
+            overlay.style.display = 'none';
+            headerTitle.innerText = "KANZLEI-SYSTEM v2.4";
+            activeCase = null;
         }
 
-        const q = currentCase.questions[currentQuestionIndex];
-        setTimeout(() => {
+        // --- GAME LOGIC ---
+        function startCase(idx) {
+            activeCase = cases[idx];
+            qIndex = 0;
+            trust = 50;
+            
+            menuScreen.style.display = 'none';
+            gameScreen.style.display = 'flex';
+            trustContainer.style.display = 'block';
+            updateTrustUI();
+            
+            headerTitle.innerText = `AKTE: ${activeCase.id}`;
+            chatWindow.innerHTML = '';
+            inputArea.innerHTML = '';
+
+            addMessage('system', `LADE AKTE: ${activeCase.title}...`);
+            setTimeout(nextQuestion, 1000);
+        }
+
+        function nextQuestion() {
+            if (qIndex >= activeCase.questions.length) {
+                endCase(true);
+                return;
+            }
+            const q = activeCase.questions[qIndex];
             addMessage('partner', q.intro);
             renderInputs(q);
-        }, 600);
-    }
+        }
 
-    function renderInputs(question) {
-        inputArea.innerHTML = ''; 
-
-        if (question.type === 'choice') {
-            const grid = document.createElement('div');
-            grid.classList.add('options-grid');
-            question.options.forEach((opt, index) => {
+        function renderInputs(q) {
+            inputArea.innerHTML = '';
+            if (q.type === 'choice') {
+                const grid = document.createElement('div');
+                grid.className = 'options-grid';
+                q.options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-option';
+                    btn.innerText = `> ${opt}`;
+                    btn.onclick = () => handleAnswer(i, q);
+                    grid.appendChild(btn);
+                });
+                inputArea.appendChild(grid);
+            } else {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'text-input-wrapper';
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = 'Antwort eingeben...';
+                input.addEventListener("keypress", (e) => { if(e.key==="Enter") handleAnswer(input.value, q); });
                 const btn = document.createElement('button');
-                btn.classList.add('btn-option');
-                btn.innerText = `> ${opt}`;
-                btn.onclick = () => handleAnswer(index, question);
-                grid.appendChild(btn);
-            });
-            inputArea.appendChild(grid);
-        } 
-        else if (question.type === 'text') {
-            const wrapper = document.createElement('div');
-            wrapper.classList.add('text-input-wrapper');
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.placeholder = "Antwort eingeben...";
-            input.addEventListener("keypress", (e) => {
-                if (e.key === "Enter") handleAnswer(input.value, question);
-            });
-            const btn = document.createElement('button');
-            btn.classList.add('btn-submit');
-            btn.innerText = "SENDEN";
-            btn.onclick = () => handleAnswer(input.value, question);
-            wrapper.appendChild(input);
-            wrapper.appendChild(btn);
-            inputArea.appendChild(wrapper);
-            setTimeout(() => input.focus(), 100);
-        }
-    }
-
-    function handleAnswer(answer, question) {
-        inputArea.innerHTML = '';
-        
-        let displayAnswer = (question.type === 'choice') ? question.options[answer] : answer;
-        addMessage('user', displayAnswer);
-
-        let isCorrect = false;
-        if (question.type === 'choice') {
-            isCorrect = (answer === question.correctAnswer);
-        } else {
-            const lowerAns = answer.toLowerCase();
-            const matches = question.keywords.filter(kw => lowerAns.includes(kw)).length;
-            // Mindestens ein Keyword muss passen
-            isCorrect = matches >= 1; 
+                btn.className = 'btn-submit';
+                btn.innerText = 'SENDEN';
+                btn.onclick = () => handleAnswer(input.value, q);
+                wrapper.appendChild(input);
+                wrapper.appendChild(btn);
+                inputArea.appendChild(wrapper);
+                setTimeout(() => input.focus(), 100);
+            }
         }
 
-        setTimeout(() => {
-            if (isCorrect) {
-                trust = Math.min(100, trust + 10);
-                addMessage('system', 'TRUST INCREASED', 'success');
-                addMessage('partner', question.feedback);
-            } else {
-                trust -= 15;
-                addMessage('system', 'TRUST DECREASED', 'fail');
-                let correction = question.type === 'choice' 
-                    ? `Falsch. Richtig wäre: ${question.options[question.correctAnswer]}`
-                    : `Ungenügend. ${question.explanation}`;
-                addMessage('partner', correction);
+        function handleAnswer(ans, q) {
+            inputArea.innerHTML = '';
+            let display = (q.type === 'choice') ? q.options[ans] : ans;
+            addMessage('user', display);
+
+            let correct = false;
+            if (q.type === 'choice') correct = (ans === q.correctAnswer);
+            else {
+                let lower = ans.toLowerCase();
+                correct = q.keywords.some(k => lower.includes(k));
             }
 
-            updateTrustUI();
+            setTimeout(() => {
+                if (correct) {
+                    trust = Math.min(100, trust + 10);
+                    addMessage('system', 'TRUST INCREASED', 'success');
+                    addMessage('partner', q.feedback);
+                } else {
+                    trust -= 20;
+                    addMessage('system', 'TRUST DECREASED', 'fail');
+                    let expl = (q.type === 'choice') ? `Richtig wäre: ${q.options[q.correctAnswer]}` : q.explanation;
+                    addMessage('partner', `Das war falsch. ${expl}`);
+                }
+                updateTrustUI();
 
-            if (trust <= 0) {
-                gameActive = false;
-                setTimeout(() => { gameOverScreen.style.display = 'flex'; }, 1000);
+                if (trust <= 0) endCase(false);
+                else {
+                    qIndex++;
+                    setTimeout(nextQuestion, 1500);
+                }
+            }, 600);
+        }
+
+        function endCase(success) {
+            overlay.style.display = 'flex';
+            const title = document.getElementById('overlay-title');
+            const msg = document.getElementById('overlay-msg');
+            
+            if (success) {
+                title.innerText = "AKTE GESCHLOSSEN";
+                title.style.color = "var(--accent-green)";
+                msg.innerText = "Gute Arbeit. Der Mandant ist zufrieden.";
             } else {
-                currentQuestionIndex++;
-                setTimeout(askQuestion, 1500);
+                title.innerText = "GEFEUERT";
+                title.style.color = "var(--accent-red)";
+                msg.innerText = "Das Vertrauen ist aufgebraucht.";
             }
-        }, 600);
-    }
+        }
 
-    // Start
-    window.onload = initGame;
+        function addMessage(sender, text, type) {
+            const div = document.createElement('div');
+            div.className = `message ${sender} ${type || ''}`;
+            div.innerText = text;
+            chatWindow.appendChild(div);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function updateTrustUI() {
+            const bar = document.getElementById('trust-bar');
+            bar.style.width = trust + '%';
+            if (trust > 70) bar.style.background = 'var(--accent-green)';
+            else if (trust < 30) bar.style.background = 'var(--accent-red)';
+            else bar.style.background = 'var(--accent-blue)';
+        }
+
+        window.onload = init;
+
+    </script>
 </body>
 </html>
