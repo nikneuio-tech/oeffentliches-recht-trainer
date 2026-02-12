@@ -297,394 +297,287 @@
 
     <script>
         // --- GAME DATA ---
-       const questions = [
-            // --- BLOCK 1: METHODENLEHRE ---
-            {
-                id: 1,
-                type: 'choice',
-                intro: "Guten Morgen. Wir steigen direkt ein. Ich habe hier eine Norm, deren Wortlaut unklar ist. Wenn ich den normativen Aussagegehalt anhand der Stellung im Gesetz ermittle – welche Auslegungsmethode wende ich an?",
-                options: [
-                    "Historische Auslegung",
-                    "Systematische Auslegung",
-                    "Teleologische Auslegung"
-                ],
-                correctAnswer: 1,
-                feedback: "Korrekt. Der Kontext im Gesetz ist entscheidend."
-            },
-            {
-                id: 2,
-                type: 'text',
-                intro: "Bleiben wir kurz dabei. Was wäre denn dann die 'Historische Auslegung'? Erklären Sie mir das kurz.",
-                keywords: ["wille", "gesetzgeber", "entstehungsgeschichte", "materialien", "protokolle"],
-                explanation: "Es geht um den Willen des historischen Gesetzgebers und die Entstehungsgeschichte (Materialien/Protokolle).",
-                feedback: "Genau. Wir schauen in die alten Protokolle und Materialien."
-            },
-            {
-                id: 3,
-                type: 'choice',
-                intro: "Ein Gesetz lässt mehrere Deutungen zu. Eine davon verstößt gegen das Grundgesetz, die andere nicht. Was tun wir?",
-                options: [
-                    "Das Gesetz ist nichtig und muss verworfen werden.",
-                    "Wir wenden die verfassungskonforme Auslegung an (Norm bleibt gültig).",
-                    "Wir fragen das Bundesverfassungsgericht um Erlaubnis."
-                ],
-                correctAnswer: 1,
-                feedback: "Richtig. Solange eine verfassungskonforme Auslegung möglich ist, bleibt die Norm gültig."
-            },
+       // --- GAME DATA (Gruppiert in "Akten") ---
+    const cases = [
+        {
+            id: "AKTE_001_METHODEN",
+            title: "Die Grundlagen",
+            questions: [
+                {
+                    type: 'choice',
+                    intro: "Guten Morgen. Wir haben eine Norm mit unklarem Wortlaut. Wenn ich den Inhalt anhand der Stellung im Gesetz ermittle – welche Auslegung ist das?",
+                    options: ["Historische Auslegung", "Systematische Auslegung", "Teleologische Auslegung"],
+                    correctAnswer: 1,
+                    feedback: "Korrekt. Der Kontext im Gesetz ist entscheidend.",
+                    explanation: "Systematische Auslegung schaut auf den Zusammenhang im Gesetz."
+                },
+                {
+                    type: 'text',
+                    intro: "Gut. Und wenn wir in die alten Protokolle und Materialien schauen? Wie nennt man diese Auslegung?",
+                    keywords: ["historisch", "wille", "gesetzgeber", "geschichte"],
+                    explanation: "Das ist die Historische Auslegung (Wille des historischen Gesetzgebers).",
+                    feedback: "Richtig. Der Wille des historischen Gesetzgebers zählt."
+                },
+                {
+                    type: 'choice',
+                    intro: "Eine Norm verstößt scheinbar gegen das Grundgesetz. Was besagt die 'verfassungskonforme Auslegung'?",
+                    options: ["Norm ist nichtig.", "Norm bleibt gültig, solange eine GG-konforme Deutung möglich ist.", "Norm muss geändert werden."],
+                    correctAnswer: 1,
+                    feedback: "Exakt. Die Norm wird 'gerettet'."
+                }
+            ]
+        },
+        {
+            id: "AKTE_002_WINDKRAFT",
+            title: "Fall: August Förster",
+            questions: [
+                {
+                    type: 'choice',
+                    intro: "Herr Förster will gegen die Genehmigung einer Windkraftanlage vorgehen. Er will, dass die Genehmigung aufgehoben wird. Welche Klageart?",
+                    options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I Alt. 1 VwGO)", "Feststellungsklage"],
+                    correctAnswer: 1,
+                    feedback: "Richtig. Er will die Aufhebung eines VA.",
+                    explanation: "Statthaft ist die Anfechtungsklage, da die Aufhebung eines VA begehrt wird."
+                },
+                {
+                    type: 'choice',
+                    intro: "Bevor wir klagen: Welches Vorverfahren müssen wir durchlaufen (§ 68 VwGO)?",
+                    options: ["Schlichtungsverfahren", "Widerspruch (Anfechtungswiderspruch)", "Direktklage"],
+                    correctAnswer: 1,
+                    feedback: "Korrekt. Der Widerspruch ist vorgeschaltet.",
+                    explanation: "Nach § 68 VwGO ist der Widerspruch vorgeschaltet."
+                },
+                {
+                    type: 'text',
+                    intro: "Damit Herr Förster überhaupt klagebefugt ist (§ 42 II VwGO), was muss er geltend machen?",
+                    keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv", "eigene"],
+                    explanation: "Die Möglichkeit einer Verletzung in eigenen subjektiven Rechten (Möglichkeitstheorie).",
+                    feedback: "Genau. Die Möglichkeit einer Rechtsverletzung (z.B. Art. 14 GG) muss bestehen."
+                }
+            ]
+        },
+        {
+            id: "AKTE_003_BUSUNTERNEHMER",
+            title: "Fall: Der Unzuverlässige",
+            questions: [
+                {
+                    type: 'choice',
+                    intro: "Unser Busunternehmer zahlt keine Steuern mehr. Wir wollen ihm die Lizenz entziehen. Welche Rechtsgrundlage nutzen wir?",
+                    options: ["§ 35 GewO (Gewerbeuntersagung)", "§ 25 PBefG (Widerruf)", "§ 48 VwVfG (Rücknahme)"],
+                    correctAnswer: 1,
+                    feedback: "Aufpassen! Spezialgesetz vor Allgemeingesetz.",
+                    explanation: "Hier gilt das Personenbeförderungsgesetz (PBefG) als Spezialgesetz, nicht die GewO."
+                },
+                {
+                    type: 'text',
+                    intro: "Wann gilt ein Unternehmer als 'unzuverlässig'? Definieren Sie die Prognose.",
+                    keywords: ["zukunft", "gewähr", "ordnungsgemäß", "betrieb", "verhalten"],
+                    explanation: "Wenn er keine Gewähr für den künftigen ordnungsgemäßen Betrieb bietet (negative Zukunftsprognose).",
+                    feedback: "Exakt. Es geht um die negative Zukunftsprognose."
+                },
+                {
+                    type: 'choice',
+                    intro: "Was sind die Tatbestandsvoraussetzungen für den Widerruf nach § 25 PBefG?",
+                    options: ["Nur Steuerschulden", "Wegfall Genehmigungsvoraussetzung + Tatsachen + Unzuverlässigkeit", "Insolvenzverfahren"],
+                    correctAnswer: 1,
+                    feedback: "Richtig. Das ist die Checkliste.",
+                    explanation: "Wegfall der Voraussetzungen, konkrete Tatsachen und Unzuverlässigkeit müssen vorliegen."
+                }
+            ]
+        },
+        {
+            id: "AKTE_004_EUROPA_HAFTUNG",
+            title: "Europa & Staatshaftung",
+            questions: [
+                {
+                    type: 'text',
+                    intro: "Nennen Sie mir zwei EU-Grundfreiheiten.",
+                    keywords: ["waren", "arbeitnehmer", "dienstleistung", "niederlassung", "kapital"],
+                    explanation: "Warenverkehr, Arbeitnehmerfreizügigkeit, Dienstleistungs-, Niederlassungs-, Kapitalverkehrsfreiheit.",
+                    feedback: "Das sind die Säulen des Binnenmarkts."
+                },
+                {
+                    type: 'choice',
+                    intro: "Die Behörde hat geschlampt, der Mandant will Schadensersatz. Anspruchsgrundlage?",
+                    options: ["§ 823 BGB", "§ 839 BGB i.V.m. Art. 34 GG", "§ 1 VwVfG"],
+                    correctAnswer: 1,
+                    feedback: "Korrekt. Amtshaftung.",
+                    explanation: "Amtspflichtverletzung führt zu § 839 BGB i.V.m. Art. 34 GG."
+                },
+                {
+                    type: 'choice',
+                    intro: "Wann gelten EU-Richtlinien unmittelbar für den Bürger?",
+                    options: ["Nie", "Wenn Frist abgelaufen & inhaltlich bestimmt (vertikale Wirkung)", "Immer"],
+                    correctAnswer: 1,
+                    feedback: "Richtig. Nur ausnahmsweise bei Umsetzungsdefiziten.",
+                    explanation: "Voraussetzungen: Fristablauf, inhaltliche Bestimmtheit, Begünstigung des Bürgers."
+                }
+            ]
+        }
+    ];
 
-            // --- BLOCK 2: ORGANISATIONSFORMEN ---
-            {
-                id: 4,
-                type: 'text',
-                intro: "Themenwechsel. Unser Mandant will eine 'Anstalt des öffentlichen Rechts' gründen. Definieren Sie 'Anstalt'.",
-                keywords: ["personal", "sachmittel", "vermögen", "benutzer", "aufgabe"],
-                explanation: "Zusammenfassung von Personal/Sachmitteln zur Erfüllung einer öff. Aufgabe, die Benutzern zur Verfügung steht.",
-                feedback: "Akzeptabel. Wichtig ist die Abgrenzung: Die Anstalt hat Benutzer, keine Mitglieder."
-            },
-            {
-                id: 5,
-                type: 'choice',
-                intro: "Und wo liegt dann der Unterschied zur Körperschaft?",
-                options: [
-                    "Die Körperschaft ist mitgliedschaftlich organisiert.",
-                    "Die Körperschaft hat Kunden.",
-                    "Die Körperschaft ist privatrechtlich."
-                ],
-                correctAnswer: 0,
-                feedback: "So ist es. Körperschaft = Mitglieder. Anstalt = Benutzer."
-            },
+    // --- STATE VARIABLES ---
+    let trust = 50;
+    let currentCaseIndex = 0;
+    let currentQuestionIndex = 0;
+    let gameActive = true;
 
-            // --- BLOCK 3: RECHTSWEG & KLAGE ---
-            {
-                id: 6,
-                type: 'choice',
-                intro: "Der Fall 'Nossen gegen Ketzerbachtal'. Es geht um kommunale Zusammenarbeit. Welcher Rechtsweg ist eröffnet und warum?",
-                options: [
-                    "Zivilrechtsweg, weil es um Schadensersatz geht.",
-                    "Verwaltungsrechtsweg (§ 40 VwGO), weil Hoheitsträger berechtigt/verpflichtet sind (Sonderrechtstheorie).",
-                    "Verfassungsrechtsweg, weil Kommunen Teil des Staates sind."
-                ],
-                correctAnswer: 1,
-                feedback: "Korrekt. Es sind originäre öffentliche Interessen betroffen (Interessentheorie) und Träger hoheitlicher Gewalt berechtigt."
-            },
-            {
-                id: 7,
-                type: 'choice',
-                intro: "Mandant Förster (Hotelier) will gegen eine Windkraftanlage klagen. Er will die Genehmigung 'weg' haben. Welche Klageart?",
-                options: [
-                    "Allgemeine Leistungsklage",
-                    "Anfechtungsklage (§ 42 I Alt. 1 VwGO)",
-                    "Verpflichtungsklage"
-                ],
-                correctAnswer: 1,
-                feedback: "Ja. Er begehrt die Aufhebung eines Verwaltungsaktes."
-            },
-            {
-                id: 8,
-                type: 'text',
-                intro: "Bevor wir klagen: Was muss Herr Förster geltend machen können, um überhaupt klagebefugt zu sein? (§ 42 II VwGO)",
-                keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv", "eigene"],
-                explanation: "Er muss die Möglichkeit einer Verletzung in eigenen subjektiven Rechten geltend machen (Möglichkeitstheorie).",
-                feedback: "Richtig. Die bloße Behauptung reicht nicht, die Möglichkeit der Verletzung (z.B. Art. 14 GG) muss bestehen."
-            },
+    // --- DOM ELEMENTS ---
+    const chatWindow = document.getElementById('chat-window');
+    const inputArea = document.getElementById('input-area');
+    const trustBar = document.getElementById('trust-bar');
+    const caseDisplay = document.getElementById('case-display');
+    const gameOverScreen = document.getElementById('game-over-screen');
 
-            // --- BLOCK 4: NORMEN & VERFASSUNG ---
-            {
-                id: 9,
-                type: 'choice',
-                intro: "Schauen Sie ins TKG. § 87 Abs. 1 gibt ein Ziel vor. Um welche Normart handelt es sich?",
-                options: [
-                    "Konditional gefasste Norm (Wenn-Dann)",
-                    "Final gefasste Norm (Ziel/Rechtsfolge)",
-                    "Deskriptive Norm (Beschreibung)"
-                ],
-                correctAnswer: 1,
-                feedback: "Gut erkannt. Final = Zielorientiert."
-            },
-            {
-                id: 10,
-                type: 'text',
-                intro: "Ein heikles Thema: Kann sich der Staat (z.B. das ZDF) auf Grundrechte berufen? Wie lautet der Grundsatz?",
-                keywords: ["nein", "grundsätzlich", "nicht", "konfusion", "verpflichteter"],
-                explanation: "Grundsätzlich nein (Konfusionsargument). Der Staat ist Verpflichteter, nicht Berechtigter.",
-                feedback: "Der Grundsatz ist 'Nein'. Aber denken Sie an die Ausnahme bei der Rundfunkfreiheit!"
-            },
-            {
-                id: 11,
-                type: 'choice',
-                intro: "Stichwort Rundfunkrat. Das Gebot der Staatsferne ist verletzt. Wie hoch darf der Anteil staatlicher Mitglieder maximal sein?",
-                options: [
-                    "Maximal 50%",
-                    "Maximal ein Drittel (1/3)",
-                    "Gar keine staatlichen Mitglieder"
-                ],
-                correctAnswer: 1,
-                feedback: "Exakt. Die Drittel-Quote darf nicht überschritten werden."
-            },
+    // --- FUNCTIONS ---
 
-            // --- BLOCK 5: EUROPA & AMTSHAFTUNG ---
-            {
-                id: 12,
-                type: 'text',
-                intro: "Nennen Sie mir zwei EU-Grundfreiheiten aus dem AEUV.",
-                keywords: ["waren", "arbeitnehmer", "dienstleistung", "niederlassung", "kapital"],
-                explanation: "Warenverkehr, Arbeitnehmerfreizügigkeit, Dienstleistungsfreiheit, Niederlassungsfreiheit, Kapitalverkehr.",
-                feedback: "Das sind die wichtigsten Säulen des Binnenmarktes."
-            },
-            {
-                id: 13,
-                type: 'choice',
-                intro: "Die Behörde hat Mist gebaut und die Genehmigung verzögert. Unser Mandant will Schadensersatz (Amtshaftung). Was ist die Anspruchsgrundlage?",
-                options: [
-                    "§ 823 BGB",
-                    "§ 839 BGB i.V.m. Art. 34 GG",
-                    "§ 40 VwGO"
-                ],
-                correctAnswer: 1,
-                feedback: "Korrekt. § 839 BGB ist die Haftungsnorm, Art. 34 GG leitet die Haftung auf den Staat über."
-            },
-            {
-                id: 14,
-                type: 'choice',
-                intro: "Eine EU-Richtlinie wurde nicht umgesetzt, die Frist ist abgelaufen. Gilt sie jetzt unmittelbar für den Bürger?",
-                options: [
-                    "Ja, wenn sie inhaltlich unbedingt und hinreichend bestimmt ist.",
-                    "Nein, Richtlinien gelten nie unmittelbar.",
-                    "Nur wenn der EuGH zustimmt."
-                ],
-                correctAnswer: 0,
-                feedback: "Richtig. Das ist die vertikale unmittelbare Wirkung bei Umsetzungsdefiziten."
-            },
+    function initGame() {
+        trust = 50;
+        currentCaseIndex = 0;
+        currentQuestionIndex = 0;
+        gameActive = true;
+        
+        chatWindow.innerHTML = '';
+        gameOverScreen.style.display = 'none';
+        updateTrustUI();
+        
+        addMessage('system', 'System initialized. Loading Case Files...');
+        setTimeout(() => {
+            startCase();
+        }, 1000);
+    }
 
-            // --- BLOCK 6: VERWALTUNGSHANDELN ---
-            {
-                id: 15,
-                type: 'text',
-                intro: "Standardfrage, muss sitzen: Definieren Sie den Verwaltungsakt nach § 35 VwVfG.",
-                keywords: ["hoheitlich", "maßnahme", "behörde", "regelung", "einzelfall", "außenwirkung"],
-                explanation: "Hoheitliche Maßnahme einer Behörde zur Regelung eines Einzelfalls mit Außenwirkung.",
-                feedback: "Das ist das Handwerkszeug. Hoheitlich, Behörde, Regelung, Einzelfall, Außenwirkung."
-            },
-            {
-                id: 16,
-                type: 'choice',
-                intro: "Die Behörde hat Ermessen, nutzt es aber gar nicht, weil sie denkt, sie 'muss' so handeln. Welcher Fehler?",
-                options: [
-                    "Ermessensüberschreitung",
-                    "Ermessensnichtgebrauch (Ermessensausfall)",
-                    "Ermessensfehlgebrauch"
-                ],
-                correctAnswer: 1,
-                feedback: "Ja. Wer nicht erkennt, dass er die Wahl hat, begeht einen Ermessensnichtgebrauch."
-            },
-            {
-                id: 17,
-                type: 'choice',
-                intro: "Letzter Fall: Der Busunternehmer. Er ist unzuverlässig (Steuerschulden). Wir wollen ihm die Genehmigung entziehen. Welche Rechtsgrundlage?",
-                options: [
-                    "§ 35 GewO (Gewerbeuntersagung)",
-                    "§ 25 PBefG (Widerruf der Genehmigung)",
-                    "§ 48 VwVfG (Rücknahme)"
-                ],
-                correctAnswer: 1,
-                feedback: "Aufpassen! Hier gilt das Spezialgesetz (PBefG), nicht die GewO."
-            },
-            {
-                id: 18,
-                type: 'text',
-                intro: "Wann gilt ein Gewerbetreibender als 'unzuverlässig'? Geben Sie mir die Definition für die Prognose.",
-                keywords: ["gewähr", "künftig", "ordnungsgemäß", "betrieb", "verhalten", "gesamteindruck"],
-                explanation: "Wenn er nach dem Gesamteindruck seines Verhaltens keine Gewähr für den künftigen ordnungsgemäßen Betrieb bietet.",
-                feedback: "Exakt. Es ist eine negative Zukunftsprognose."
-            }
-        ];
+    function updateTrustUI() {
+        trustBar.style.width = `${trust}%`;
+        if (trust > 70) trustBar.style.backgroundColor = 'var(--accent-green)';
+        else if (trust < 30) trustBar.style.backgroundColor = 'var(--accent-red)';
+        else trustBar.style.backgroundColor = 'var(--accent-blue)';
+    }
 
-        // --- STATE VARIABLES ---
-        let trust = 50;
-        let currentQIndex = 0;
-        let gameActive = true;
+    function addMessage(sender, text, mood = 'neutral') {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', sender);
+        if (sender === 'system') msgDiv.classList.add(mood);
+        msgDiv.innerText = text;
+        chatWindow.appendChild(msgDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
 
-        // --- DOM ELEMENTS ---
-        const chatWindow = document.getElementById('chat-window');
-        const inputArea = document.getElementById('input-area');
-        const trustBar = document.getElementById('trust-bar');
-        const caseDisplay = document.getElementById('case-display');
-        const gameOverScreen = document.getElementById('game-over-screen');
-
-        // --- FUNCTIONS ---
-
-        function initGame() {
-            // Reset State
-            trust = 50;
-            currentQIndex = 0;
-            gameActive = true;
-            
-            // Reset UI
-            chatWindow.innerHTML = '';
-            gameOverScreen.style.display = 'none';
-            updateTrustUI();
-            
-            // Start Sequence
-            addMessage('system', 'System initialized. Authenticating Associate...');
-            setTimeout(() => {
-                nextQuestion();
-            }, 1000);
+    function startCase() {
+        if (currentCaseIndex >= cases.length) {
+            addMessage('partner', "Hervorragende Arbeit. Sie haben alle Akten bearbeitet. Sie sind bereit für die Prüfung.");
+            inputArea.innerHTML = "<div style='color: #666; text-align: center; width: 100%; padding: 20px;'>SIMULATION COMPLETE - READY FOR EXAM</div>";
+            return;
         }
 
-        function updateTrustUI() {
-            trustBar.style.width = `${trust}%`;
-            
-            // Color Logic
-            if (trust > 70) trustBar.style.backgroundColor = 'var(--accent-green)';
-            else if (trust < 30) trustBar.style.backgroundColor = 'var(--accent-red)';
-            else trustBar.style.backgroundColor = 'var(--accent-blue)';
+        const currentCase = cases[currentCaseIndex];
+        caseDisplay.innerText = currentCase.id;
+        
+        addMessage('system', `OPENING FILE: ${currentCase.title}`, 'neutral');
+        
+        setTimeout(() => {
+            askQuestion();
+        }, 1000);
+    }
+
+    function askQuestion() {
+        if (!gameActive) return;
+        
+        const currentCase = cases[currentCaseIndex];
+        
+        if (currentQuestionIndex >= currentCase.questions.length) {
+            // Case done, next case
+            currentCaseIndex++;
+            currentQuestionIndex = 0;
+            setTimeout(startCase, 1500);
+            return;
         }
 
-        function addMessage(sender, text, mood = 'neutral') {
-            const msgDiv = document.createElement('div');
-            msgDiv.classList.add('message');
-            msgDiv.classList.add(sender); // 'partner', 'user', 'system'
-            
-            if (sender === 'system') {
-                msgDiv.classList.add(mood); // 'success', 'fail'
-            }
+        const q = currentCase.questions[currentQuestionIndex];
+        setTimeout(() => {
+            addMessage('partner', q.intro);
+            renderInputs(q);
+        }, 600);
+    }
 
-            msgDiv.innerText = text;
-            chatWindow.appendChild(msgDiv);
-            
-            // Scroll to bottom
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
+    function renderInputs(question) {
+        inputArea.innerHTML = ''; 
 
-        function nextQuestion() {
-            if (!gameActive) return;
-
-            if (currentQIndex >= questions.length) {
-                // Win Condition
-                addMessage('partner', "Gute Arbeit heute. Sie dürfen gehen. Wir sehen uns morgen früh.");
-                inputArea.innerHTML = "<div style='color: #666; text-align: center; width: 100%;'>SIMULATION COMPLETE</div>";
-                return;
-            }
-
-            const q = questions[currentQIndex];
-            caseDisplay.innerText = `CASE_00${q.id}_PUB_LAW`;
-            
-            // Partner asks logic
-            setTimeout(() => {
-                addMessage('partner', q.intro);
-                renderInputs(q);
-            }, 800);
-        }
-
-        function renderInputs(question) {
-            inputArea.innerHTML = ''; // Clear previous inputs
-
-            if (question.type === 'choice') {
-                const grid = document.createElement('div');
-                grid.classList.add('options-grid');
-
-                question.options.forEach((opt, index) => {
-                    const btn = document.createElement('button');
-                    btn.classList.add('btn-option');
-                    btn.innerText = `> ${opt}`;
-                    btn.onclick = () => handleAnswer(index, question);
-                    grid.appendChild(btn);
-                });
-                inputArea.appendChild(grid);
-            } 
-            else if (question.type === 'text') {
-                const wrapper = document.createElement('div');
-                wrapper.classList.add('text-input-wrapper');
-
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.placeholder = "Geben Sie Ihre Antwort ein...";
-                input.id = 'text-answer';
-                // Allow enter key
-                input.addEventListener("keypress", function(event) {
-                    if (event.key === "Enter") {
-                        handleAnswer(input.value, question);
-                    }
-                });
-
+        if (question.type === 'choice') {
+            const grid = document.createElement('div');
+            grid.classList.add('options-grid');
+            question.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
-                btn.classList.add('btn-submit');
-                btn.innerText = "SENDEN";
-                btn.onclick = () => handleAnswer(input.value, question);
+                btn.classList.add('btn-option');
+                btn.innerText = `> ${opt}`;
+                btn.onclick = () => handleAnswer(index, question);
+                grid.appendChild(btn);
+            });
+            inputArea.appendChild(grid);
+        } 
+        else if (question.type === 'text') {
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('text-input-wrapper');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = "Antwort eingeben...";
+            input.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") handleAnswer(input.value, question);
+            });
+            const btn = document.createElement('button');
+            btn.classList.add('btn-submit');
+            btn.innerText = "SENDEN";
+            btn.onclick = () => handleAnswer(input.value, question);
+            wrapper.appendChild(input);
+            wrapper.appendChild(btn);
+            inputArea.appendChild(wrapper);
+            setTimeout(() => input.focus(), 100);
+        }
+    }
 
-                wrapper.appendChild(input);
-                wrapper.appendChild(btn);
-                inputArea.appendChild(wrapper);
-                
-                // Auto focus
-                setTimeout(() => input.focus(), 100);
-            }
+    function handleAnswer(answer, question) {
+        inputArea.innerHTML = '';
+        
+        let displayAnswer = (question.type === 'choice') ? question.options[answer] : answer;
+        addMessage('user', displayAnswer);
+
+        let isCorrect = false;
+        if (question.type === 'choice') {
+            isCorrect = (answer === question.correctAnswer);
+        } else {
+            const lowerAns = answer.toLowerCase();
+            const matches = question.keywords.filter(kw => lowerAns.includes(kw)).length;
+            // Mindestens ein Keyword muss passen
+            isCorrect = matches >= 1; 
         }
 
-        function handleAnswer(answer, question) {
-            // Remove inputs immediately to prevent double submission
-            inputArea.innerHTML = '';
-
-            // 1. Display User Answer in Chat
-            let displayAnswer = "";
-            if (question.type === 'choice') {
-                displayAnswer = question.options[answer];
+        setTimeout(() => {
+            if (isCorrect) {
+                trust = Math.min(100, trust + 10);
+                addMessage('system', 'TRUST INCREASED', 'success');
+                addMessage('partner', question.feedback);
             } else {
-                displayAnswer = answer;
-            }
-            addMessage('user', displayAnswer);
-
-            // 2. Evaluate
-            let isCorrect = false;
-
-            if (question.type === 'choice') {
-                isCorrect = (answer === question.correctAnswer);
-            } else if (question.type === 'text') {
-                // Simple keyword matching for demo
-                const lowerAns = answer.toLowerCase();
-                // Check if any keyword matches
-                const matchCount = question.keywords.filter(kw => lowerAns.includes(kw)).length;
-                isCorrect = matchCount > 0;
+                trust -= 15;
+                addMessage('system', 'TRUST DECREASED', 'fail');
+                let correction = question.type === 'choice' 
+                    ? `Falsch. Richtig wäre: ${question.options[question.correctAnswer]}`
+                    : `Ungenügend. ${question.explanation}`;
+                addMessage('partner', correction);
             }
 
-            // 3. Process Result (Delay slightly for realism)
-            setTimeout(() => {
-                if (isCorrect) {
-                    trust = Math.min(100, trust + 15);
-                    addMessage('system', 'TRUST INCREASED', 'success');
-                    addMessage('partner', question.feedback);
-                } else {
-                    trust = trust - 20;
-                    addMessage('system', 'TRUST DECREASED', 'fail');
-                    
-                    let correction = "";
-                    if (question.type === 'choice') {
-                        correction = `Falsch. Richtige Antwort: ${question.options[question.correctAnswer]}`;
-                    } else {
-                        correction = `Ungenügend. ${question.explanation}`;
-                    }
-                    addMessage('partner', correction);
-                }
+            updateTrustUI();
 
-                updateTrustUI();
+            if (trust <= 0) {
+                gameActive = false;
+                setTimeout(() => { gameOverScreen.style.display = 'flex'; }, 1000);
+            } else {
+                currentQuestionIndex++;
+                setTimeout(askQuestion, 1500);
+            }
+        }, 600);
+    }
 
-                // Check Game Over
-                if (trust <= 0) {
-                    gameActive = false;
-                    setTimeout(() => {
-                        gameOverScreen.style.display = 'flex';
-                    }, 1000);
-                } else {
-                    currentQIndex++;
-                    setTimeout(nextQuestion, 1500);
-                }
-
-            }, 600);
-        }
-
-        // Start the game on load
-        window.onload = initGame;
-
-    </script>
+    // Start
+    window.onload = initGame;
 </body>
 </html>
