@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Merriweather:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -19,8 +19,11 @@
             --accent-red: #ff5252;
             --accent-blue: #2979ff;
             --accent-gold: #ffd700;
+            --paper-bg: #f4f1ea;
+            --paper-text: #2c2c2c;
             --border-color: #333;
             --font-serif: 'Playfair Display', serif;
+            --font-body: 'Merriweather', serif; /* For Case Files */
             --font-mono: 'Fira Code', monospace;
         }
 
@@ -154,23 +157,30 @@
         .diff-desc { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 10px; }
         .diff-meta { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- ARCHIVE & EXAM REVIEW SCREEN --- */
-        #archive-screen {
-            display: none; flex: 1; padding: 20px; overflow-y: auto; flex-direction: column; background: var(--bg-color);
-        }
-        .archive-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
-        .archive-list { display: flex; flex-direction: column; gap: 30px; }
-        .archive-group h3 { color: var(--accent-blue); border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 15px; font-family: var(--font-serif); }
-        .archive-item { background: #1a1a1a; padding: 20px; border-radius: 6px; border-left: 3px solid var(--text-secondary); margin-bottom: 15px; }
-        .archive-q { font-weight: bold; margin-bottom: 10px; color: #fff; font-family: var(--font-serif); font-size: 1.1rem; }
-        .archive-sol { font-size: 0.95rem; color: var(--text-primary); white-space: pre-wrap; line-height: 1.6; }
-
         /* --- GAME SCREEN --- */
-        #game-screen { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+        #game-screen { display: none; flex: 1; flex-direction: column; overflow: hidden; position: relative; }
 
         #chat-window {
             flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth;
         }
+
+        /* NEW: THE CASE FILE (AKTE) */
+        .case-file-doc {
+            background: var(--paper-bg);
+            color: var(--paper-text);
+            font-family: var(--font-body);
+            padding: 25px;
+            border-left: 6px solid #8b0000; /* Red Legal Tape */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            border-radius: 2px;
+            margin-bottom: 20px;
+            position: relative;
+            animation: slideIn 0.5s ease;
+        }
+        .case-file-doc::before { content: "SACHVERHALT"; position: absolute; top: 10px; right: 10px; font-family: var(--font-mono); font-size: 0.6rem; border: 1px solid #8b0000; color: #8b0000; padding: 2px 5px; transform: rotate(-5deg); opacity: 0.7; }
+        .case-file-text { font-size: 0.95rem; line-height: 1.6; }
+
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         .message {
             max-width: 85%; padding: 15px 20px; border-radius: 4px; animation: fadeIn 0.3s ease-up; line-height: 1.5; position: relative;
@@ -192,13 +202,18 @@
 
         /* --- INPUT AREA --- */
         #input-area {
-            padding: 20px; border-top: 1px solid var(--border-color); background: #181818; min-height: 120px; display: flex; flex-direction: column; justify-content: center; gap: 10px;
+            padding: 20px; border-top: 1px solid var(--border-color); background: #181818; min-height: 140px; display: flex; flex-direction: column; justify-content: center; gap: 10px;
         }
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn-option { background: transparent; border: 1px solid var(--text-secondary); color: var(--text-primary); padding: 12px; font-family: var(--font-mono); cursor: pointer; transition: all 0.2s; text-align: left; }
         .btn-option:hover { border-color: var(--accent-blue); background: rgba(41, 121, 255, 0.1); }
-        .btn-option.wrong { border-color: var(--accent-red); color: var(--accent-red); opacity: 0.5; text-decoration: line-through; pointer-events: none; }
         
+        /* Step Inputs (Medium Mode) */
+        .step-input-group { display: flex; flex-direction: column; gap: 8px; }
+        .step-label { font-size: 0.7rem; color: var(--accent-blue); font-family: var(--font-mono); }
+        .step-input { background: #111; border: 1px solid #444; color: #fff; padding: 8px; font-family: var(--font-mono); outline: none; }
+        .step-input:focus { border-color: var(--accent-blue); }
+
         .text-input-wrapper { display: flex; gap: 10px; flex-direction: column; }
         textarea { 
             flex: 1; background: transparent; border: 1px solid var(--text-secondary); color: #fff; padding: 12px; font-family: var(--font-mono); outline: none; resize: none; min-height: 80px; 
@@ -225,12 +240,19 @@
         .btn-assess-ok:hover { background: var(--accent-green); color: #000; }
         .btn-assess-no:hover { background: var(--accent-red); color: #000; }
 
-        /* Exam Grade Input */
-        .exam-grade-input {
-            width: 60px; background: #000; border: 1px solid #555; color: #fff; text-align: center; padding: 5px; margin-left: 10px;
-        }
-
         @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+
+        /* --- ARCHIVE --- */
+        #archive-screen {
+            display: none; flex: 1; padding: 20px; overflow-y: auto; flex-direction: column; background: var(--bg-color);
+        }
+        .archive-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
+        .archive-list { display: flex; flex-direction: column; gap: 30px; }
+        .archive-group h3 { color: var(--accent-blue); border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 15px; font-family: var(--font-serif); }
+        .archive-item { background: #1a1a1a; padding: 20px; border-radius: 6px; border-left: 3px solid var(--text-secondary); margin-bottom: 15px; }
+        .archive-q { font-weight: bold; margin-bottom: 10px; color: #fff; font-family: var(--font-serif); font-size: 1.1rem; }
+        .archive-sol { font-size: 0.95rem; color: var(--text-primary); white-space: pre-wrap; line-height: 1.6; }
+        .exam-grade-input { width: 60px; background: #000; border: 1px solid #555; color: #fff; text-align: center; padding: 5px; margin-left: 10px; }
 
         /* --- OVERLAYS --- */
         #game-over-screen {
@@ -252,18 +274,14 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v13.0</div>
-            
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v14.0</div>
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
                     <span class="trust-label">PARTNER'S TRUST</span>
-                    <div class="progress-bg">
-                        <div class="progress-fill" id="trust-bar"></div>
-                    </div>
+                    <div class="progress-bg"><div class="progress-fill" id="trust-bar"></div></div>
                 </div>
                 <button class="btn-exit" onclick="exitToMenu()">✕</button>
             </div>
-            
             <div id="timer-container"><div id="timer-bar"></div></div>
         </header>
 
@@ -272,18 +290,12 @@
                 <div class="menu-title">Aktenbestand</div>
                 <div class="menu-subtitle">Öffentliches Recht - Training Mode</div>
             </div>
-            
             <div class="global-progress-container">
                 <div class="global-label"><span>Gesamtzulassung zur Klausur</span><span id="global-pct">0%</span></div>
                 <div class="global-bar-bg"><div class="global-bar-fill" id="global-bar"></div></div>
             </div>
-
-            <div class="archive-link">
-                <button class="btn-archive" onclick="showArchive()">📂 Aktenarchiv (Volltext)</button>
-            </div>
-
+            <div class="archive-link"><button class="btn-archive" onclick="showArchive()">📂 Aktenarchiv (Volltext)</button></div>
             <div id="case-list"></div>
-
             <div id="exam-card" class="case-card exam-card">
                 <div style="font-size: 2rem;">🔒</div>
                 <div class="case-title" style="margin-top: 10px; color: #666;">ABSCHLUSSKLAUSUR</div>
@@ -293,22 +305,19 @@
 
         <div id="difficulty-screen">
             <div class="menu-title" style="margin-bottom: 30px;">Wählen Sie Ihre Position</div>
-            
             <div class="diff-card easy" onclick="selectDifficulty('easy')">
-                <div class="diff-title">Junior Associate</div>
-                <div class="diff-desc">Geführtes Vorgehen. Der Partner stellt kleinteilige Fragen. Strukturhilfen (Scaffolding) im Textfeld.</div>
+                <div class="diff-title">Junior Associate (Leicht)</div>
+                <div class="diff-desc">Multiple Choice. Der Partner führt Sie durch den Fall.</div>
                 <div class="diff-meta">Zeit: 90s | Risiko: Gering</div>
             </div>
-
             <div class="diff-card medium" onclick="selectDifficulty('medium')">
-                <div class="diff-title">Associate</div>
-                <div class="diff-desc">Checkliste wird gestellt. Begriffe selbst einordnen. Keine Textvorlage.</div>
+                <div class="diff-title">Associate (Mittel)</div>
+                <div class="diff-desc">Strukturierte Eingabe. Sie müssen die Prüfungspunkte selbst ausfüllen.</div>
                 <div class="diff-meta">Zeit: 60s | Risiko: Mittel</div>
             </div>
-
             <div class="diff-card hard" onclick="selectDifficulty('hard')">
-                <div class="diff-title">Partner</div>
-                <div class="diff-desc">High Stakes. Freies Gutachten ohne Hilfestellung.</div>
+                <div class="diff-title">Partner (Schwer)</div>
+                <div class="diff-desc">Freies Gutachten. Schreiben Sie die Lösung ohne Hilfestellung.</div>
                 <div class="diff-meta">Zeit: 45s | Risiko: Hoch</div>
             </div>
             <button class="btn-back" style="margin-top:20px; font-size: 0.8rem;" onclick="exitToMenu()">Abbrechen</button>
@@ -336,13 +345,14 @@
             <button class="btn-back" onclick="exitToMenu()">Zurück zur Übersicht</button>
         </div>
         
-        <div class="reset-trigger" onclick="hardReset()" title="Spielstand löschen (Reset)">🗑️</div>
+        <div class="reset-trigger" onclick="hardReset()" title="Reset">🗑️</div>
         <div class="dev-btn" onclick="devUnlock()">[DEV: Unlock]</div>
     </div>
 
     <script>
-        // --- DATA WITH POINTS ---
+        // --- COMPLETE CONTENT DATABASE ---
         const cases = [
+            // STANDARD TASKS (1-5)
             {
                 id: "AKTE_001", complexity: 'standard',
                 title: "Grundlagen & Methoden", subtitle: "Aufgaben 1, 2, 5",
@@ -353,7 +363,7 @@
                     { id: 3, points: 1, type: 'choice', intro: "Ein Gesetz verstößt scheinbar gegen das GG. Was besagt die 'verfassungskonforme Auslegung'?", options: ["Gesetz ist nichtig.", "Diejenige Deutung wählen, die mit dem GG vereinbar ist.", "BVerfG fragen."], correctAnswer: 1, feedback: "Exakt.", explanation: "Die Norm bleibt gültig." },
                     { id: 5, points: 1, type: 'text', intro: "Wo werden vom Bundespräsidenten ausgefertigte Gesetze veröffentlicht?", explanation: "Im Bundesgesetzblatt." }
                 ],
-                detailed_solution: `Aufgabe 1: Systematische Auslegung...\nAufgabe 2: Verfassungskonforme Auslegung...`
+                detailed_solution: `Aufgabe 1: Systematische Auslegung ist das Feststellen des normativen Aussagegehaltes einer Norm anhand ihrer Stellung im Gesetz oder im Gesamtzusammenhang der Rechtsordnung.\nAufgabe 2: Verfassungskonforme Auslegung bedeutet, dass wenn ein Gesetz mehrere Deutungen zulässt, diejenige zu wählen ist, die mit dem Grundgesetz vereinbar ist.`
             },
             {
                 id: "AKTE_002", complexity: 'standard',
@@ -365,32 +375,48 @@
                     { id: 4, points: 1, type: 'choice', intro: "Unterschied zur Körperschaft?", options: ["Körperschaft ist privat.", "Körperschaft ist mitgliedschaftlich organisiert.", "Kein Unterschied."], correctAnswer: 1, feedback: "Richtig.", explanation: "Körperschaft = Mitglieder. Anstalt = Benutzer." },
                     { id: 11, points: 2, type: 'text', intro: "Nennen Sie ein Beispiel im GG für das Demokratieprinzip.", explanation: "Art. 20 Abs. 1 und 2 GG (Wahlen / Volkssouveränität)." }
                 ],
-                detailed_solution: `Aufgabe 3... Aufgabe 4...`
+                detailed_solution: `Aufgabe 3: Staatszielbestimmung ist eine Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (Bsp: Sozialstaat).\nAufgabe 4: Anstalt ist eine Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe für Benutzer. Eine Körperschaft ist mitgliedschaftlich organisiert.`
             },
+            // COMPLEX: NOSSEN (Task 6)
             {
                 id: "AKTE_003", complexity: 'high',
                 title: "Fall: Nossen vs. Ketzerbachtal", subtitle: "Aufgabe 6 (Rechtsweg)",
                 topics: ["Rechtswegeröffnung", "Abgrenzungstheorien", "SächsKomZG"],
-                scaffolding: "1. Obersatz (§ 40 VwGO):\n2. Abgrenzungstheorien:\n3. Subsumtion & Ergebnis:",
-                questions_easy: [
-                    { id: 6, points: 5, type: 'text', intro: "Prüfen Sie umfassend die Rechtswegeröffnung (§ 40 VwGO) inklusive der Abgrenzungstheorien.", explanation: "1. Rechtsweg eröffnet gem. § 40 I VwGO.\n2. Theorien: Subordination (Über/Unterordnung), Interessentheorie (Öff. Interesse), Mod. Subjektstheorie (Sonderrecht).\n3. Ergebnis: Verwaltungsrechtsweg eröffnet (SächsKomZG)." }
-                ],
-                questions_medium: [{ id: 6, points: 5, type: 'text', intro: "Schreiben Sie ein Gutachten zur Rechtswegeröffnung.", explanation: "1. Rechtsweg eröffnet gem. § 40 I VwGO.\n2. Theorien: Subordination, Interesse, Subjekt.\n3. Ergebnis: Verwaltungsrechtsweg eröffnet." }],
-                questions_hard: [{ id: 6, points: 5, type: 'text', intro: "Gutachten: Prüfen Sie die Rechtswegeröffnung.", explanation: "1. § 40 I VwGO.\n2. Theorien.\n3. Ergebnis: Eröffnet." }],
-                detailed_solution: `Aufgabe 6 Lösung:\nObersatz § 40 VwGO... Abgrenzungstheorien... Subsumtion SächsKomZG...`
+                case_context: "Die sächsische Stadt Nossen und die Gemeinde Ketzerbachtal bilden eine Verwaltungsgemeinschaft nach dem SächsKomZG. Ketzerbachtal will Nossen auf Schadensersatz verklagen, weil Aufgaben angeblich nicht richtig wahrgenommen wurden.",
+                // Mode A (Easy/MC)
+                options: ["Zivilrechtsweg (BGB)", "Verwaltungsrechtsweg (VwGO)", "Verfassungsgericht"],
+                correctOption: 1,
+                // Mode B (Steps)
+                steps: ["1. Rechtswegeröffnung (§)", "2. Abgrenzungstheorien", "3. Ergebnis"],
+                questions: [ {id: 6, points: 5, intro: "Prüfen Sie die Rechtswegeröffnung.", explanation: "..."} ], // Placeholder for logic
+                detailed_solution: `Aufgabe 6 Lösung:
+1. Obersatz: Der Rechtsweg zu den Verwaltungsgerichten ist gem. § 40 Abs. 1 VwGO eröffnet, wenn es sich um eine öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art handelt und keine abdrängende Sonderzuweisung vorliegt.
+2. Abgrenzungstheorien (Privatrecht vs. Öffentliches Recht):
+a) Subordinationstheorie (Subjektionstheorie): Ein öffentlich-rechtliches Verhältnis liegt vor, wenn ein Über-/Unterordnungsverhältnis zwischen den Beteiligten besteht. (Hier eher Gleichordnung, daher unergiebig).
+b) Interessentheorie: Dient die Norm überwiegend dem öffentlichen Interesse (Allgemeinwohl) oder dem Individualinteresse? (Hier: Kommunale Zusammenarbeit = Öffentliches Interesse).
+c) Modifizierte Subjektstheorie (Sonderrechtstheorie): Eine Norm ist öffentlich-rechtlich, wenn sie einen Träger hoheitlicher Gewalt gerade in seiner Eigenschaft als solcher berechtigt oder verpflichtet (Sonderrecht des Staates).
+3. Subsumtion: Gegenstand des Streits ist die Verwaltungsgemeinschaft nach dem SächsKomZG. Das SächsKomZG berechtigt und verpflichtet ausschließlich Gemeinden (Hoheitsträger) zur Zusammenarbeit. Damit handelt es sich um Sonderrecht des Staates. Es liegt eine öffentlich-rechtliche Streitigkeit vor. Der Verwaltungsrechtsweg (§ 40 VwGO) ist eröffnet.`
             },
+            // COMPLEX: WINDKRAFT (Task 7)
             {
                 id: "AKTE_004", complexity: 'high',
                 title: "Fall: Windkraft (Förster)", subtitle: "Aufgabe 7 (Zulässigkeit)",
                 topics: ["Anfechtungsklage", "Klagebefugnis", "Art. 14 GG", "Gemeinde-Klagerecht"],
-                scaffolding: "A. Klage des Förster\n1. Statthafte Klageart:\n2. Klagebefugnis (§ 42 II VwGO):\n3. Vorverfahren:\n\nB. Klage der Gemeinde\n- Betroffenes Recht:",
-                questions_easy: [
-                    { id: 7, points: 6, type: 'text', intro: "Prüfen Sie die Zulässigkeit der Klage für Förster und die Gemeinde.", explanation: "A. Förster: Anfechtungsklage (§ 42 I VwGO). Befugnis: Art. 14 GG. Vorverfahren: Widerspruch (§ 68 VwGO).\nB. Gemeinde: Art. 28 II GG (Selbstverwaltung)." }
-                ],
-                questions_medium: [{ id: 7, points: 6, type: 'text', intro: "Prüfen Sie die Zulässigkeit der Klage für Förster und die Gemeinde.", explanation: "..." }],
-                questions_hard: [{ id: 7, points: 6, type: 'text', intro: "Prüfen Sie die Zulässigkeit der Klage für Förster und die Gemeinde.", explanation: "..." }],
-                detailed_solution: `Aufgabe 7 Lösung...`
+                case_context: "August Förster betreibt ein Hotel im Außenbereich. In 1000m Entfernung wird eine Windkraftanlage genehmigt. Er fürchtet Lärm und Aussichtsverlust und will klagen. Auch die Stadt Löbau ist dagegen.",
+                // Mode A
+                options: ["Verpflichtungsklage", "Anfechtungsklage", "Feststellungsklage"],
+                correctOption: 1,
+                // Mode B
+                steps: ["1. Statthafte Klageart", "2. Klagebefugnis (Förster)", "3. Klagebefugnis (Gemeinde)"],
+                questions: [ {id: 7, points: 6, intro: "Prüfen Sie die Zulässigkeit.", explanation: "..."} ],
+                detailed_solution: `Aufgabe 7 Lösung:
+A. Zulässigkeit der Klage des Hoteliers Förster:
+1. Statthafte Klageart: August Förster begehrt die Aufhebung der Genehmigung. Da die Genehmigung ein Verwaltungsakt i.S.v. § 35 VwVfG ist, ist die Anfechtungsklage gemäß § 42 Abs. 1 Alt. 1 VwGO statthaft.
+2. Klagebefugnis (§ 42 Abs. 2 VwGO): Kläger muss Möglichkeit einer Verletzung in eigenen subjektiven Rechten geltend machen (Möglichkeitstheorie). Hier kommt eine Verletzung seines Eigentums am eingerichteten und ausgeübten Gewerbebetrieb (Art. 14 GG) in Betracht.
+3. Vorverfahren: Gemäß § 68 VwGO ist grundsätzlich ein Widerspruchsverfahren (Vorverfahren) durchzuführen.
+B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusionsargument, da Teil des Staates). Sie muss sich stattdessen auf ihr Recht auf kommunale Selbstverwaltung (Planungshoheit) aus Art. 28 Abs. 2 GG berufen.`
             },
+            // STANDARD TASKS (8-12)
             {
                 id: "AKTE_005", complexity: 'standard',
                 title: "Normen & Verfassung", subtitle: "Aufgaben 8, 9, 10, 12",
@@ -402,8 +428,9 @@
                     { id: 10, points: 7, type: 'text', intro: "ZDF-Fall. Kann sich der Staat auf Grundrechte berufen?", explanation: "Grundsatz: Nein (Konfusionsargument). Ausnahme: Rundfunkfreiheit (Art. 5 I 2 GG)." },
                     { id: 12, points: 1, type: 'choice', intro: "Corona-Notbremse Kompetenz?", options: ["Länder", "Bund", "EU"], correctAnswer: 1, feedback: "Richtig.", explanation: "Bund. Art. 74 GG." }
                 ],
-                detailed_solution: `Aufgabe 8... Aufgabe 9... Aufgabe 10...`
+                detailed_solution: `Aufgabe 8: a) § 87 TKG: Final. b) § 110 TKG: Konditional. c) § 3 TKG: Deskriptiv.\nAufgabe 9: Geschäftsräume fallen unter 'Wohnung' (Art. 13 GG). Während Öffnungszeiten geringerer Schutz.\nAufgabe 10: Grundsatz: Staat kann sich nicht auf Grundrechte berufen (Konfusionsargument). Ausnahme: Rundfunkfreiheit. Gremien: Gebot der Vielfaltsicherung und Staatsferne (Drittel-Quote).`
             },
+            // STANDARD TASKS (13-19)
             {
                 id: "AKTE_006", complexity: 'standard',
                 title: "Verwaltung & Europa", subtitle: "Aufgaben 13-19",
@@ -415,39 +442,43 @@
                     { id: 16, points: 1, type: 'text', intro: "Nennen Sie einen Ermessensfehler.", explanation: "Ermessensnichtgebrauch, Ermessensüberschreitung, Ermessensfehlgebrauch." },
                     { id: 17, points: 2, type: 'text', intro: "Norm für Widerruf?", explanation: "§ 49 VwVfG." }
                 ],
-                detailed_solution: `Aufgabe 13...`
+                detailed_solution: `Aufgabe 14: Amtshaftung: § 839 I BGB i.V.m. Art. 34 GG.\nAufgabe 15: VA = Hoheitliche Maßnahme einer Behörde auf dem Gebiet des öff. Rechts zur Regelung eines Einzelfalls mit Außenwirkung (§ 35 VwVfG).\nAufgabe 17: Widerruf geregelt in § 49 VwVfG.`
             },
+            // COMPLEX: BUS (Task 20)
             {
                 id: "AKTE_007", complexity: 'high',
                 title: "Fall: Busunternehmer", subtitle: "Aufgabe 20 (Gewerbe)",
                 topics: ["Spezialgesetz PBefG", "Unzuverlässigkeit", "Widerruf"],
-                scaffolding: "1. Rechtsgrundlage:\n2. Formelle RM:\n3. Materielle RM:\n- Tatbestandsvoraussetzungen:\n- Unzuverlässigkeit (Def):",
-                questions_easy: [
-                    { id: 20, points: 5, type: 'text', intro: "Prüfen Sie die Rechtmäßigkeit des Lizenzentzugs.", explanation: "1. EGL: § 25 I PBefG (Spezialgesetz).\n2. Voraussetzungen: Wegfall Genehmigung, Tatsachen, Unzuverlässigkeit (Negative Zukunftsprognose)." }
-                ],
-                questions_medium: [{ id: 20, points: 5, type: 'text', intro: "Prüfen Sie die Rechtmäßigkeit.", explanation: "..." }],
-                questions_hard: [{ id: 20, points: 5, type: 'text', intro: "Gutachten: Rechtmäßigkeit des Widerrufs.", explanation: "..." }],
-                detailed_solution: `Aufgabe 20 Lösung...`
+                case_context: "Ein Busunternehmer hat erhebliche Steuerschulden und zahlt keine Sozialabgaben mehr. Das Landratsamt möchte ihm die Genehmigung entziehen.",
+                // Mode A
+                options: ["Gewerbeuntersagung (§ 35 GewO)", "Widerruf der Genehmigung (§ 25 PBefG)", "Rücknahme des VA (§ 48 VwVfG)"],
+                correctOption: 1,
+                // Mode B
+                steps: ["1. Rechtsgrundlage (Spezialgesetz)", "2. Tatbestandsvoraussetzungen", "3. Definition Unzuverlässigkeit"],
+                questions: [ {id: 20, points: 5, intro: "Prüfen Sie die Rechtmäßigkeit.", explanation: "..."} ],
+                detailed_solution: `Aufgabe 20 Lösung:\n1. Rechtsgrundlage: Spezialgesetz Personenbeförderungsgesetz (PBefG), nicht GewO! Maßnahme: Widerruf der Genehmigung gemäß § 25 Abs. 1 PBefG.\n2. Tatbestandsvoraussetzungen:\n- Wegfall der Genehmigungsvoraussetzungen.\n- Konkrete Tatsachen (z.B. Steuerschulden).\n- Unzuverlässigkeit: Gewerbetreibender bietet nach Gesamteindruck nicht die Gewähr für künftigen ordnungsgemäßen Betrieb (Negative Zukunftsprognose).`
             }
         ];
 
-        // --- ENGINE LOGIC ---
+        // --- ENGINE ---
         let activeCase = null;
-        let qIndex = 0;
         let trust = 50;
         let savedProgress = {};
-        let currentQuestions = [];
-        let currentDifficulty = 'standard';
+        let questionQueue = [];
+        let initialQueueLength = 0;
         let timerInterval = null;
+        let timeLimit = 60;
+        let timeLeft = 60;
+        let currentDifficulty = 'standard';
         let isExamMode = false;
-        let examAnswers = []; // Store user inputs for exam grading
+        let examAnswers = [];
 
-        // Init Data
+        // Safe Load
         try {
-            const data = localStorage.getItem('junior_lawyer_save_v13');
+            const data = localStorage.getItem('junior_lawyer_save_v14');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
-            console.log("Resetting save.");
+            console.log("Reset.");
             savedProgress = {};
         }
 
@@ -470,7 +501,7 @@
 
         function init() { renderMenu(); }
 
-        // --- MENU & GLOBAL PROGRESS ---
+        // --- MENU ---
         function renderMenu() {
             caseList.innerHTML = '';
             let totalCases = cases.length;
@@ -479,7 +510,6 @@
             cases.forEach((c, idx) => {
                 let highScore = savedProgress[c.id] || 0;
                 if(highScore >= 100) completedCases++;
-                
                 let barW = highScore + "%";
                 let barC = highScore >= 100 ? 'var(--accent-green)' : (highScore > 0 ? 'var(--accent-blue)' : '#333');
                 let topics = c.topics.map(t => `<span class="topic-pill">${t}</span>`).join('');
@@ -507,12 +537,10 @@
                 caseList.appendChild(card);
             });
 
-            // UPDATE GLOBAL PROGRESS
             let globalPerc = Math.round((completedCases / totalCases) * 100);
             globalBar.style.width = globalPerc + "%";
             globalPct.innerText = globalPerc + "%";
 
-            // EXAM CARD LOGIC
             examCardDiv.innerHTML = '';
             if (globalPerc >= 100) {
                 examCardDiv.classList.add('unlocked');
@@ -525,41 +553,46 @@
             }
         }
 
-        // --- TRAINING LOGIC ---
+        // --- PREP ---
+        let selectedCaseIdx = -1;
+
         function prepareCase(idx) {
-            let c = cases[idx];
             selectedCaseIdx = idx;
+            const c = cases[idx];
             if (c.complexity === 'high') {
                 menuScreen.style.display = 'none';
                 diffScreen.style.display = 'flex';
             } else {
-                startStandard(idx);
+                startTraining(idx, 'standard');
             }
         }
 
         function selectDifficulty(diff) {
             diffScreen.style.display = 'none';
+            if (diff === 'easy') timeLimit = 90;
+            else if (diff === 'medium') timeLimit = 60;
+            else timeLimit = 45;
+            startTraining(selectedCaseIdx, diff);
+        }
+
+        function startTraining(idx, diff) {
             currentDifficulty = diff;
-            const c = cases[selectedCaseIdx];
-            if (diff === 'easy') currentQuestions = c.questions_easy;
-            else if (diff === 'medium') currentQuestions = c.questions_medium;
-            else currentQuestions = c.questions_hard;
-            launchGame(c);
-        }
-
-        function startStandard(idx) {
-            const c = cases[idx];
-            currentDifficulty = 'standard';
-            currentQuestions = c.questions;
-            menuScreen.style.display = 'none';
-            launchGame(c);
-        }
-
-        function launchGame(c) {
-            activeCase = c;
-            qIndex = 0;
-            trust = 50;
+            activeCase = cases[idx];
+            
+            // Build Queue
+            // Standard cases have multiple Qs. Complex have 1 generic logic Q but rendered differently.
+            if (activeCase.complexity === 'standard') {
+                questionQueue = activeCase.questions.map((q, i) => ({...q, index: i}));
+            } else {
+                // Complex cases treat the whole thing as one item in the queue initially
+                questionQueue = [{...activeCase.questions[0], index: 0}]; 
+            }
+            
+            initialQueueLength = questionQueue.length;
             isExamMode = false;
+            trust = 50;
+            
+            menuScreen.style.display = 'none';
             gameScreen.style.display = 'flex';
             gameHeader.style.display = 'flex';
             document.getElementById('timer-container').style.display = 'block';
@@ -569,42 +602,248 @@
             setTimeout(nextQ, 800);
         }
 
-        // --- EXAM LOGIC ---
+        // --- QUEUE LOGIC ---
+        function nextQ() {
+            if (questionQueue.length === 0) return endCase(true);
+            
+            let currentItem = questionQueue[0];
+            
+            // Display Case File if Complex
+            if (activeCase.complexity === 'high') {
+                const existingDoc = document.querySelector('.case-file-doc');
+                if(!existingDoc) {
+                    const doc = document.createElement('div');
+                    doc.className = 'case-file-doc';
+                    doc.innerHTML = `<div class="case-file-text">${activeCase.case_context}</div>`;
+                    chatWindow.appendChild(doc);
+                }
+            } else {
+                addMsg('partner', currentItem.intro);
+            }
+
+            renderInput(currentItem);
+            startTimer();
+        }
+
+        function renderInput(q) {
+            inputArea.innerHTML = '';
+            
+            // COMPLEX CASE LOGIC
+            if (activeCase.complexity === 'high') {
+                const btnCheck = document.createElement('button');
+                btnCheck.className = 'btn-submit';
+                btnCheck.innerText = 'Lösung abgleichen';
+                btnCheck.onclick = () => { stopTimer(); showComplexComparison(); };
+
+                if (currentDifficulty === 'easy') {
+                    // Multiple Choice
+                    addMsg('partner', "Wählen Sie die zutreffende Lösung:");
+                    const grid = document.createElement('div');
+                    grid.className = 'options-grid';
+                    activeCase.options.forEach((opt, i) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'btn-option';
+                        btn.innerText = opt;
+                        btn.onclick = (e) => {
+                            stopTimer();
+                            inputArea.innerHTML = '';
+                            addMsg('user', opt);
+                            if (i === activeCase.correctOption) handleQueue(true);
+                            else {
+                                addMsg('system', 'Falsch.', 'fail');
+                                handleQueue(false);
+                            }
+                        };
+                        grid.appendChild(btn);
+                    });
+                    inputArea.appendChild(grid);
+
+                } else if (currentDifficulty === 'medium') {
+                    // Step Inputs
+                    addMsg('partner', "Füllen Sie die Prüfungspunkte aus:");
+                    const wrp = document.createElement('div');
+                    wrp.className = 'text-input-wrapper';
+                    
+                    let inputs = [];
+                    activeCase.steps.forEach(step => {
+                        const grp = document.createElement('div');
+                        grp.className = 'step-input-group';
+                        grp.innerHTML = `<div class="step-label">${step}</div>`;
+                        const inp = document.createElement('input');
+                        inp.className = 'step-input';
+                        grp.appendChild(inp);
+                        wrp.appendChild(grp);
+                        inputs.push(inp);
+                    });
+                    
+                    wrp.appendChild(btnCheck);
+                    inputArea.appendChild(wrp);
+
+                } else {
+                    // Hard (Textarea)
+                    addMsg('partner', "Erstellen Sie das Gutachten.");
+                    const wrp = document.createElement('div');
+                    wrp.className = 'text-input-wrapper';
+                    const inp = document.createElement('textarea');
+                    inp.placeholder = 'Gutachten...';
+                    wrp.appendChild(inp);
+                    wrp.appendChild(btnCheck);
+                    inputArea.appendChild(wrp);
+                }
+
+            } else {
+                // STANDARD CASE LOGIC
+                if (q.type === 'choice') {
+                    const grid = document.createElement('div');
+                    grid.className = 'options-grid';
+                    q.options.forEach((opt, i) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'btn-option';
+                        btn.innerText = "> " + opt;
+                        btn.onclick = (e) => {
+                            stopTimer();
+                            inputArea.innerHTML = '';
+                            addMsg('user', opt);
+                            if(i === q.correctAnswer) handleQueue(true);
+                            else handleQueue(false);
+                        };
+                        grid.appendChild(btn);
+                    });
+                    inputArea.appendChild(grid);
+                } else {
+                    const wrp = document.createElement('div');
+                    wrp.className = 'text-input-wrapper';
+                    const inp = document.createElement('textarea');
+                    inp.placeholder = 'Antwort...';
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-submit';
+                    btn.innerText = 'Lösung abgleichen';
+                    btn.onclick = () => { stopTimer(); showStandardComparison(inp.value, q); };
+                    wrp.append(inp, btn);
+                    inputArea.appendChild(wrp);
+                }
+            }
+        }
+
+        // --- VALIDATION HANDLERS ---
+        function showStandardComparison(userAns, q) {
+            inputArea.innerHTML = '';
+            const container = document.createElement('div');
+            container.id = 'comparison-view';
+            container.innerHTML = `
+                <div class="compare-box"><div class="compare-label">Ihre Eingabe</div><div class="user-text">${userAns}</div></div>
+                <div class="compare-box" style="border-color:var(--accent-green)"><div class="compare-label" style="color:var(--accent-green)">Lösung</div><div class="model-text">${q.explanation}</div></div>
+                <div class="assessment-buttons">
+                    <button class="btn-assess-no" onclick="handleQueue(false)">Unvollständig</button>
+                    <button class="btn-assess-ok" onclick="handleQueue(true)">Korrekt</button>
+                </div>`;
+            inputArea.appendChild(container);
+            document.getElementById('comparison-view').style.display = 'flex';
+        }
+
+        function showComplexComparison() {
+            inputArea.innerHTML = '';
+            const container = document.createElement('div');
+            container.id = 'comparison-view';
+            container.innerHTML = `
+                <div class="compare-box" style="border-color:var(--accent-green)"><div class="compare-label" style="color:var(--accent-green)">Musterlösung (Volltext)</div><div class="model-text">${activeCase.detailed_solution}</div></div>
+                <div class="assessment-buttons">
+                    <button class="btn-assess-no" onclick="handleQueue(false)">Unvollständig</button>
+                    <button class="btn-assess-ok" onclick="handleQueue(true)">Korrekt</button>
+                </div>`;
+            inputArea.appendChild(container);
+            document.getElementById('comparison-view').style.display = 'flex';
+        }
+
+        // --- SMART LOOP CORE ---
+        function handleQueue(success) {
+            inputArea.innerHTML = '';
+            if (success) {
+                // Remove from front
+                questionQueue.shift();
+                trust = Math.min(100, trust + 5);
+                addMsg('system', 'STATUS: KORREKT', 'success');
+            } else {
+                // Push to back
+                let failedItem = questionQueue.shift();
+                questionQueue.push(failedItem);
+                trust = Math.max(0, trust - 5);
+                addMsg('system', 'WIEDERVORLAGE: Frage hinten angestellt.', 'fail');
+            }
+            updateTrust();
+            setTimeout(nextQ, 1000);
+        }
+
+        function startTimer() {
+            timeLeft = timeLimit;
+            timerBar.style.width = '100%';
+            timerBar.style.backgroundColor = 'var(--accent-green)';
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                let pct = (timeLeft / timeLimit) * 100;
+                timerBar.style.width = pct + '%';
+                if (timeLeft < 10) timerBar.style.backgroundColor = 'var(--accent-red)';
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    // Timeout = Wrong
+                    handleQueue(false);
+                }
+            }, 1000);
+        }
+        function stopTimer() { clearInterval(timerInterval); }
+
+        function endCase(win) {
+            stopTimer();
+            overlay.style.display = 'flex';
+            const t = document.getElementById('overlay-title');
+            const m = document.getElementById('overlay-msg');
+            t.innerText = "FALL ABGESCHLOSSEN";
+            t.style.color = "var(--accent-green)";
+            m.innerText = "Alle Fragen korrekt beantwortet.";
+            savedProgress[activeCase.id] = 100;
+            localStorage.setItem('junior_lawyer_save_v14', JSON.stringify(savedProgress));
+        }
+
+        // --- EXAM MODE (Linear, No Loop) ---
         function startExam() {
             isExamMode = true;
             menuScreen.style.display = 'none';
             gameScreen.style.display = 'flex';
-            gameHeader.style.display = 'none'; // No trust/exit in exam
+            gameHeader.style.display = 'none'; 
             document.getElementById('timer-container').style.display = 'none';
             
-            // Flatten ALL questions into one big array
             currentQuestions = [];
             examAnswers = [];
+            // Flatten Questions. For complex cases, push the generic placeholder but we'll use detailed_solution for grading
             cases.forEach(c => {
-                if(c.complexity === 'high') currentQuestions.push(...c.questions_hard);
-                else currentQuestions.push(...c.questions);
+                if(c.complexity === 'high') {
+                    currentQuestions.push({
+                        intro: c.title + ": " + c.case_context, 
+                        explanation: c.detailed_solution, 
+                        points: 5 // Default high
+                    });
+                } else {
+                    currentQuestions.push(...c.questions);
+                }
             });
 
             qIndex = 0;
             chatWindow.innerHTML = '';
             addMsg('system', 'ABSCHLUSSKLAUSUR GESTARTET', 'info');
-            addMsg('system', 'Bearbeiten Sie alle Aufgaben. Es erfolgt keine Rückmeldung während der Prüfung.', 'info');
             setTimeout(nextExamQ, 1000);
         }
 
         function nextExamQ() {
-            if (qIndex >= currentQuestions.length) {
-                startExamGrading();
-                return;
-            }
+            if (qIndex >= currentQuestions.length) { startExamGrading(); return; }
             const q = currentQuestions[qIndex];
-            addMsg('partner', `Frage ${qIndex + 1}/${currentQuestions.length}: ${q.intro}`);
+            addMsg('partner', `Aufgabe ${qIndex+1}: ${q.intro}`);
             
             inputArea.innerHTML = '';
             const wrp = document.createElement('div');
             wrp.className = 'text-input-wrapper';
             const inp = document.createElement('textarea');
-            inp.placeholder = 'Ihre Klausurlösung...';
+            inp.placeholder = 'Klausurlösung...';
             const btn = document.createElement('button');
             btn.className = 'btn-submit';
             btn.innerText = 'NÄCHSTE AUFGABE';
@@ -622,35 +861,24 @@
             gameScreen.style.display = 'none';
             archiveScreen.style.display = 'flex';
             archiveContent.innerHTML = '';
-            archiveTitle.innerText = "KLAUSUR KORREKTURPHASE";
+            document.getElementById('archive-title').innerText = "KORREKTURPHASE";
             examResultFooter.style.display = 'block';
-            document.querySelector('#archive-screen .btn-back').style.display = 'none'; // Lock exit
+            document.querySelector('#archive-screen .btn-back').style.display = 'none';
 
             let totalMaxPoints = 0;
-
             examAnswers.forEach((item, i) => {
                 const q = item.q;
-                totalMaxPoints += (q.points || 1);
+                const pts = q.points || 1;
+                totalMaxPoints += pts;
                 const div = document.createElement('div');
                 div.className = 'archive-item';
                 div.innerHTML = `
-                    <div class="archive-q">Aufgabe ${i+1} (${q.points} Pkt)</div>
-                    <div style="margin-bottom:10px; color:#aaa;">${q.intro}</div>
+                    <div class="archive-q">Aufgabe ${i+1} (${pts} Pkt)</div>
                     <div style="display:flex; gap:20px; flex-wrap:wrap;">
-                        <div style="flex:1; min-width:250px;">
-                            <div style="font-size:0.7rem; color:#888;">IHRE ANTWORT</div>
-                            <div class="user-text" style="white-space: pre-wrap; border:1px solid #444; padding:10px;">${item.userAns || '-'}</div>
-                        </div>
-                        <div style="flex:1; min-width:250px;">
-                            <div style="font-size:0.7rem; color:var(--accent-green);">MUSTERLÖSUNG</div>
-                            <div class="model-text">${q.explanation}</div>
-                        </div>
+                        <div style="flex:1;"><div style="color:#888; font-size:0.7rem">IHRE ANTWORT</div><div class="user-text" style="white-space:pre-wrap; border:1px solid #444; padding:10px;">${item.userAns || '-'}</div></div>
+                        <div style="flex:1;"><div style="color:var(--accent-green); font-size:0.7rem">MUSTERLÖSUNG</div><div class="model-text">${q.explanation}</div></div>
                     </div>
-                    <div style="margin-top:15px; text-align:right;">
-                        <label>Erreichte Punkte:</label>
-                        <input type="number" class="exam-grade-input" id="grade-${i}" min="0" max="${q.points}" value="0"> / ${q.points}
-                    </div>
-                `;
+                    <div style="margin-top:15px; text-align:right;"><label>Punkte:</label><input type="number" class="exam-grade-input" id="grade-${i}" min="0" max="${pts}" value="0"> / ${pts}</div>`;
                 archiveContent.appendChild(div);
             });
         }
@@ -659,163 +887,23 @@
             let totalScore = 0;
             let maxScore = 0;
             examAnswers.forEach((item, i) => {
-                let pts = parseInt(document.getElementById(`grade-${i}`).value) || 0;
-                totalScore += pts;
+                totalScore += (parseInt(document.getElementById(`grade-${i}`).value) || 0);
                 maxScore += (item.q.points || 1);
             });
-
             let pct = (totalScore / maxScore) * 100;
-            let note = "";
-            let color = "";
-
-            if (pct < 50) { note = "Mangelhaft (Durchgefallen)"; color = "var(--accent-red)"; }
-            else if (pct < 65) { note = "Ausreichend (4 Punkte)"; color = "#f1c40f"; }
-            else if (pct < 81) { note = "Befriedigend (8 Punkte)"; color = "var(--accent-blue)"; }
-            else if (pct < 91) { note = "Vollbefriedigend (11 Punkte)"; color = "var(--accent-green)"; }
-            else { note = "Gut / Sehr Gut (Prädikat!)"; color = "var(--accent-gold)"; }
-
-            archiveContent.innerHTML = `
-                <div style="text-align:center; padding:50px;">
-                    <h1 style="color:${color}; font-size:3rem; margin-bottom:10px;">${note}</h1>
-                    <p style="color:#aaa;">Punkte: ${totalScore} / ${maxScore} (${Math.round(pct)}%)</p>
-                    <button class="btn-assess-ok" style="margin-top:30px; max-width:200px;" onclick="exitToMenu()">ZURÜCK ZUM DASHBOARD</button>
-                </div>
-            `;
+            let note = pct < 50 ? "Mangelhaft" : (pct < 65 ? "Ausreichend" : (pct < 81 ? "Befriedigend" : (pct < 91 ? "Vollbefriedigend" : "Gut/Sehr Gut")));
+            let color = pct < 50 ? "var(--accent-red)" : (pct > 90 ? "var(--accent-gold)" : "var(--accent-green)");
+            
+            archiveContent.innerHTML = `<div style="text-align:center; padding:50px;"><h1 style="color:${color}; font-size:3rem; margin-bottom:10px;">${note}</h1><p style="color:#aaa;">Punkte: ${totalScore} / ${maxScore} (${Math.round(pct)}%)</p><button class="btn-assess-ok" style="margin-top:30px;" onclick="exitToMenu()">ZURÜCK</button></div>`;
             examResultFooter.style.display = 'none';
             document.querySelector('#archive-screen .btn-back').style.display = 'block';
-        }
-
-        // --- REGULAR GAME FLOW ---
-        function nextQ() {
-            if (qIndex >= currentQuestions.length) return endCase(true);
-            const q = currentQuestions[qIndex];
-            addMsg('partner', q.intro);
-            renderInp(q);
-        }
-
-        function renderInp(q) {
-            inputArea.innerHTML = '';
-            
-            if (q.type === 'choice') {
-                // Choice still uses auto-validation
-                const grid = document.createElement('div');
-                grid.className = 'options-grid';
-                q.options.forEach((opt, i) => {
-                    const btn = document.createElement('button');
-                    btn.className = 'btn-option';
-                    btn.innerText = "> " + opt;
-                    btn.onclick = (e) => checkChoice(i, q, e.target);
-                    grid.appendChild(btn);
-                });
-                inputArea.appendChild(grid);
-            } else {
-                // Text Inputs use Manual Self-Assessment
-                const wrp = document.createElement('div');
-                wrp.className = 'text-input-wrapper';
-                const inp = document.createElement('textarea');
-                
-                if (currentDifficulty === 'easy' && activeCase.scaffolding && qIndex === 0) {
-                    inp.value = activeCase.scaffolding;
-                } else {
-                    inp.placeholder = 'Ihre Antwort...';
-                }
-
-                const btn = document.createElement('button');
-                btn.className = 'btn-submit';
-                btn.innerText = 'Lösung abgleichen';
-                btn.onclick = () => {
-                    showComparison(inp.value, q);
-                };
-                wrp.append(inp, btn);
-                inputArea.appendChild(wrp);
-                setTimeout(() => inp.focus(), 100);
-            }
-        }
-
-        function checkChoice(val, q, btn) {
-            if (val === q.correctAnswer) {
-                inputArea.innerHTML = '';
-                addMsg('user', q.options[val]);
-                handleSelfRating(true); 
-            } else {
-                btn.classList.add('wrong');
-                trust = Math.max(0, trust - 5);
-                addMsg('system', 'Falsch. Versuch es erneut.', 'fail');
-                updateTrust();
-                if(trust === 0) endCase(false);
-            }
-        }
-
-        function showComparison(userAns, q) {
-            inputArea.innerHTML = '';
-            const container = document.createElement('div');
-            container.id = 'comparison-view';
-            
-            container.innerHTML = `
-                <div class="compare-box">
-                    <div class="compare-label">Ihre Eingabe</div>
-                    <div class="user-text">${userAns ? userAns.replace(/\n/g, '<br>') : '(Keine Eingabe)'}</div>
-                </div>
-                <div class="compare-box" style="border-color: var(--accent-green);">
-                    <div class="compare-label" style="color: var(--accent-green);">Musterlösung</div>
-                    <div class="model-text">${q.explanation}</div>
-                </div>
-                <div class="assessment-buttons">
-                    <button class="btn-assess-no" onclick="handleSelfRating(false)">Nicht gewusst / Unvollständig</button>
-                    <button class="btn-assess-ok" onclick="handleSelfRating(true)">Korrekt / Vollständig</button>
-                </div>
-            `;
-            inputArea.appendChild(container);
-            document.getElementById('comparison-view').style.display = 'flex';
-        }
-
-        window.handleSelfRating = function(isCorrect) {
-            inputArea.innerHTML = '';
-            if (isCorrect) {
-                trust = Math.min(100, trust + 10);
-                addMsg('system', 'EINSCHÄTZUNG: KORREKT', 'success');
-                updateTrust();
-                qIndex++;
-                setTimeout(nextQ, 1000);
-            } else {
-                trust = Math.max(0, trust - 10);
-                addMsg('system', 'EINSCHÄTZUNG: UNVOLLSTÄNDIG', 'fail');
-                addMsg('partner', "Merken Sie sich die Lösung gut.");
-                updateTrust();
-                if(trust === 0) endCase(false);
-                else {
-                    qIndex++;
-                    setTimeout(nextQ, 2000);
-                }
-            }
-        };
-
-        function endCase(win) {
-            overlay.style.display = 'flex';
-            const t = document.getElementById('overlay-title');
-            const m = document.getElementById('overlay-msg');
-            if (win) {
-                t.innerText = "FALL ABGESCHLOSSEN";
-                t.style.color = "var(--accent-green)";
-                m.innerText = "Mandat erfolgreich bearbeitet.";
-                savedProgress[activeCase.id] = 100;
-                localStorage.setItem('junior_lawyer_save_v13', JSON.stringify(savedProgress));
-            } else {
-                t.innerText = "GESCHEITERT";
-                t.style.color = "var(--accent-red)";
-                m.innerText = "Vertrauen auf 0.";
-            }
         }
 
         // --- UTILS ---
         function showArchive() {
             menuScreen.style.display = 'none';
             archiveScreen.style.display = 'flex';
-            archiveTitle.innerText = "Musterlösungen";
             archiveContent.innerHTML = '';
-            examResultFooter.style.display = 'none';
-            document.querySelector('#archive-screen .btn-back').style.display = 'block';
-            
             cases.forEach(c => {
                 const grp = document.createElement('div');
                 grp.className = 'archive-group';
@@ -837,34 +925,36 @@
         }
 
         function updateTrust() {
-            const b = document.getElementById('trust-bar');
-            b.style.width = trust + "%";
-            b.style.background = trust > 70 ? 'var(--accent-green)' : (trust < 30 ? 'var(--accent-red)' : 'var(--accent-blue)');
-        }
-
-        function exitToMenu() {
-            menuScreen.style.display = 'flex';
-            gameScreen.style.display = 'none';
-            archiveScreen.style.display = 'none';
-            diffScreen.style.display = 'none';
-            overlay.style.display = 'none';
-            document.getElementById('timer-container').style.display = 'none';
-            isExamMode = false;
-            renderMenu();
-        }
-
-        function hardReset() {
-            if(confirm("Spielstand löschen?")) {
-                localStorage.removeItem('junior_lawyer_save_v13');
-                location.reload();
+            // In smart loop, bar represents remaining queue vs initial
+            if(!isExamMode && initialQueueLength > 0) {
+                let completed = initialQueueLength - questionQueue.length;
+                // Don't let it go backward visually if re-queued, just stick or use trust
+                // Actually, let's use Trust bar as "Queue Progress"
+                let pct = (completed / initialQueueLength) * 100;
+                // If we requeue, queue length stays same or grows? 
+                // Logic: queue removes on success. So length decreases. 
+                // If fail, push back, length same. 
+                // So bar only grows on success.
+                const b = document.getElementById('trust-bar');
+                b.style.width = pct + "%";
+                b.style.background = 'var(--accent-blue)';
             }
         }
 
-        function devUnlock() {
-            cases.forEach(c => savedProgress[c.id] = 100);
-            localStorage.setItem('junior_lawyer_save_v13', JSON.stringify(savedProgress));
-            location.reload();
+        function exitToMenu() {
+            stopTimer();
+            menuScreen.style.display = 'flex';
+            gameScreen.style.display = 'none';
+            archiveScreen.style.display = 'none';
+            gameHeader.style.display = 'none';
+            timerContainer.style.display = 'none';
+            diffScreen.style.display = 'none';
+            overlay.style.display = 'none';
+            renderMenu();
         }
+
+        function hardReset() { if(confirm("Reset?")) { localStorage.removeItem('junior_lawyer_save_v14'); location.reload(); } }
+        function devUnlock() { cases.forEach(c => savedProgress[c.id]=100); localStorage.setItem('junior_lawyer_save_v14', JSON.stringify(savedProgress)); location.reload(); }
 
         window.onload = init;
     </script>
