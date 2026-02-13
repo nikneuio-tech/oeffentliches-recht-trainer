@@ -263,7 +263,7 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v15.0</div>
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v15.1</div>
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
                     <span class="trust-label">PARTNER'S TRUST</span>
@@ -341,7 +341,7 @@
     <script>
         // --- CONTENT DATABASE ---
         const cases = [
-            // STANDARD TASKS
+            // STANDARD TASKS (1-5)
             {
                 id: "AKTE_001", complexity: 'standard',
                 title: "Grundlagen & Methoden", subtitle: "Aufgaben 1, 2, 5",
@@ -356,15 +356,17 @@
             },
             {
                 id: "AKTE_002", complexity: 'standard',
-                title: "Staatsorganisation", subtitle: "Aufgaben 3, 4, 11",
-                topics: ["Staatsziele", "Anstalt vs. Körperschaft", "Stiftung", "Demokratieprinzip"],
+                title: "Staatsorganisation", subtitle: "Aufgaben 3, 4, 11 + Zusatz",
+                topics: ["Staatsziele", "Anstalt vs. Körperschaft", "Stiftung", "Demokratieprinzip", "Rechtsstaatsprinzip", "Bundesstaatsprinzip"],
                 questions: [
                     { id: 3, points: 1, type: 'text', intro: "Was ist eine Staatszielbestimmung? (Def + Bsp)", explanation: "Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (Bsp: Sozialstaat, Umweltschutz)." },
                     { id: 4, points: 1, type: 'text', intro: "Definieren Sie 'Anstalt des öffentlichen Rechts'.", explanation: "Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe, die Benutzern zur Verfügung steht." },
                     { id: 4, points: 1, type: 'choice', intro: "Unterschied zur Körperschaft?", options: ["Körperschaft ist privat.", "Körperschaft ist mitgliedschaftlich organisiert.", "Kein Unterschied."], correctAnswer: 1, feedback: "Richtig.", explanation: "Körperschaft = Mitglieder. Anstalt = Benutzer." },
-                    { id: 11, points: 2, type: 'text', intro: "Nennen Sie ein Beispiel im GG für das Demokratieprinzip.", explanation: "Art. 20 Abs. 1 und 2 GG (Wahlen / Volkssouveränität)." }
+                    { id: 11, points: 2, type: 'text', intro: "Nennen Sie ein Beispiel im GG für das Demokratieprinzip.", explanation: "Art. 20 Abs. 1 und 2 GG (Wahlen / Volkssouveränität)." },
+                    { id: 21, points: 2, type: 'text', intro: "Was fordert das Rechtsstaatsprinzip? Nennen Sie ein Kernelement.", explanation: "Gewaltenteilung, Gesetzmäßigkeit der Verwaltung (Vorrang/Vorbehalt), Verhältnismäßigkeit, Rechtssicherheit." },
+                    { id: 22, points: 2, type: 'text', intro: "Definieren Sie das Bundesstaatsprinzip.", explanation: "Aufteilung der staatlichen Aufgaben zwischen dem Gesamtstaat (Bund) und den Gliedstaaten (Ländern)." }
                 ],
-                detailed_solution: `Aufgabe 3: Staatszielbestimmung ist eine Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (Bsp: Sozialstaat).\nAufgabe 4: Anstalt ist eine Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe für Benutzer. Eine Körperschaft ist mitgliedschaftlich organisiert.`
+                detailed_solution: `Aufgabe 3: Staatszielbestimmung ist eine Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (Bsp: Sozialstaat).\nAufgabe 4: Anstalt ist eine Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe für Benutzer. Eine Körperschaft ist mitgliedschaftlich organisiert.\nAufgabe 11+: Staatsstrukturprinzipien (Art. 20 GG) umfassen Demokratie, Rechtsstaat (Gewaltenteilung, Rechtssicherheit), Bundesstaat (Föderalismus) und Sozialstaat.`
             },
             // COMPLEX: NOSSEN (Task 6 - MULTI STEP)
             {
@@ -527,7 +529,7 @@ Gemeinden haben keine Grundrechte (Konfusionsargument). Sie müssen sich auf Art
         let stepIndex = 0; // Tracks multi-step cases
 
         try {
-            const data = localStorage.getItem('junior_lawyer_save_v15');
+            const data = localStorage.getItem('junior_lawyer_save_v15_1');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
             console.log("Reset.");
@@ -926,7 +928,7 @@ Gemeinden haben keine Grundrechte (Konfusionsargument). Sie müssen sich auf Art
             document.getElementById('overlay-title').innerText = "FALL ABGESCHLOSSEN";
             document.getElementById('overlay-msg').innerText = "Mandat erfolgreich bearbeitet.";
             savedProgress[activeCase.id] = 100;
-            localStorage.setItem('junior_lawyer_save_v15', JSON.stringify(savedProgress));
+            localStorage.setItem('junior_lawyer_save_v15_1', JSON.stringify(savedProgress));
         }
 
         function addMsg(cls, txt, type) {
@@ -978,8 +980,8 @@ Gemeinden haben keine Grundrechte (Konfusionsargument). Sie müssen sich auf Art
             renderMenu();
         }
 
-        function hardReset() { if(confirm("Reset?")) { localStorage.removeItem('junior_lawyer_save_v15'); location.reload(); } }
-        function devUnlock() { cases.forEach(c => savedProgress[c.id]=100); localStorage.setItem('junior_lawyer_save_v15', JSON.stringify(savedProgress)); location.reload(); }
+        function hardReset() { if(confirm("Reset?")) { localStorage.removeItem('junior_lawyer_save_v15_1'); location.reload(); } }
+        function devUnlock() { cases.forEach(c => savedProgress[c.id]=100); localStorage.setItem('junior_lawyer_save_v15_1', JSON.stringify(savedProgress)); location.reload(); }
 
         window.onload = init;
     </script>
