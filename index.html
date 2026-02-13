@@ -202,6 +202,19 @@
         }
         .btn-giveup:hover { border-color: var(--accent-red); color: var(--accent-red); }
 
+        /* Comparison View (New) */
+        #comparison-view { display: none; flex-direction: column; gap: 15px; width: 100%; }
+        .compare-box { background: #222; border: 1px solid #444; padding: 10px; border-radius: 6px; }
+        .compare-label { font-size: 0.7rem; text-transform: uppercase; color: #888; margin-bottom: 5px; }
+        .user-text { color: #fff; font-family: var(--font-mono); font-size: 0.9rem; }
+        .model-text { color: var(--accent-green); font-family: var(--font-serif); font-size: 1rem; line-height: 1.5; white-space: pre-wrap; }
+        
+        .assessment-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-assess-ok { flex: 1; background: rgba(0, 230, 118, 0.1); border: 1px solid var(--accent-green); color: var(--accent-green); padding: 15px; cursor: pointer; font-family: var(--font-mono); }
+        .btn-assess-no { flex: 1; background: rgba(255, 82, 82, 0.1); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 15px; cursor: pointer; font-family: var(--font-mono); }
+        .btn-assess-ok:hover { background: var(--accent-green); color: #000; }
+        .btn-assess-no:hover { background: var(--accent-red); color: #000; }
+
         @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
 
         /* --- OVERLAYS --- */
@@ -222,7 +235,7 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v11.0</div>
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v12.0</div>
             
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
@@ -255,19 +268,19 @@
             
             <div class="diff-card easy" onclick="selectDifficulty('easy')">
                 <div class="diff-title">Junior Associate</div>
-                <div class="diff-desc">Geführtes Vorgehen. Der Partner stellt kleinteilige Fragen. Hinweise verfügbar.</div>
+                <div class="diff-desc">Geführtes Vorgehen. Der Partner stellt kleinteilige Fragen. Strukturhilfen (Scaffolding) im Textfeld.</div>
                 <div class="diff-meta">Zeit: 90s | Risiko: Gering</div>
             </div>
 
             <div class="diff-card medium" onclick="selectDifficulty('medium')">
                 <div class="diff-title">Associate</div>
-                <div class="diff-desc">Checkliste wird gestellt. Sie müssen die Begriffe selbst einordnen.</div>
+                <div class="diff-desc">Checkliste wird gestellt. Begriffe selbst einordnen. Keine Textvorlage.</div>
                 <div class="diff-meta">Zeit: 60s | Risiko: Mittel</div>
             </div>
 
             <div class="diff-card hard" onclick="selectDifficulty('hard')">
                 <div class="diff-title">Partner</div>
-                <div class="diff-desc">High Stakes. Freies Gutachten ohne Hilfestellung. Jedes Wort zählt.</div>
+                <div class="diff-desc">High Stakes. Freies Gutachten ohne Hilfestellung.</div>
                 <div class="diff-meta">Zeit: 45s | Risiko: Hoch</div>
             </div>
             <button class="btn-back" style="margin-top:20px; font-size: 0.8rem;" onclick="exitToMenu()">Abbrechen</button>
@@ -283,7 +296,8 @@
 
         <div id="game-screen">
             <div id="chat-window"></div>
-            <div id="input-area"></div>
+            <div id="input-area">
+                </div>
         </div>
 
         <div id="game-over-screen">
@@ -296,7 +310,7 @@
     </div>
 
     <script>
-        // --- EDIT HERE: CASES & QUESTIONS ---
+        // --- DATA ---
         const cases = [
             // STANDARD TASKS
             {
@@ -305,9 +319,9 @@
                 topics: ["Systematische Auslegung", "Historische Auslegung", "Verfassungskonforme Auslegung", "Richtlinienkonforme Auslegung"],
                 questions: [
                     { type: 'choice', intro: "Ein Gesetz ist unklar. Wir ermitteln den Inhalt anhand der Stellung im Gesetz. Welche Auslegung?", options: ["Historische Auslegung", "Systematische Auslegung", "Teleologische Auslegung"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Systematische Auslegung prüft die Stellung im Gesetz." },
-                    { type: 'text', intro: "Was versteht man unter 'Historischer Auslegung'?", keywords: ["wille", "gesetzgeber", "geschichte", "materialien"], explanation: "Ermittlung des Willens des historischen Gesetzgebers.", feedback: "Richtig." },
+                    { type: 'text', intro: "Was versteht man unter 'Historischer Auslegung'?", explanation: "Ermittlung des Willens des historischen Gesetzgebers anhand der Entstehungsgeschichte (Gesetzesmaterialien, Protokolle)." },
                     { type: 'choice', intro: "Ein Gesetz verstößt scheinbar gegen das GG. Was besagt die 'verfassungskonforme Auslegung'?", options: ["Gesetz ist nichtig.", "Diejenige Deutung wählen, die mit dem GG vereinbar ist.", "BVerfG fragen."], correctAnswer: 1, feedback: "Exakt.", explanation: "Die Norm bleibt gültig." },
-                    { type: 'text', intro: "Wo werden vom Bundespräsidenten ausgefertigte Gesetze veröffentlicht?", keywords: ["bundesgesetzblatt", "bgbl"], explanation: "Im Bundesgesetzblatt.", feedback: "Korrekt." }
+                    { type: 'text', intro: "Wo werden vom Bundespräsidenten ausgefertigte Gesetze veröffentlicht?", explanation: "Im Bundesgesetzblatt." }
                 ],
                 detailed_solution: `Aufgabe 1: Systematische Auslegung ist das Feststellen des normativen Aussagegehaltes einer Norm anhand ihrer Stellung im Gesetz oder im Gesamtzusammenhang der Rechtsordnung.\nAufgabe 2: Verfassungskonforme Auslegung bedeutet, dass wenn ein Gesetz mehrere Deutungen zulässt, diejenige zu wählen ist, die mit dem Grundgesetz vereinbar ist.`
             },
@@ -316,10 +330,10 @@
                 title: "Staatsorganisation", subtitle: "Aufgaben 3, 4, 11",
                 topics: ["Staatsziele", "Anstalt vs. Körperschaft", "Stiftung", "Demokratieprinzip"],
                 questions: [
-                    { type: 'text', intro: "Was ist eine Staatszielbestimmung? (Def + Bsp)", keywords: ["aufgabe", "staat", "subjektiv", "recht"], explanation: "Verfassungsnorm, die dem Staat Aufgaben vorgibt.", feedback: "Gut." },
-                    { type: 'text', intro: "Definieren Sie 'Anstalt des öffentlichen Rechts'.", keywords: ["personal", "sachmittel", "benutzer"], explanation: "Zusammenfassung von Personal/Sachen zur Erfüllung einer öff. Aufgabe für Benutzer.", feedback: "Richtig." },
+                    { type: 'text', intro: "Was ist eine Staatszielbestimmung? (Def + Bsp)", explanation: "Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (Bsp: Sozialstaat, Umweltschutz)." },
+                    { type: 'text', intro: "Definieren Sie 'Anstalt des öffentlichen Rechts'.", explanation: "Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe, die Benutzern zur Verfügung steht." },
                     { type: 'choice', intro: "Unterschied zur Körperschaft?", options: ["Körperschaft ist privat.", "Körperschaft ist mitgliedschaftlich organisiert.", "Kein Unterschied."], correctAnswer: 1, feedback: "Richtig.", explanation: "Körperschaft = Mitglieder. Anstalt = Benutzer." },
-                    { type: 'text', intro: "Nennen Sie ein Beispiel im GG für das Demokratieprinzip.", keywords: ["20", "wahlen", "abstimmung"], explanation: "Art. 20 Abs. 1 und 2 GG.", feedback: "Kernvorschrift." }
+                    { type: 'text', intro: "Nennen Sie ein Beispiel im GG für das Demokratieprinzip.", explanation: "Art. 20 Abs. 1 und 2 GG (Wahlen / Volkssouveränität)." }
                 ],
                 detailed_solution: `Aufgabe 3: Staatszielbestimmung ist eine Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (Bsp: Sozialstaat).\nAufgabe 4: Anstalt ist eine Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe für Benutzer. Eine Körperschaft ist mitgliedschaftlich organisiert.`
             },
@@ -328,17 +342,15 @@
                 id: "AKTE_003", complexity: 'high',
                 title: "Fall: Nossen vs. Ketzerbachtal", subtitle: "Aufgabe 6 (Rechtsweg)",
                 topics: ["Rechtswegeröffnung", "Abgrenzungstheorien", "SächsKomZG"],
+                scaffolding: "1. Obersatz (§ 40 VwGO):\n\n2. Abgrenzungstheorien:\n- Subordinationstheorie:\n- Interessentheorie:\n- Mod. Subjektstheorie:\n\n3. Subsumtion & Ergebnis:",
                 questions_easy: [
-                    { type: 'choice', intro: "Streit um Verwaltungsgemeinschaft. Welcher Rechtsweg ist eröffnet?", options: ["Zivilrechtsweg", "Verwaltungsrechtsweg (§ 40 VwGO)", "Verfassungsrechtsweg"], correctAnswer: 1, feedback: "Richtig.", explanation: "Öffentlich-rechtliche Streitigkeit." },
-                    { type: 'choice', intro: "Welche Theorie fragt nach einem Über-/Unterordnungsverhältnis?", options: ["Interessentheorie", "Subordinationstheorie", "Sonderrechtstheorie"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Subordinationstheorie." },
-                    { type: 'choice', intro: "Welche Theorie fragt, ob ein Hoheitsträger berechtigt ist?", options: ["Interessentheorie", "Subordinationstheorie", "Modifizierte Subjektstheorie"], correctAnswer: 2, feedback: "Richtig.", explanation: "Modifizierte Subjektstheorie." }
+                    { type: 'text', intro: "Prüfen Sie umfassend die Rechtswegeröffnung (§ 40 VwGO) inklusive der Abgrenzungstheorien.", explanation: "1. Rechtsweg eröffnet gem. § 40 I VwGO (öffentlich-rechtliche Streitigkeit).\n2. Theorien:\n- Subordinationstheorie: Über-/Unterordnung? (Hier (-), eher Gleichordnung).\n- Interessentheorie: Öffentliches Interesse? (Ja, kommunale Zusammenarbeit).\n- Mod. Subjektstheorie (h.M.): Berechtigung/Verpflichtung eines Hoheitsträgers? (Ja, SächsKomZG berechtigt Gemeinden als solche -> Sonderrecht).\n3. Ergebnis: Verwaltungsrechtsweg eröffnet." }
                 ],
                 questions_medium: [
-                    { type: 'text', intro: "Prüfen Sie die Rechtswegeröffnung. Nennen Sie die drei Theorien.", keywords: ["subordination", "interesse", "subjekt", "sonderrecht"], explanation: "Subordinationstheorie, Interessentheorie, Modifizierte Subjektstheorie.", feedback: "Gut." },
-                    { type: 'text', intro: "Subsumieren Sie: Warum ist es hier öffentliches Recht?", keywords: ["zusammenarbeit", "kommunal", "hoheitsträger", "zuordnung"], explanation: "Kommunale Zusammenarbeit = Öff. Interesse. SächsKomZG = Sonderrecht.", feedback: "Korrekt." }
+                    { type: 'text', intro: "Schreiben Sie ein Gutachten zur Rechtswegeröffnung. Gehen Sie auf Subordinationstheorie, Interessentheorie und Sonderrechtstheorie ein.", explanation: "1. Rechtsweg eröffnet gem. § 40 I VwGO (öffentlich-rechtliche Streitigkeit).\n2. Theorien:\n- Subordinationstheorie: Über-/Unterordnung? (Hier (-), eher Gleichordnung).\n- Interessentheorie: Öffentliches Interesse? (Ja, kommunale Zusammenarbeit).\n- Mod. Subjektstheorie (h.M.): Berechtigung/Verpflichtung eines Hoheitsträgers? (Ja, SächsKomZG berechtigt Gemeinden als solche -> Sonderrecht).\n3. Ergebnis: Verwaltungsrechtsweg eröffnet." }
                 ],
                 questions_hard: [
-                    { type: 'text', intro: "Gutachten: Prüfen und erläutern Sie, ob der Rechtsweg zu den Verwaltungsgerichten eröffnet ist. Gehen Sie auf die Abgrenzungstheorien ein.", keywords: ["40", "vwgo", "subordination", "interesse", "subjekt", "sonderrecht", "hoheitsträger", "sächskomzg", "zusammenarbeit"], explanation: "§ 40 VwGO. Subordinationstheorie (Über/Unterordnung), Interessentheorie (Öff. Interesse), Mod. Subjektstheorie (Sonderrecht). Hier: SächsKomZG.", feedback: "Umfassend geprüft." }
+                    { type: 'text', intro: "Gutachten: Prüfen und erläutern Sie, ob der Rechtsweg zu den Verwaltungsgerichten eröffnet ist.", explanation: "1. Rechtsweg eröffnet gem. § 40 I VwGO (öffentlich-rechtliche Streitigkeit).\n2. Theorien:\n- Subordinationstheorie: Über-/Unterordnung? (Hier (-), eher Gleichordnung).\n- Interessentheorie: Öffentliches Interesse? (Ja, kommunale Zusammenarbeit).\n- Mod. Subjektstheorie (h.M.): Berechtigung/Verpflichtung eines Hoheitsträgers? (Ja, SächsKomZG berechtigt Gemeinden als solche -> Sonderrecht).\n3. Ergebnis: Verwaltungsrechtsweg eröffnet." }
                 ],
                 detailed_solution: `Aufgabe 6 Lösung:
 1. Obersatz: Der Rechtsweg zu den Verwaltungsgerichten ist gem. § 40 Abs. 1 VwGO eröffnet, wenn es sich um eine öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art handelt und keine abdrängende Sonderzuweisung vorliegt.
@@ -356,22 +368,20 @@ Gegenstand des Streits ist die Verwaltungsgemeinschaft nach dem SächsKomZG. Das
                 id: "AKTE_004", complexity: 'high',
                 title: "Fall: Windkraft (Förster)", subtitle: "Aufgabe 7 (Zulässigkeit)",
                 topics: ["Anfechtungsklage", "Klagebefugnis", "Art. 14 GG", "Gemeinde-Klagerecht"],
+                scaffolding: "A. Klage des Förster\n1. Statthafte Klageart:\n2. Klagebefugnis (§ 42 II VwGO):\n3. Vorverfahren:\n\nB. Klage der Gemeinde\n- Betroffenes Recht:",
                 questions_easy: [
-                    { type: 'choice', intro: "Rechtsnatur der Genehmigung?", options: ["Realakt", "Verwaltungsakt (§ 35 VwVfG)", "Verordnung"], correctAnswer: 1, feedback: "Korrekt.", explanation: "Verwaltungsakt." },
-                    { type: 'choice', intro: "Statthafte Klageart für Aufhebung?", options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I VwGO)", "Feststellungsklage"], correctAnswer: 1, feedback: "Richtig.", explanation: "Anfechtungsklage." },
-                    { type: 'text', intro: "Voraussetzung für Klagebefugnis (§ 42 II VwGO)?", keywords: ["möglichkeit", "verletzung", "rechte", "subjektiv"], explanation: "Möglichkeit einer Verletzung in eigenen subjektiven Rechten.", feedback: "Exakt." }
+                    { type: 'text', intro: "Prüfen Sie die Zulässigkeit der Klage für den Hotelier Förster und kurz für die Gemeinde.", explanation: "A. Förster:\n1. Klageart: Anfechtungsklage (§ 42 I Alt. 1 VwGO), da Aufhebung eines VA (Genehmigung § 35 VwVfG) begehrt.\n2. Befugnis (§ 42 II VwGO): Möglichkeitstheorie -> Mögliche Verletzung von Art. 14 GG (Eigentum am Betrieb).\n3. Vorverfahren: Widerspruch (§ 68 VwGO).\nB. Gemeinde: Keine Grundrechte (Konfusionsargument). Muss sich auf Art. 28 II GG (Selbstverwaltung/Planungshoheit) berufen." }
                 ],
                 questions_medium: [
-                    { type: 'text', intro: "Bestimmen Sie Klageart und Vorverfahren.", keywords: ["anfechtung", "widerspruch", "68"], explanation: "Anfechtungsklage (§ 42 VwGO). Vorgeschaltet: Widerspruch (§ 68 VwGO).", feedback: "Gut." },
-                    { type: 'text', intro: "Begründen Sie die Klagebefugnis des Hoteliers.", keywords: ["eigentum", "14", "betrieb", "möglichkeit"], explanation: "Möglichkeit der Verletzung von Art. 14 GG (Eigentum).", feedback: "Richtig." }
+                    { type: 'text', intro: "Prüfen Sie die Zulässigkeit der Klage für den Hotelier Förster und kurz für die Gemeinde.", explanation: "A. Förster:\n1. Klageart: Anfechtungsklage (§ 42 I Alt. 1 VwGO), da Aufhebung eines VA (Genehmigung § 35 VwVfG) begehrt.\n2. Befugnis (§ 42 II VwGO): Möglichkeitstheorie -> Mögliche Verletzung von Art. 14 GG (Eigentum am Betrieb).\n3. Vorverfahren: Widerspruch (§ 68 VwGO).\nB. Gemeinde: Keine Grundrechte (Konfusionsargument). Muss sich auf Art. 28 II GG (Selbstverwaltung/Planungshoheit) berufen." }
                 ],
                 questions_hard: [
-                    { type: 'text', intro: "Gutachten: Prüfen Sie die Zulässigkeit der Klage (Statthafte Klageart, Befugnis). Wie wäre es, wenn die Stadt Löbau klagt?", keywords: ["anfechtung", "verwaltungsakt", "35", "widerspruch", "68", "klagebefugnis", "42", "möglichkeit", "eigentum", "14", "gemeinde", "28", "planungshoheit"], explanation: "VA -> Anfechtungsklage. Vorverfahren: Widerspruch. Befugnis: Möglichkeitstheorie (Art. 14 GG). Stadt Löbau: Art. 28 II GG (Planungshoheit).", feedback: "Exzellent." }
+                    { type: 'text', intro: "Prüfen Sie die Zulässigkeit der Klage für den Hotelier Förster und kurz für die Gemeinde.", explanation: "A. Förster:\n1. Klageart: Anfechtungsklage (§ 42 I Alt. 1 VwGO), da Aufhebung eines VA (Genehmigung § 35 VwVfG) begehrt.\n2. Befugnis (§ 42 II VwGO): Möglichkeitstheorie -> Mögliche Verletzung von Art. 14 GG (Eigentum am Betrieb).\n3. Vorverfahren: Widerspruch (§ 68 VwGO).\nB. Gemeinde: Keine Grundrechte (Konfusionsargument). Muss sich auf Art. 28 II GG (Selbstverwaltung/Planungshoheit) berufen." }
                 ],
                 detailed_solution: `Aufgabe 7 Lösung:
 A. Zulässigkeit der Klage des Hoteliers Förster:
 1. Statthafte Klageart: August Förster begehrt die Aufhebung der Genehmigung. Da die Genehmigung ein Verwaltungsakt i.S.v. § 35 VwVfG ist (hoheitliche Maßnahme, Behörde, Regelung, Einzelfall, Außenwirkung), ist die Anfechtungsklage gemäß § 42 Abs. 1 Alt. 1 VwGO statthaft.
-2. Klagebefugnis (§ 42 Abs. 2 VwGO): Er muss geltend machen, durch den VA in seinen Rechten verletzt zu sein. Es reicht die Möglichkeit einer Rechtsverletzung (Möglichkeitstheorie). Hier kommt eine Verletzung seines Eigentums am eingerichteten und ausgeübten Gewerbebetrieb (Art. 14 GG) in Betracht.
+2. Klagebefugnis (§ 42 Abs. 2 VwGO): Kläger muss Möglichkeit einer Verletzung in eigenen subjektiven Rechten geltend machen (Möglichkeitstheorie). Hier kommt eine Verletzung seines Eigentums am eingerichteten und ausgeübten Gewerbebetrieb (Art. 14 GG) in Betracht.
 3. Vorverfahren: Gemäß § 68 VwGO ist grundsätzlich ein Widerspruchsverfahren (Vorverfahren) durchzuführen.
 
 B. Klage der Stadt Löbau:
@@ -385,8 +395,8 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
                 questions: [
                     { type: 'choice', intro: "§ 87 I TKG gibt ein Ziel vor. Normart?", options: ["Konditional", "Final", "Deskriptiv"], correctAnswer: 1, feedback: "Final = Ziel.", explanation: "Final gefasste Norm." },
                     { type: 'choice', intro: "§ 110 I TKG (Wenn-Dann)?", options: ["Konditional", "Final", "Deskriptiv"], correctAnswer: 0, feedback: "Korrekt.", explanation: "Konditional gefasste Norm." },
-                    { type: 'text', intro: "Art. 13 GG. Sind Geschäftsräume geschützt?", keywords: ["ja", "öffnungszeiten", "ladenschluss"], explanation: "Ja. Aber während Öffnungszeiten geringerer Schutz.", feedback: "Richtig." },
-                    { type: 'text', intro: "ZDF-Fall. Kann sich der Staat auf Grundrechte berufen?", keywords: ["nein", "konfusion", "rundfunkfreiheit"], explanation: "Grundsatz: Nein. Ausnahme: Rundfunkfreiheit.", feedback: "Korrekt." },
+                    { type: 'text', intro: "Art. 13 GG. Sind Geschäftsräume geschützt?", explanation: "Ja. Aber während Öffnungszeiten geringerer Schutz, nach Ladenschluss voller Schutz." },
+                    { type: 'text', intro: "ZDF-Fall. Kann sich der Staat auf Grundrechte berufen?", explanation: "Grundsatz: Nein (Konfusionsargument). Ausnahme: Rundfunkfreiheit (Art. 5 I 2 GG)." },
                     { type: 'choice', intro: "Corona-Notbremse Kompetenz?", options: ["Länder", "Bund", "EU"], correctAnswer: 1, feedback: "Richtig.", explanation: "Bund. Art. 74 GG (Gemeingefährliche Krankheiten)." }
                 ],
                 detailed_solution: `Aufgabe 8: a) § 87 TKG: Final. b) § 110 TKG: Konditional. c) § 3 TKG: Deskriptiv.\nAufgabe 9: Geschäftsräume fallen unter 'Wohnung' (Art. 13 GG). Während Öffnungszeiten geringerer Schutz.\nAufgabe 10: Grundsatz: Staat kann sich nicht auf Grundrechte berufen (Konfusionsargument). Ausnahme: Rundfunkfreiheit. Gremien: Gebot der Vielfaltsicherung und Staatsferne (Drittel-Quote).`
@@ -396,11 +406,11 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
                 title: "Verwaltung & Europa", subtitle: "Aufgaben 13-19",
                 topics: ["EU-Grundfreiheiten", "Amtshaftung", "VA-Definition", "Ermessen", "Widerruf", "EU-Grundrechte"],
                 questions: [
-                    { type: 'text', intro: "Nennen Sie zwei EU-Grundfreiheiten.", keywords: ["waren", "arbeitnehmer", "dienstleistung", "kapital"], explanation: "Warenverkehr, Arbeitnehmerfreizügigkeit, Dienstleistung, Niederlassung.", feedback: "Gut." },
+                    { type: 'text', intro: "Nennen Sie zwei EU-Grundfreiheiten.", explanation: "Warenverkehr, Arbeitnehmerfreizügigkeit, Dienstleistung, Niederlassung, Kapital." },
                     { type: 'choice', intro: "Amtshaftung Anspruchsgrundlage?", options: ["§ 823 BGB", "§ 839 BGB i.V.m. Art. 34 GG", "VwGO"], correctAnswer: 1, feedback: "Richtig.", explanation: "§ 839 BGB + Art. 34 GG." },
-                    { type: 'text', intro: "Definition Verwaltungsakt (§ 35 VwVfG).", keywords: ["hoheitlich", "behörde", "regelung", "einzelfall", "außenwirkung"], explanation: "Hoheitliche Maßnahme einer Behörde auf Gebiet des öff. Rechts zur Regelung eines Einzelfalls mit Außenwirkung.", feedback: "Wichtig!" },
-                    { type: 'text', intro: "Nennen Sie einen Ermessensfehler.", keywords: ["nichtgebrauch", "überschreitung", "fehlgebrauch"], explanation: "Ermessensnichtgebrauch, -überschreitung, -fehlgebrauch.", feedback: "Richtig." },
-                    { type: 'text', intro: "Norm für Widerruf?", keywords: ["49"], explanation: "§ 49 VwVfG.", feedback: "Korrekt." }
+                    { type: 'text', intro: "Definition Verwaltungsakt (§ 35 VwVfG).", explanation: "Hoheitliche Maßnahme einer Behörde auf Gebiet des öff. Rechts zur Regelung eines Einzelfalls mit Außenwirkung." },
+                    { type: 'text', intro: "Nennen Sie einen Ermessensfehler.", explanation: "Ermessensnichtgebrauch, Ermessensüberschreitung, Ermessensfehlgebrauch." },
+                    { type: 'text', intro: "Norm für Widerruf?", explanation: "§ 49 VwVfG." }
                 ],
                 detailed_solution: `Aufgabe 14: Amtshaftung: § 839 I BGB i.V.m. Art. 34 GG.\nAufgabe 15: VA = Hoheitliche Maßnahme einer Behörde auf dem Gebiet des öff. Rechts zur Regelung eines Einzelfalls mit Außenwirkung (§ 35 VwVfG).\nAufgabe 17: Widerruf geregelt in § 49 VwVfG.`
             },
@@ -409,17 +419,15 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
                 id: "AKTE_007", complexity: 'high',
                 title: "Fall: Busunternehmer", subtitle: "Aufgabe 20 (Gewerbe)",
                 topics: ["Spezialgesetz PBefG", "Unzuverlässigkeit", "Widerruf"],
+                scaffolding: "1. Rechtsgrundlage:\n\n2. Formelle RM:\n\n3. Materielle RM:\n- Tatbestandsvoraussetzungen:\n- Unzuverlässigkeit (Def):",
                 questions_easy: [
-                    { type: 'choice', intro: "Busunternehmer zahlt Steuern nicht. Lizenzentzug. Rechtsgrundlage?", options: ["§ 35 GewO", "§ 25 PBefG", "§ 48 VwVfG"], correctAnswer: 1, feedback: "Wichtig! Spezialgesetz.", explanation: "PBefG vor GewO." },
-                    { type: 'text', intro: "Maßnahme?", keywords: ["widerruf", "genehmigung"], explanation: "Widerruf der Genehmigung.", feedback: "Ja." },
-                    { type: 'text', intro: "Begriff der 'Unzuverlässigkeit'?", keywords: ["gewähr", "künftig", "ordnungsgemäß"], explanation: "Keine Gewähr für künftigen ordnungsgemäßen Betrieb.", feedback: "Genau." }
+                    { type: 'text', intro: "Prüfen Sie die Rechtmäßigkeit des Lizenzentzugs (EGL und Voraussetzungen).", explanation: "1. Rechtsgrundlage: § 25 I PBefG (Spezialgesetz vor GewO!).\n2. Maßnahme: Widerruf.\n3. Voraussetzungen:\n- Wegfall der Genehmigungsvoraussetzungen.\n- Konkrete Tatsachen (z.B. Steuerschulden).\n- Unzuverlässigkeit: Negative Zukunftsprognose (Keine Gewähr für künftigen ordnungsgemäßen Betrieb)." }
                 ],
                 questions_medium: [
-                    { type: 'text', intro: "Bestimmen Sie Ermächtigungsgrundlage und Maßnahme.", keywords: ["25", "pbefg", "widerruf"], explanation: "Widerruf nach § 25 Abs. 1 PBefG.", feedback: "Gut." },
-                    { type: 'text', intro: "Nennen Sie die Tatbestandsvoraussetzungen.", keywords: ["wegfall", "tatsachen", "unzuverlässigkeit"], explanation: "Wegfall Voraussetzungen, Konkrete Tatsachen, Unzuverlässigkeit.", feedback: "Richtig." }
+                    { type: 'text', intro: "Prüfen Sie die Rechtmäßigkeit des Lizenzentzugs (EGL und Voraussetzungen).", explanation: "1. Rechtsgrundlage: § 25 I PBefG (Spezialgesetz vor GewO!).\n2. Maßnahme: Widerruf.\n3. Voraussetzungen:\n- Wegfall der Genehmigungsvoraussetzungen.\n- Konkrete Tatsachen (z.B. Steuerschulden).\n- Unzuverlässigkeit: Negative Zukunftsprognose (Keine Gewähr für künftigen ordnungsgemäßen Betrieb)." }
                 ],
                 questions_hard: [
-                    { type: 'text', intro: "Gutachten: Nach welcher Ermächtigungsgrundlage kann vorgegangen werden? Nennen Sie alle Tatbestandsvoraussetzungen und definieren Sie die Unzuverlässigkeit.", keywords: ["25", "pbefg", "widerruf", "spezialgesetz", "wegfall", "voraussetzungen", "tatsachen", "unzuverlässigkeit", "prognose", "gewähr", "künftig", "ordnungsgemäß"], explanation: "EGL: § 25 I PBefG (Spezialgesetz). Maßnahme: Widerruf. Voraussetzungen: 1. Wegfall Genehmigungsvoraussetzungen, 2. Konkrete Tatsachen, 3. Unzuverlässigkeit (Negative Zukunftsprognose).", feedback: "Perfekt." }
+                    { type: 'text', intro: "Gutachten: Nach welcher Ermächtigungsgrundlage kann vorgegangen werden? Prüfen Sie die Voraussetzungen.", explanation: "1. Rechtsgrundlage: § 25 I PBefG (Spezialgesetz vor GewO!).\n2. Maßnahme: Widerruf.\n3. Voraussetzungen:\n- Wegfall der Genehmigungsvoraussetzungen.\n- Konkrete Tatsachen (z.B. Steuerschulden).\n- Unzuverlässigkeit: Negative Zukunftsprognose (Keine Gewähr für künftigen ordnungsgemäßen Betrieb)." }
                 ],
                 detailed_solution: `Aufgabe 20 Lösung:\n1. Rechtsgrundlage: Spezialgesetz Personenbeförderungsgesetz (PBefG), nicht GewO! Maßnahme: Widerruf der Genehmigung gemäß § 25 Abs. 1 PBefG.\n2. Tatbestandsvoraussetzungen:\n- Wegfall der Genehmigungsvoraussetzungen.\n- Konkrete Tatsachen (z.B. Steuerschulden).\n- Unzuverlässigkeit: Gewerbetreibender bietet nach Gesamteindruck nicht die Gewähr für künftigen ordnungsgemäßen Betrieb (Negative Zukunftsprognose).`
             }
@@ -434,9 +442,10 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
         let timerInterval = null;
         let timeLimit = 60;
         let timeLeft = 60;
+        let currentDifficulty = 'standard';
 
         try {
-            const data = localStorage.getItem('junior_lawyer_save_v11');
+            const data = localStorage.getItem('junior_lawyer_save_v12');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
             console.log("Resetting save.");
@@ -467,7 +476,7 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
             cases.forEach((c, idx) => {
                 let highScore = savedProgress[c.id] || 0;
                 let barW = highScore + "%";
-                let barC = highScore > 70 ? 'var(--accent-green)' : (highScore > 0 ? 'var(--accent-blue)' : '#333');
+                let barC = highScore >= 100 ? 'var(--accent-green)' : (highScore > 0 ? 'var(--accent-blue)' : '#333');
                 let topics = c.topics.map(t => `<span class="topic-pill">${t}</span>`).join('');
                 let isComplex = c.complexity === 'high';
 
@@ -486,7 +495,7 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
                     </div>
                     <div class="topics-preview">${topics}</div>
                     <div class="case-mastery">
-                        <div class="mastery-label"><span>Wissen:</span><span>${highScore}%</span></div>
+                        <div class="mastery-label"><span>Status:</span><span>${highScore >= 100 ? 'Abgeschlossen' : highScore + '%'}</span></div>
                         <div class="mastery-bg"><div class="mastery-fill" style="width:${barW}; background:${barC}"></div></div>
                     </div>
                 `;
@@ -509,15 +518,25 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
 
         function selectDifficulty(diff) {
             diffScreen.style.display = 'none';
+            currentDifficulty = diff;
             const c = cases[selectedCaseIdx];
-            if (diff === 'easy') { currentQuestions = c.questions_easy; timeLimit = 90; } 
-            else if (diff === 'medium') { currentQuestions = c.questions_medium; timeLimit = 60; } 
-            else { currentQuestions = c.questions_hard; timeLimit = 45; }
+            
+            if (diff === 'easy') {
+                currentQuestions = c.questions_easy;
+                timeLimit = 120; // More time for easy
+            } else if (diff === 'medium') {
+                currentQuestions = c.questions_medium;
+                timeLimit = 90;
+            } else {
+                currentQuestions = c.questions_hard;
+                timeLimit = 60;
+            }
             launchGame(c);
         }
 
         function startStandard(idx) {
             const c = cases[idx];
+            currentDifficulty = 'standard';
             currentQuestions = c.questions;
             timeLimit = 60;
             menuScreen.style.display = 'none';
@@ -541,13 +560,18 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
             timeLeft = timeLimit;
             timerBar.style.width = '100%';
             timerBar.style.backgroundColor = 'var(--accent-green)';
+            
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 timeLeft--;
                 let pct = (timeLeft / timeLimit) * 100;
                 timerBar.style.width = pct + '%';
                 if (timeLeft < 10) timerBar.style.backgroundColor = 'var(--accent-red)';
-                if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeout(); }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeout();
+                }
             }, 1000);
         }
 
@@ -557,16 +581,10 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
             inputArea.innerHTML = '';
             trust = Math.max(0, trust - 10);
             addMsg('system', 'ZEIT ABGELAUFEN', 'fail');
-            addMsg('partner', "Zu langsam! Mandant verärgert.");
+            addMsg('partner', "Zu langsam. Sehen Sie sich die Lösung an.");
             updateTrust();
-            if(trust === 0) endCase(false);
-            else {
-                const btn = document.createElement('button');
-                btn.className = 'btn-giveup';
-                btn.innerText = 'Weiter';
-                btn.onclick = () => { qIndex++; nextQ(); };
-                inputArea.appendChild(btn);
-            }
+            // Show comparison directly on timeout
+            showComparison('', currentQuestions[qIndex]); 
         }
 
         function nextQ() {
@@ -579,12 +597,9 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
 
         function renderInp(q) {
             inputArea.innerHTML = '';
-            const btnReveal = document.createElement('button');
-            btnReveal.className = 'btn-giveup';
-            btnReveal.innerText = 'Lösung aufdecken (Joker) -15%';
-            btnReveal.onclick = () => revealSolution(q);
-
+            
             if (q.type === 'choice') {
+                // Choice still uses auto-validation
                 const grid = document.createElement('div');
                 grid.className = 'options-grid';
                 q.options.forEach((opt, i) => {
@@ -596,19 +611,29 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
                 });
                 inputArea.appendChild(grid);
             } else {
+                // Text Inputs use Manual Self-Assessment
                 const wrp = document.createElement('div');
                 wrp.className = 'text-input-wrapper';
                 const inp = document.createElement('textarea');
-                inp.placeholder = 'Ihre Antwort...';
+                
+                // Add Scaffolding if Easy Mode and available
+                if (currentDifficulty === 'easy' && activeCase.scaffolding && qIndex === 0) {
+                    inp.value = activeCase.scaffolding;
+                } else {
+                    inp.placeholder = 'Ihre Antwort...';
+                }
+
                 const btn = document.createElement('button');
                 btn.className = 'btn-submit';
-                btn.innerText = 'SENDEN';
-                btn.onclick = () => checkText(inp.value, q);
+                btn.innerText = 'Lösung abgleichen';
+                btn.onclick = () => {
+                    stopTimer();
+                    showComparison(inp.value, q);
+                };
                 wrp.append(inp, btn);
                 inputArea.appendChild(wrp);
                 setTimeout(() => inp.focus(), 100);
             }
-            inputArea.appendChild(btnReveal);
         }
 
         function checkChoice(val, q, btn) {
@@ -616,7 +641,7 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
                 stopTimer();
                 inputArea.innerHTML = '';
                 addMsg('user', q.options[val]);
-                processSuccess(q);
+                handleSelfRating(true); // Auto-pass for choice
             } else {
                 btn.classList.add('wrong');
                 trust = Math.max(0, trust - 5);
@@ -626,45 +651,49 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
             }
         }
 
-        function checkText(val, q) {
-            const lowerVal = val.toLowerCase();
-            // Fuzzy Check: Contains ANY key keyword for simple, MOST for hard
-            const foundCount = q.keywords.filter(k => lowerVal.includes(k.toLowerCase())).length;
-            
-            // Logic: Needs at least 1 keyword match
-            if (foundCount > 0) {
-                stopTimer();
-                inputArea.innerHTML = '';
-                addMsg('user', val);
-                processSuccess(q);
-            } else {
-                trust = Math.max(0, trust - 5);
-                addMsg('system', 'Zu ungenau oder falsch. Prüfen Sie die Definition.', 'fail');
-                updateTrust();
-                if(trust === 0) { stopTimer(); endCase(false); }
-            }
-        }
-
-        function revealSolution(q) {
-            stopTimer();
+        function showComparison(userAns, q) {
             inputArea.innerHTML = '';
-            addMsg('user', '(Joker)');
-            trust = Math.max(0, trust - 15);
-            addMsg('partner', 'Lösung: ' + q.explanation);
-            addMsg('system', 'STRAFE -15%', 'fail');
-            updateTrust();
-            if(trust === 0) endCase(false);
-            else { qIndex++; setTimeout(nextQ, 3000); }
+            const container = document.createElement('div');
+            container.id = 'comparison-view';
+            
+            container.innerHTML = `
+                <div class="compare-box">
+                    <div class="compare-label">Ihre Eingabe</div>
+                    <div class="user-text">${userAns ? userAns.replace(/\n/g, '<br>') : '(Keine Eingabe)'}</div>
+                </div>
+                <div class="compare-box" style="border-color: var(--accent-green);">
+                    <div class="compare-label" style="color: var(--accent-green);">Musterlösung</div>
+                    <div class="model-text">${q.explanation}</div>
+                </div>
+                <div class="assessment-buttons">
+                    <button class="btn-assess-no" onclick="handleSelfRating(false)">Nicht gewusst / Unvollständig</button>
+                    <button class="btn-assess-ok" onclick="handleSelfRating(true)">Korrekt / Vollständig</button>
+                </div>
+            `;
+            inputArea.appendChild(container);
+            document.getElementById('comparison-view').style.display = 'flex';
         }
 
-        function processSuccess(q) {
-            trust = Math.min(100, trust + 10);
-            addMsg('partner', q.feedback);
-            addMsg('system', 'VERTRAUEN GESTIEGEN', 'success');
-            updateTrust();
-            qIndex++;
-            setTimeout(nextQ, 1500);
-        }
+        window.handleSelfRating = function(isCorrect) {
+            inputArea.innerHTML = '';
+            if (isCorrect) {
+                trust = Math.min(100, trust + 10);
+                addMsg('system', 'EINSCHÄTZUNG: KORREKT', 'success');
+                updateTrust();
+                qIndex++;
+                setTimeout(nextQ, 1000);
+            } else {
+                trust = Math.max(0, trust - 10);
+                addMsg('system', 'EINSCHÄTZUNG: UNVOLLSTÄNDIG', 'fail');
+                addMsg('partner', "Merken Sie sich die Lösung gut.");
+                updateTrust();
+                if(trust === 0) endCase(false);
+                else {
+                    qIndex++;
+                    setTimeout(nextQ, 2000);
+                }
+            }
+        };
 
         function endCase(win) {
             stopTimer();
@@ -674,12 +703,12 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
             if (win) {
                 t.innerText = "FALL ABGESCHLOSSEN";
                 t.style.color = "var(--accent-green)";
-                m.innerText = "Score: " + trust + "%";
-                let old = savedProgress[activeCase.id] || 0;
-                if (trust > old) {
-                    savedProgress[activeCase.id] = trust;
-                    localStorage.setItem('junior_lawyer_save_v11', JSON.stringify(savedProgress));
-                }
+                m.innerText = "Mandat erfolgreich bearbeitet.";
+                
+                // Force 100% on success
+                savedProgress[activeCase.id] = 100;
+                localStorage.setItem('junior_lawyer_save_v12', JSON.stringify(savedProgress));
+                
             } else {
                 t.innerText = "GESCHEITERT";
                 t.style.color = "var(--accent-red)";
@@ -687,6 +716,7 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
             }
         }
 
+        // --- ARCHIVE ---
         function showArchive() {
             menuScreen.style.display = 'none';
             archiveScreen.style.display = 'flex';
@@ -731,7 +761,7 @@ Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusions
 
         function hardReset() {
             if(confirm("Spielstand löschen?")) {
-                localStorage.removeItem('junior_lawyer_save_v11');
+                localStorage.removeItem('junior_lawyer_save_v12');
                 location.reload();
             }
         }
