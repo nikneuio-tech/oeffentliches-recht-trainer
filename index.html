@@ -23,7 +23,7 @@
             --paper-text: #2c2c2c;
             --border-color: #333;
             --font-serif: 'Playfair Display', serif;
-            --font-body: 'Merriweather', serif; /* For Case Files */
+            --font-body: 'Merriweather', serif;
             --font-mono: 'Fira Code', monospace;
         }
 
@@ -164,17 +164,11 @@
             flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth;
         }
 
-        /* NEW: THE CASE FILE (AKTE) */
+        /* CASE FILE */
         .case-file-doc {
-            background: var(--paper-bg);
-            color: var(--paper-text);
-            font-family: var(--font-body);
-            padding: 25px;
-            border-left: 6px solid #8b0000; /* Red Legal Tape */
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            border-radius: 2px;
-            margin-bottom: 20px;
-            position: relative;
+            background: var(--paper-bg); color: var(--paper-text); font-family: var(--font-body);
+            padding: 25px; border-left: 6px solid #8b0000; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            border-radius: 2px; margin-bottom: 20px; position: sticky; top: 0; z-index: 5;
             animation: slideIn 0.5s ease;
         }
         .case-file-doc::before { content: "SACHVERHALT"; position: absolute; top: 10px; right: 10px; font-family: var(--font-mono); font-size: 0.6rem; border: 1px solid #8b0000; color: #8b0000; padding: 2px 5px; transform: rotate(-5deg); opacity: 0.7; }
@@ -208,12 +202,8 @@
         .btn-option { background: transparent; border: 1px solid var(--text-secondary); color: var(--text-primary); padding: 12px; font-family: var(--font-mono); cursor: pointer; transition: all 0.2s; text-align: left; }
         .btn-option:hover { border-color: var(--accent-blue); background: rgba(41, 121, 255, 0.1); }
         
-        /* Step Inputs (Medium Mode) */
-        .step-input-group { display: flex; flex-direction: column; gap: 8px; }
-        .step-label { font-size: 0.7rem; color: var(--accent-blue); font-family: var(--font-mono); }
-        .step-input { background: #111; border: 1px solid #444; color: #fff; padding: 8px; font-family: var(--font-mono); outline: none; }
-        .step-input:focus { border-color: var(--accent-blue); }
-
+        .step-label { font-size: 0.8rem; color: var(--accent-gold); font-family: var(--font-mono); margin-bottom: 5px; display: block;}
+        
         .text-input-wrapper { display: flex; gap: 10px; flex-direction: column; }
         textarea { 
             flex: 1; background: transparent; border: 1px solid var(--text-secondary); color: #fff; padding: 12px; font-family: var(--font-mono); outline: none; resize: none; min-height: 80px; 
@@ -242,7 +232,7 @@
 
         @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
 
-        /* --- ARCHIVE --- */
+        /* --- ARCHIVE & OVERLAYS --- */
         #archive-screen {
             display: none; flex: 1; padding: 20px; overflow-y: auto; flex-direction: column; background: var(--bg-color);
         }
@@ -254,7 +244,6 @@
         .archive-sol { font-size: 0.95rem; color: var(--text-primary); white-space: pre-wrap; line-height: 1.6; }
         .exam-grade-input { width: 60px; background: #000; border: 1px solid #555; color: #fff; text-align: center; padding: 5px; margin-left: 10px; }
 
-        /* --- OVERLAYS --- */
         #game-over-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(18, 18, 18, 0.98);
@@ -274,7 +263,7 @@
 
     <div id="app-container">
         <header>
-            <div class="case-id" id="header-title">KANZLEI-SYSTEM v14.0</div>
+            <div class="case-id" id="header-title">KANZLEI-SYSTEM v15.0</div>
             <div class="game-header-elements" id="game-header-elements">
                 <div class="trust-container">
                     <span class="trust-label">PARTNER'S TRUST</span>
@@ -307,17 +296,17 @@
             <div class="menu-title" style="margin-bottom: 30px;">Wählen Sie Ihre Position</div>
             <div class="diff-card easy" onclick="selectDifficulty('easy')">
                 <div class="diff-title">Junior Associate (Leicht)</div>
-                <div class="diff-desc">Multiple Choice. Der Partner führt Sie durch den Fall.</div>
+                <div class="diff-desc">Multiple Choice (Geführt). Schritt für Schritt.</div>
                 <div class="diff-meta">Zeit: 90s | Risiko: Gering</div>
             </div>
             <div class="diff-card medium" onclick="selectDifficulty('medium')">
                 <div class="diff-title">Associate (Mittel)</div>
-                <div class="diff-desc">Strukturierte Eingabe. Sie müssen die Prüfungspunkte selbst ausfüllen.</div>
+                <div class="diff-desc">Geführte Texteingabe. Sie erhalten Hinweise.</div>
                 <div class="diff-meta">Zeit: 60s | Risiko: Mittel</div>
             </div>
             <div class="diff-card hard" onclick="selectDifficulty('hard')">
                 <div class="diff-title">Partner (Schwer)</div>
-                <div class="diff-desc">Freies Gutachten. Schreiben Sie die Lösung ohne Hilfestellung.</div>
+                <div class="diff-desc">Freies Gutachten. Ein Textfeld, keine Hilfe.</div>
                 <div class="diff-meta">Zeit: 45s | Risiko: Hoch</div>
             </div>
             <button class="btn-back" style="margin-top:20px; font-size: 0.8rem;" onclick="exitToMenu()">Abbrechen</button>
@@ -350,9 +339,9 @@
     </div>
 
     <script>
-        // --- COMPLETE CONTENT DATABASE ---
+        // --- CONTENT DATABASE ---
         const cases = [
-            // STANDARD TASKS (1-5)
+            // STANDARD TASKS
             {
                 id: "AKTE_001", complexity: 'standard',
                 title: "Grundlagen & Methoden", subtitle: "Aufgaben 1, 2, 5",
@@ -377,25 +366,48 @@
                 ],
                 detailed_solution: `Aufgabe 3: Staatszielbestimmung ist eine Verfassungsnorm, die dem Staat Aufgaben vorgibt, ohne subjektive Rechte für den Einzelnen zu begründen (Bsp: Sozialstaat).\nAufgabe 4: Anstalt ist eine Zusammenfassung von Personal- und Sachmitteln zur Erfüllung einer öffentlichen Aufgabe für Benutzer. Eine Körperschaft ist mitgliedschaftlich organisiert.`
             },
-            // COMPLEX: NOSSEN (Task 6)
+            // COMPLEX: NOSSEN (Task 6 - MULTI STEP)
             {
                 id: "AKTE_003", complexity: 'high',
                 title: "Fall: Nossen vs. Ketzerbachtal", subtitle: "Aufgabe 6 (Rechtsweg)",
                 topics: ["Rechtswegeröffnung", "Abgrenzungstheorien", "SächsKomZG"],
                 case_context: "Die sächsische Stadt Nossen und die Gemeinde Ketzerbachtal bilden eine Verwaltungsgemeinschaft nach dem SächsKomZG. Ketzerbachtal will Nossen auf Schadensersatz verklagen, weil Aufgaben angeblich nicht richtig wahrgenommen wurden.",
-                // Mode A (Easy/MC)
-                options: ["Zivilrechtsweg (BGB)", "Verwaltungsrechtsweg (VwGO)", "Verfassungsgericht"],
-                correctOption: 1,
-                // Mode B (Steps)
-                steps: ["1. Rechtswegeröffnung (§)", "2. Abgrenzungstheorien", "3. Ergebnis"],
-                questions: [ {id: 6, points: 5, intro: "Prüfen Sie die Rechtswegeröffnung.", explanation: "..."} ], // Placeholder for logic
+                // Multi Step Logic
+                steps: [
+                    {
+                        step_title: "1. Rechtswegeröffnung",
+                        question: "Welcher Rechtsweg ist eröffnet?",
+                        article_hint: "§ 40 VwGO",
+                        mode_easy_options: ["Ordentlicher Rechtsweg (BGB)", "Verwaltungsrechtsweg (§ 40 VwGO)", "Verfassungsgericht"],
+                        correct_option_index: 1,
+                        mode_medium_hint: "Prüfen Sie § 40 VwGO. Um welche Art Streitigkeit handelt es sich?"
+                    },
+                    {
+                        step_title: "2. Abgrenzungstheorien",
+                        question: "Welche Theorien ziehen Sie zur Abgrenzung heran?",
+                        article_hint: "Theorienstreit",
+                        mode_easy_options: ["Zwei-Reiche-Lehre", "Subordinationstheorie, Interessentheorie, Mod. Subjektstheorie", "Schutznormtheorie"],
+                        correct_option_index: 1,
+                        mode_medium_hint: "Nennen Sie die drei gängigen Theorien zur Abgrenzung Öffentliches Recht/Privatrecht."
+                    },
+                    {
+                        step_title: "3. Subsumtion",
+                        question: "Warum ist es hier öffentlich-rechtlich?",
+                        article_hint: "SächsKomZG",
+                        mode_easy_options: ["Weil es um Geld geht.", "Privatrechtlich, da Vertrag.", "Öffentlich-rechtlich, da SächsKomZG Hoheitsträger als solche berechtigt (Sonderrecht)."],
+                        correct_option_index: 2,
+                        mode_medium_hint: "Wenden Sie die Sonderrechtstheorie auf das SächsKomZG an."
+                    }
+                ],
+                // Fallback for Exam mode (flat question)
+                questions: [ {id: 6, points: 5, intro: "Prüfen Sie die Rechtswegeröffnung umfassend.", explanation: "..."} ], 
                 detailed_solution: `Aufgabe 6 Lösung:
-1. Obersatz: Der Rechtsweg zu den Verwaltungsgerichten ist gem. § 40 Abs. 1 VwGO eröffnet, wenn es sich um eine öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art handelt und keine abdrängende Sonderzuweisung vorliegt.
-2. Abgrenzungstheorien (Privatrecht vs. Öffentliches Recht):
-a) Subordinationstheorie (Subjektionstheorie): Ein öffentlich-rechtliches Verhältnis liegt vor, wenn ein Über-/Unterordnungsverhältnis zwischen den Beteiligten besteht. (Hier eher Gleichordnung, daher unergiebig).
-b) Interessentheorie: Dient die Norm überwiegend dem öffentlichen Interesse (Allgemeinwohl) oder dem Individualinteresse? (Hier: Kommunale Zusammenarbeit = Öffentliches Interesse).
-c) Modifizierte Subjektstheorie (Sonderrechtstheorie): Eine Norm ist öffentlich-rechtlich, wenn sie einen Träger hoheitlicher Gewalt gerade in seiner Eigenschaft als solcher berechtigt oder verpflichtet (Sonderrecht des Staates).
-3. Subsumtion: Gegenstand des Streits ist die Verwaltungsgemeinschaft nach dem SächsKomZG. Das SächsKomZG berechtigt und verpflichtet ausschließlich Gemeinden (Hoheitsträger) zur Zusammenarbeit. Damit handelt es sich um Sonderrecht des Staates. Es liegt eine öffentlich-rechtliche Streitigkeit vor. Der Verwaltungsrechtsweg (§ 40 VwGO) ist eröffnet.`
+1. Obersatz: Der Rechtsweg zu den Verwaltungsgerichten ist gem. § 40 Abs. 1 VwGO eröffnet, wenn es sich um eine öffentlich-rechtliche Streitigkeit nichtverfassungsrechtlicher Art handelt.
+2. Abgrenzungstheorien:
+a) Subordinationstheorie: Über-/Unterordnungsverhältnis? (Hier (-)).
+b) Interessentheorie: Öffentliches Interesse? (Ja).
+c) Modifizierte Subjektstheorie: Berechtigt die Norm einen Hoheitsträger gerade als solchen? (Sonderrecht).
+3. Subsumtion: Das SächsKomZG berechtigt und verpflichtet ausschließlich Gemeinden (Hoheitsträger). Damit liegt Sonderrecht des Staates vor -> Öffentlich-rechtliche Streitigkeit. § 40 VwGO (+).`
             },
             // COMPLEX: WINDKRAFT (Task 7)
             {
@@ -403,20 +415,42 @@ c) Modifizierte Subjektstheorie (Sonderrechtstheorie): Eine Norm ist öffentlich
                 title: "Fall: Windkraft (Förster)", subtitle: "Aufgabe 7 (Zulässigkeit)",
                 topics: ["Anfechtungsklage", "Klagebefugnis", "Art. 14 GG", "Gemeinde-Klagerecht"],
                 case_context: "August Förster betreibt ein Hotel im Außenbereich. In 1000m Entfernung wird eine Windkraftanlage genehmigt. Er fürchtet Lärm und Aussichtsverlust und will klagen. Auch die Stadt Löbau ist dagegen.",
-                // Mode A
-                options: ["Verpflichtungsklage", "Anfechtungsklage", "Feststellungsklage"],
-                correctOption: 1,
-                // Mode B
-                steps: ["1. Statthafte Klageart", "2. Klagebefugnis (Förster)", "3. Klagebefugnis (Gemeinde)"],
+                steps: [
+                    {
+                        step_title: "1. Statthafte Klageart",
+                        question: "Was ist die statthafte Klageart?",
+                        article_hint: "Begehren: Aufhebung",
+                        mode_easy_options: ["Verpflichtungsklage", "Anfechtungsklage (§ 42 I VwGO)", "Feststellungsklage"],
+                        correct_option_index: 1,
+                        mode_medium_hint: "Der Kläger will die Aufhebung eines VA. Welche Klageart passt?"
+                    },
+                    {
+                        step_title: "2. Klagebefugnis (Förster)",
+                        question: "Was muss Förster geltend machen?",
+                        article_hint: "§ 42 II VwGO",
+                        mode_easy_options: ["Tatsächliche Verletzung", "Möglichkeit einer Rechtsverletzung (Art. 14 GG)", "Beliebiges Interesse"],
+                        correct_option_index: 1,
+                        mode_medium_hint: "Welche Theorie gilt für § 42 II VwGO? Welches Grundrecht ist betroffen?"
+                    },
+                    {
+                        step_title: "3. Klagebefugnis (Gemeinde)",
+                        question: "Worauf kann sich die Gemeinde berufen?",
+                        article_hint: "Art. 28 GG",
+                        mode_easy_options: ["Grundrechte", "Eigentum", "Kommunale Selbstverwaltungsgarantie (Planungshoheit)"],
+                        correct_option_index: 2,
+                        mode_medium_hint: "Können Gemeinden Grundrechte haben? Nein. Worauf stützen sie sich?"
+                    }
+                ],
                 questions: [ {id: 7, points: 6, intro: "Prüfen Sie die Zulässigkeit.", explanation: "..."} ],
                 detailed_solution: `Aufgabe 7 Lösung:
 A. Zulässigkeit der Klage des Hoteliers Förster:
-1. Statthafte Klageart: August Förster begehrt die Aufhebung der Genehmigung. Da die Genehmigung ein Verwaltungsakt i.S.v. § 35 VwVfG ist, ist die Anfechtungsklage gemäß § 42 Abs. 1 Alt. 1 VwGO statthaft.
-2. Klagebefugnis (§ 42 Abs. 2 VwGO): Kläger muss Möglichkeit einer Verletzung in eigenen subjektiven Rechten geltend machen (Möglichkeitstheorie). Hier kommt eine Verletzung seines Eigentums am eingerichteten und ausgeübten Gewerbebetrieb (Art. 14 GG) in Betracht.
-3. Vorverfahren: Gemäß § 68 VwGO ist grundsätzlich ein Widerspruchsverfahren (Vorverfahren) durchzuführen.
-B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grundrechte berufen (Konfusionsargument, da Teil des Staates). Sie muss sich stattdessen auf ihr Recht auf kommunale Selbstverwaltung (Planungshoheit) aus Art. 28 Abs. 2 GG berufen.`
+1. Statthafte Klageart: Anfechtungsklage (§ 42 I VwGO), da Aufhebung eines VA (§ 35 VwVfG) begehrt.
+2. Klagebefugnis: Möglichkeit einer Verletzung in eigenen subjektiven Rechten (Möglichkeitstheorie). Hier: Art. 14 GG (Eigentum am Gewerbebetrieb).
+3. Vorverfahren: Widerspruch (§ 68 VwGO).
+B. Klage der Stadt Löbau:
+Gemeinden haben keine Grundrechte (Konfusionsargument). Sie müssen sich auf Art. 28 Abs. 2 GG (Kommunale Selbstverwaltung / Planungshoheit) berufen.`
             },
-            // STANDARD TASKS (8-12)
+            // STANDARD TASKS
             {
                 id: "AKTE_005", complexity: 'standard',
                 title: "Normen & Verfassung", subtitle: "Aufgaben 8, 9, 10, 12",
@@ -430,7 +464,6 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
                 ],
                 detailed_solution: `Aufgabe 8: a) § 87 TKG: Final. b) § 110 TKG: Konditional. c) § 3 TKG: Deskriptiv.\nAufgabe 9: Geschäftsräume fallen unter 'Wohnung' (Art. 13 GG). Während Öffnungszeiten geringerer Schutz.\nAufgabe 10: Grundsatz: Staat kann sich nicht auf Grundrechte berufen (Konfusionsargument). Ausnahme: Rundfunkfreiheit. Gremien: Gebot der Vielfaltsicherung und Staatsferne (Drittel-Quote).`
             },
-            // STANDARD TASKS (13-19)
             {
                 id: "AKTE_006", complexity: 'standard',
                 title: "Verwaltung & Europa", subtitle: "Aufgaben 13-19",
@@ -450,11 +483,32 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
                 title: "Fall: Busunternehmer", subtitle: "Aufgabe 20 (Gewerbe)",
                 topics: ["Spezialgesetz PBefG", "Unzuverlässigkeit", "Widerruf"],
                 case_context: "Ein Busunternehmer hat erhebliche Steuerschulden und zahlt keine Sozialabgaben mehr. Das Landratsamt möchte ihm die Genehmigung entziehen.",
-                // Mode A
-                options: ["Gewerbeuntersagung (§ 35 GewO)", "Widerruf der Genehmigung (§ 25 PBefG)", "Rücknahme des VA (§ 48 VwVfG)"],
-                correctOption: 1,
-                // Mode B
-                steps: ["1. Rechtsgrundlage (Spezialgesetz)", "2. Tatbestandsvoraussetzungen", "3. Definition Unzuverlässigkeit"],
+                steps: [
+                    {
+                        step_title: "1. Rechtsgrundlage",
+                        question: "Was ist die Rechtsgrundlage für den Entzug?",
+                        article_hint: "Spezialgesetz vor GewO!",
+                        mode_easy_options: ["§ 35 GewO", "§ 25 PBefG", "§ 48 VwVfG"],
+                        correct_option_index: 1,
+                        mode_medium_hint: "Nennen Sie das Spezialgesetz für Busunternehmer (Personenbeförderung)."
+                    },
+                    {
+                        step_title: "2. Tatbestandsvoraussetzungen",
+                        question: "Was muss vorliegen?",
+                        article_hint: "§ 25 PBefG",
+                        mode_easy_options: ["Nur Schulden", "Wegfall der Voraussetzungen + Unzuverlässigkeit", "Ermessen der Behörde"],
+                        correct_option_index: 1,
+                        mode_medium_hint: "Nennen Sie die zwei zentralen Voraussetzungen."
+                    },
+                    {
+                        step_title: "3. Definition",
+                        question: "Definieren Sie 'Unzuverlässigkeit'.",
+                        article_hint: "Prognoseentscheidung",
+                        mode_easy_options: ["Hat Schulden", "Bietet keine Gewähr für künftigen ordnungsgemäßen Betrieb", "Ist vorbestraft"],
+                        correct_option_index: 1,
+                        mode_medium_hint: "Formulieren Sie die Definition der 'Unzuverlässigkeit' (Prognose)."
+                    }
+                ],
                 questions: [ {id: 20, points: 5, intro: "Prüfen Sie die Rechtmäßigkeit.", explanation: "..."} ],
                 detailed_solution: `Aufgabe 20 Lösung:\n1. Rechtsgrundlage: Spezialgesetz Personenbeförderungsgesetz (PBefG), nicht GewO! Maßnahme: Widerruf der Genehmigung gemäß § 25 Abs. 1 PBefG.\n2. Tatbestandsvoraussetzungen:\n- Wegfall der Genehmigungsvoraussetzungen.\n- Konkrete Tatsachen (z.B. Steuerschulden).\n- Unzuverlässigkeit: Gewerbetreibender bietet nach Gesamteindruck nicht die Gewähr für künftigen ordnungsgemäßen Betrieb (Negative Zukunftsprognose).`
             }
@@ -465,24 +519,21 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
         let trust = 50;
         let savedProgress = {};
         let questionQueue = [];
-        let initialQueueLength = 0;
         let timerInterval = null;
-        let timeLimit = 60;
         let timeLeft = 60;
         let currentDifficulty = 'standard';
         let isExamMode = false;
         let examAnswers = [];
+        let stepIndex = 0; // Tracks multi-step cases
 
-        // Safe Load
         try {
-            const data = localStorage.getItem('junior_lawyer_save_v14');
+            const data = localStorage.getItem('junior_lawyer_save_v15');
             if (data) savedProgress = JSON.parse(data);
         } catch (e) {
             console.log("Reset.");
             savedProgress = {};
         }
 
-        // DOM
         const menuScreen = document.getElementById('menu-screen');
         const diffScreen = document.getElementById('difficulty-screen');
         const gameScreen = document.getElementById('game-screen');
@@ -563,35 +614,45 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
                 menuScreen.style.display = 'none';
                 diffScreen.style.display = 'flex';
             } else {
-                startTraining(idx, 'standard');
+                startStandard(idx);
             }
         }
 
         function selectDifficulty(diff) {
             diffScreen.style.display = 'none';
-            if (diff === 'easy') timeLimit = 90;
-            else if (diff === 'medium') timeLimit = 60;
-            else timeLimit = 45;
-            startTraining(selectedCaseIdx, diff);
+            startComplex(selectedCaseIdx, diff);
         }
 
-        function startTraining(idx, diff) {
+        function startStandard(idx) {
+            currentDifficulty = 'standard';
+            activeCase = cases[idx];
+            questionQueue = activeCase.questions.map((q, i) => ({...q, index: i}));
+            launchGame();
+        }
+
+        function startComplex(idx, diff) {
             currentDifficulty = diff;
             activeCase = cases[idx];
-            
-            // Build Queue
-            // Standard cases have multiple Qs. Complex have 1 generic logic Q but rendered differently.
-            if (activeCase.complexity === 'standard') {
-                questionQueue = activeCase.questions.map((q, i) => ({...q, index: i}));
+            stepIndex = 0;
+            // HARD MODE = Single Question (Free Recall)
+            if (diff === 'hard') {
+                questionQueue = [{
+                    type: 'text', 
+                    intro: "Erstellen Sie ein umfassendes Gutachten zur Rechtslage.", 
+                    explanation: activeCase.detailed_solution,
+                    isHardMode: true
+                }];
             } else {
-                // Complex cases treat the whole thing as one item in the queue initially
-                questionQueue = [{...activeCase.questions[0], index: 0}]; 
+                // EASY/MEDIUM = Loop through steps
+                // We create a dummy queue of indexes [0, 1, 2...] based on steps length
+                questionQueue = activeCase.steps.map((s, i) => ({ stepIdx: i }));
             }
-            
-            initialQueueLength = questionQueue.length;
-            isExamMode = false;
+            launchGame();
+        }
+
+        function launchGame() {
             trust = 50;
-            
+            isExamMode = false;
             menuScreen.style.display = 'none';
             gameScreen.style.display = 'flex';
             gameHeader.style.display = 'flex';
@@ -599,6 +660,15 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
             updateTrust();
             chatWindow.innerHTML = '';
             addMsg('system', 'AKTE GELADEN: ' + activeCase.title, 'info');
+            
+            // SHOW CASE FILE IF COMPLEX
+            if (activeCase.complexity === 'high') {
+                const doc = document.createElement('div');
+                doc.className = 'case-file-doc';
+                doc.innerHTML = `<div class="case-file-text">${activeCase.case_context}</div>`;
+                chatWindow.appendChild(doc);
+            }
+
             setTimeout(nextQ, 800);
         }
 
@@ -606,126 +676,96 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
         function nextQ() {
             if (questionQueue.length === 0) return endCase(true);
             
-            let currentItem = questionQueue[0];
+            // Complex (Easy/Medium) vs Standard Logic
+            let item = questionQueue[0];
             
-            // Display Case File if Complex
-            if (activeCase.complexity === 'high') {
-                const existingDoc = document.querySelector('.case-file-doc');
-                if(!existingDoc) {
-                    const doc = document.createElement('div');
-                    doc.className = 'case-file-doc';
-                    doc.innerHTML = `<div class="case-file-text">${activeCase.case_context}</div>`;
-                    chatWindow.appendChild(doc);
-                }
+            if (activeCase.complexity === 'high' && currentDifficulty !== 'hard') {
+                // Multi-Step Logic
+                let step = activeCase.steps[item.stepIdx];
+                addMsg('partner', `${step.step_title}: ${step.question}`);
+                renderMultiStepInput(step);
             } else {
-                addMsg('partner', currentItem.intro);
+                // Standard or Hard Mode
+                addMsg('partner', item.intro || "Ihre Aufgabe:");
+                renderInput(item);
             }
-
-            renderInput(currentItem);
             startTimer();
+        }
+
+        function renderMultiStepInput(step) {
+            inputArea.innerHTML = '';
+            
+            if (currentDifficulty === 'easy') {
+                // Easy: MC Buttons
+                addMsg('system', `Hinweis: ${step.article_hint}`, 'info');
+                const grid = document.createElement('div');
+                grid.className = 'options-grid';
+                step.mode_easy_options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-option';
+                    btn.innerText = opt;
+                    btn.onclick = () => {
+                        stopTimer();
+                        addMsg('user', opt);
+                        if (i === step.correct_option_index) handleQueue(true);
+                        else { addMsg('system', 'Falsch.', 'fail'); handleQueue(false); }
+                    };
+                    grid.appendChild(btn);
+                });
+                inputArea.appendChild(grid);
+
+            } else {
+                // Medium: Text Input with Hint
+                addMsg('system', step.mode_medium_hint, 'info');
+                const wrp = document.createElement('div');
+                wrp.className = 'text-input-wrapper';
+                const inp = document.createElement('textarea');
+                inp.placeholder = 'Ihre Lösung...';
+                const btn = document.createElement('button');
+                btn.className = 'btn-submit';
+                btn.innerText = 'Lösung abgleichen';
+                btn.onclick = () => { stopTimer(); showStepComparison(inp.value, step); };
+                wrp.appendChild(inp);
+                wrp.appendChild(btn);
+                inputArea.appendChild(wrp);
+            }
         }
 
         function renderInput(q) {
             inputArea.innerHTML = '';
             
-            // COMPLEX CASE LOGIC
-            if (activeCase.complexity === 'high') {
-                const btnCheck = document.createElement('button');
-                btnCheck.className = 'btn-submit';
-                btnCheck.innerText = 'Lösung abgleichen';
-                btnCheck.onclick = () => { stopTimer(); showComplexComparison(); };
-
-                if (currentDifficulty === 'easy') {
-                    // Multiple Choice
-                    addMsg('partner', "Wählen Sie die zutreffende Lösung:");
-                    const grid = document.createElement('div');
-                    grid.className = 'options-grid';
-                    activeCase.options.forEach((opt, i) => {
-                        const btn = document.createElement('button');
-                        btn.className = 'btn-option';
-                        btn.innerText = opt;
-                        btn.onclick = (e) => {
-                            stopTimer();
-                            inputArea.innerHTML = '';
-                            addMsg('user', opt);
-                            if (i === activeCase.correctOption) handleQueue(true);
-                            else {
-                                addMsg('system', 'Falsch.', 'fail');
-                                handleQueue(false);
-                            }
-                        };
-                        grid.appendChild(btn);
-                    });
-                    inputArea.appendChild(grid);
-
-                } else if (currentDifficulty === 'medium') {
-                    // Step Inputs
-                    addMsg('partner', "Füllen Sie die Prüfungspunkte aus:");
-                    const wrp = document.createElement('div');
-                    wrp.className = 'text-input-wrapper';
-                    
-                    let inputs = [];
-                    activeCase.steps.forEach(step => {
-                        const grp = document.createElement('div');
-                        grp.className = 'step-input-group';
-                        grp.innerHTML = `<div class="step-label">${step}</div>`;
-                        const inp = document.createElement('input');
-                        inp.className = 'step-input';
-                        grp.appendChild(inp);
-                        wrp.appendChild(grp);
-                        inputs.push(inp);
-                    });
-                    
-                    wrp.appendChild(btnCheck);
-                    inputArea.appendChild(wrp);
-
-                } else {
-                    // Hard (Textarea)
-                    addMsg('partner', "Erstellen Sie das Gutachten.");
-                    const wrp = document.createElement('div');
-                    wrp.className = 'text-input-wrapper';
-                    const inp = document.createElement('textarea');
-                    inp.placeholder = 'Gutachten...';
-                    wrp.appendChild(inp);
-                    wrp.appendChild(btnCheck);
-                    inputArea.appendChild(wrp);
-                }
-
-            } else {
-                // STANDARD CASE LOGIC
-                if (q.type === 'choice') {
-                    const grid = document.createElement('div');
-                    grid.className = 'options-grid';
-                    q.options.forEach((opt, i) => {
-                        const btn = document.createElement('button');
-                        btn.className = 'btn-option';
-                        btn.innerText = "> " + opt;
-                        btn.onclick = (e) => {
-                            stopTimer();
-                            inputArea.innerHTML = '';
-                            addMsg('user', opt);
-                            if(i === q.correctAnswer) handleQueue(true);
-                            else handleQueue(false);
-                        };
-                        grid.appendChild(btn);
-                    });
-                    inputArea.appendChild(grid);
-                } else {
-                    const wrp = document.createElement('div');
-                    wrp.className = 'text-input-wrapper';
-                    const inp = document.createElement('textarea');
-                    inp.placeholder = 'Antwort...';
+            if (q.type === 'choice') {
+                const grid = document.createElement('div');
+                grid.className = 'options-grid';
+                q.options.forEach((opt, i) => {
                     const btn = document.createElement('button');
-                    btn.className = 'btn-submit';
-                    btn.innerText = 'Lösung abgleichen';
-                    btn.onclick = () => { stopTimer(); showStandardComparison(inp.value, q); };
-                    wrp.append(inp, btn);
-                    inputArea.appendChild(wrp);
-                }
+                    btn.className = 'btn-option';
+                    btn.innerText = "> " + opt;
+                    btn.onclick = () => {
+                        stopTimer();
+                        addMsg('user', opt);
+                        if (i === q.correctAnswer) handleQueue(true);
+                        else { addMsg('system', 'Falsch.', 'fail'); handleQueue(false); }
+                    };
+                    grid.appendChild(btn);
+                });
+                inputArea.appendChild(grid);
+            } else {
+                // Text / Hard Mode
+                const wrp = document.createElement('div');
+                wrp.className = 'text-input-wrapper';
+                const inp = document.createElement('textarea');
+                inp.placeholder = 'Antwort...';
+                const btn = document.createElement('button');
+                btn.className = 'btn-submit';
+                btn.innerText = 'Lösung abgleichen';
+                btn.onclick = () => { stopTimer(); showStandardComparison(inp.value, q); };
+                wrp.append(inp, btn);
+                inputArea.appendChild(wrp);
             }
         }
 
-        // --- VALIDATION HANDLERS ---
+        // --- COMPARISONS ---
         function showStandardComparison(userAns, q) {
             inputArea.innerHTML = '';
             const container = document.createElement('div');
@@ -741,12 +781,15 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
             document.getElementById('comparison-view').style.display = 'flex';
         }
 
-        function showComplexComparison() {
+        function showStepComparison(userAns, step) {
+            // For Medium Steps: We don't have exact solution text in data, so we show the "easy" correct option as solution
+            let correctTxt = step.mode_easy_options[step.correct_option_index];
             inputArea.innerHTML = '';
             const container = document.createElement('div');
             container.id = 'comparison-view';
             container.innerHTML = `
-                <div class="compare-box" style="border-color:var(--accent-green)"><div class="compare-label" style="color:var(--accent-green)">Musterlösung (Volltext)</div><div class="model-text">${activeCase.detailed_solution}</div></div>
+                <div class="compare-box"><div class="compare-label">Ihre Eingabe</div><div class="user-text">${userAns}</div></div>
+                <div class="compare-box" style="border-color:var(--accent-green)"><div class="compare-label" style="color:var(--accent-green)">Lösung</div><div class="model-text">${correctTxt}</div></div>
                 <div class="assessment-buttons">
                     <button class="btn-assess-no" onclick="handleQueue(false)">Unvollständig</button>
                     <button class="btn-assess-ok" onclick="handleQueue(true)">Korrekt</button>
@@ -755,18 +798,16 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
             document.getElementById('comparison-view').style.display = 'flex';
         }
 
-        // --- SMART LOOP CORE ---
+        // --- SMART LOOP ---
         function handleQueue(success) {
             inputArea.innerHTML = '';
             if (success) {
-                // Remove from front
                 questionQueue.shift();
                 trust = Math.min(100, trust + 5);
                 addMsg('system', 'STATUS: KORREKT', 'success');
             } else {
-                // Push to back
-                let failedItem = questionQueue.shift();
-                questionQueue.push(failedItem);
+                let failed = questionQueue.shift();
+                questionQueue.push(failed);
                 trust = Math.max(0, trust - 5);
                 addMsg('system', 'WIEDERVORLAGE: Frage hinten angestellt.', 'fail');
             }
@@ -774,38 +815,7 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
             setTimeout(nextQ, 1000);
         }
 
-        function startTimer() {
-            timeLeft = timeLimit;
-            timerBar.style.width = '100%';
-            timerBar.style.backgroundColor = 'var(--accent-green)';
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                let pct = (timeLeft / timeLimit) * 100;
-                timerBar.style.width = pct + '%';
-                if (timeLeft < 10) timerBar.style.backgroundColor = 'var(--accent-red)';
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    // Timeout = Wrong
-                    handleQueue(false);
-                }
-            }, 1000);
-        }
-        function stopTimer() { clearInterval(timerInterval); }
-
-        function endCase(win) {
-            stopTimer();
-            overlay.style.display = 'flex';
-            const t = document.getElementById('overlay-title');
-            const m = document.getElementById('overlay-msg');
-            t.innerText = "FALL ABGESCHLOSSEN";
-            t.style.color = "var(--accent-green)";
-            m.innerText = "Alle Fragen korrekt beantwortet.";
-            savedProgress[activeCase.id] = 100;
-            localStorage.setItem('junior_lawyer_save_v14', JSON.stringify(savedProgress));
-        }
-
-        // --- EXAM MODE (Linear, No Loop) ---
+        // --- EXAM MODE ---
         function startExam() {
             isExamMode = true;
             menuScreen.style.display = 'none';
@@ -813,30 +823,30 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
             gameHeader.style.display = 'none'; 
             document.getElementById('timer-container').style.display = 'none';
             
-            currentQuestions = [];
+            questionQueue = []; // Re-use queue variable for exam questions
             examAnswers = [];
-            // Flatten Questions. For complex cases, push the generic placeholder but we'll use detailed_solution for grading
             cases.forEach(c => {
                 if(c.complexity === 'high') {
-                    currentQuestions.push({
+                    // One big exam question for complex cases
+                    questionQueue.push({
                         intro: c.title + ": " + c.case_context, 
                         explanation: c.detailed_solution, 
-                        points: 5 // Default high
+                        points: 5 
                     });
                 } else {
-                    currentQuestions.push(...c.questions);
+                    questionQueue.push(...c.questions);
                 }
             });
 
-            qIndex = 0;
+            qIndex = 0; // Use qIndex for exam linear flow
             chatWindow.innerHTML = '';
             addMsg('system', 'ABSCHLUSSKLAUSUR GESTARTET', 'info');
             setTimeout(nextExamQ, 1000);
         }
 
         function nextExamQ() {
-            if (qIndex >= currentQuestions.length) { startExamGrading(); return; }
-            const q = currentQuestions[qIndex];
+            if (qIndex >= questionQueue.length) { startExamGrading(); return; }
+            const q = questionQueue[qIndex];
             addMsg('partner', `Aufgabe ${qIndex+1}: ${q.intro}`);
             
             inputArea.innerHTML = '';
@@ -865,11 +875,9 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
             examResultFooter.style.display = 'block';
             document.querySelector('#archive-screen .btn-back').style.display = 'none';
 
-            let totalMaxPoints = 0;
             examAnswers.forEach((item, i) => {
                 const q = item.q;
                 const pts = q.points || 1;
-                totalMaxPoints += pts;
                 const div = document.createElement('div');
                 div.className = 'archive-item';
                 div.innerHTML = `
@@ -899,11 +907,53 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
             document.querySelector('#archive-screen .btn-back').style.display = 'block';
         }
 
-        // --- UTILS ---
+        // --- COMMON ---
+        function startTimer() {
+            timeLeft = 60; // 60s Default
+            document.getElementById('timer-bar').style.width = '100%';
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer-bar').style.width = (timeLeft/60)*100 + "%";
+                if (timeLeft <= 0) { clearInterval(timerInterval); handleQueue(false); }
+            }, 1000);
+        }
+        function stopTimer() { clearInterval(timerInterval); }
+
+        function endCase(win) {
+            stopTimer();
+            overlay.style.display = 'flex';
+            document.getElementById('overlay-title').innerText = "FALL ABGESCHLOSSEN";
+            document.getElementById('overlay-msg').innerText = "Mandat erfolgreich bearbeitet.";
+            savedProgress[activeCase.id] = 100;
+            localStorage.setItem('junior_lawyer_save_v15', JSON.stringify(savedProgress));
+        }
+
+        function addMsg(cls, txt, type) {
+            const d = document.createElement('div');
+            d.className = `message ${cls} ${type||''}`;
+            d.innerText = txt;
+            chatWindow.appendChild(d);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function updateTrust() {
+            if(!isExamMode) {
+                // Bar acts as Trust
+                const b = document.getElementById('trust-bar');
+                b.style.width = trust + "%";
+                b.style.background = trust > 70 ? 'var(--accent-green)' : (trust < 30 ? 'var(--accent-red)' : 'var(--accent-blue)');
+            }
+        }
+
         function showArchive() {
             menuScreen.style.display = 'none';
             archiveScreen.style.display = 'flex';
+            document.getElementById('archive-title').innerText = "Musterlösungen";
             archiveContent.innerHTML = '';
+            examResultFooter.style.display = 'none';
+            document.querySelector('#archive-screen .btn-back').style.display = 'block';
+            
             cases.forEach(c => {
                 const grp = document.createElement('div');
                 grp.className = 'archive-group';
@@ -916,45 +966,20 @@ B. Klage der Stadt Löbau: Wenn die Gemeinde klagt, kann sie sich nicht auf Grun
             });
         }
 
-        function addMsg(cls, txt, type) {
-            const d = document.createElement('div');
-            d.className = `message ${cls} ${type||''}`;
-            d.innerText = txt;
-            chatWindow.appendChild(d);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
-
-        function updateTrust() {
-            // In smart loop, bar represents remaining queue vs initial
-            if(!isExamMode && initialQueueLength > 0) {
-                let completed = initialQueueLength - questionQueue.length;
-                // Don't let it go backward visually if re-queued, just stick or use trust
-                // Actually, let's use Trust bar as "Queue Progress"
-                let pct = (completed / initialQueueLength) * 100;
-                // If we requeue, queue length stays same or grows? 
-                // Logic: queue removes on success. So length decreases. 
-                // If fail, push back, length same. 
-                // So bar only grows on success.
-                const b = document.getElementById('trust-bar');
-                b.style.width = pct + "%";
-                b.style.background = 'var(--accent-blue)';
-            }
-        }
-
         function exitToMenu() {
             stopTimer();
             menuScreen.style.display = 'flex';
             gameScreen.style.display = 'none';
             archiveScreen.style.display = 'none';
             gameHeader.style.display = 'none';
-            timerContainer.style.display = 'none';
-            diffScreen.style.display = 'none';
+            document.getElementById('timer-container').style.display = 'none';
+            document.getElementById('difficulty-screen').style.display = 'none';
             overlay.style.display = 'none';
             renderMenu();
         }
 
-        function hardReset() { if(confirm("Reset?")) { localStorage.removeItem('junior_lawyer_save_v14'); location.reload(); } }
-        function devUnlock() { cases.forEach(c => savedProgress[c.id]=100); localStorage.setItem('junior_lawyer_save_v14', JSON.stringify(savedProgress)); location.reload(); }
+        function hardReset() { if(confirm("Reset?")) { localStorage.removeItem('junior_lawyer_save_v15'); location.reload(); } }
+        function devUnlock() { cases.forEach(c => savedProgress[c.id]=100); localStorage.setItem('junior_lawyer_save_v15', JSON.stringify(savedProgress)); location.reload(); }
 
         window.onload = init;
     </script>
